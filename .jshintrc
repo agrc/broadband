@@ -1,0 +1,34 @@
+{
+    "predef": [
+        "dijit",
+        "dojo",
+        "alert",
+        "agrc",
+        "esri",
+        "define",
+        "require",
+        "console",
+        "module",
+        "AGRC",
+        "it", 
+        "expect", 
+        "beforeEach", 
+        "afterEach", 
+        "spyOn", 
+        "jasmine", 
+        "runs", 
+        "waitsFor",
+        "describe",
+        "xit",
+        "xdescribe",
+        "stubModule"
+    ],
+
+    "evil": true,
+    "regexdash": true,
+    "browser": true,
+    "wsh": true,
+    "sub": true,
+    "undef": true,
+    "unused": true
+}

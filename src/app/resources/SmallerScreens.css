@@ -1,0 +1,58 @@
+/* iPad and smaller */
+
+.broadband-app a[data-dojo-attach-point='popoutLink'] {
+    display: none;
+}
+
+@media only screen and (max-width: 1024px) {
+    .broadband-app a[data-dojo-attach-point='popoutLink'] {
+        background-image: url('http://168.180.161.9/broadband/app/resources/images/popout.png');
+        width: 67px;
+        height: 67px;
+        display: inline-block;
+        float: left;
+        cursor: pointer;
+    }
+    .broadband-app .logo {
+        margin-left: 5px;
+    }
+    .broadband-app .side-nav {
+        position: static;
+    }
+    .center-div {
+        left: 8px !important;
+        right: 8px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+    }
+    .broadband-app div[data-dojo-attach-point='popoutMenu'] {
+        box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.2);
+        position: absolute;
+        left: -300px;
+        top: 67px;
+        bottom: 0;
+        width: 295px;
+        background: white;
+        z-index: 99;
+        border: solid #EAEAEA;
+        border-width: 1px 0 0 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .broadband-app .side-nav {
+        width: auto;
+    }
+    .main-navigation li {
+        margin: 0 0 0 23px !important;
+    }
+    .main-navigation {
+        position: static !important;
+        width: auto !important;
+    }
+    .main-navigation ul.nav-menu {
+        text-align: left !important;
+    }
+    .main-navigation .sub-menu {
+        display: none !important;
+    }
+}

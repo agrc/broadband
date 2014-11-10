@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Utah Broadband Map</title>
+	
+	<meta name='keywords' content='utah broadband map, utah broadband'>
+	<meta name='description' content='Utah Broadband Interactive Map'>
+	
+	<link rel='shortcut icon' type='image/png' href='images/favicon.png'>
+	
+    <!-- CSS FILES -->
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
+    <link rel="stylesheet" type="text/css" href="app/resources/App.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
+	
+</head>
+<body class="claro">
+    <div id='preloader'>Loading application...</div>
+    <div data-dojo-type="app.App"></div>
+    
+	<!-- JAVASCRIPT FILES -->
+    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3" data-dojo-config="async: 0, isDebug: 1, tlmSiblingOfDojo: 1"></script>
+    <script src="app/nls/run_en-us.js" defer></script> <!-- for built version -->
+    <script src="app/run.js" defer></script>
+	
+	<!-- GOOGLE ANALYTICS -->
+	<script type="text/javascript">
+    	var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-11849964-30']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+	</script>
+</body>
+</html>

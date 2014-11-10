@@ -1,0 +1,21 @@
+﻿.widgetFeedback {
+	width: 234px;
+}
+.widgetFeedback .dijitButton {
+    margin-left: 0px;
+}
+.widgetFeedback .message {
+	text-align: center;
+}
+.widgetFeedback .text-area {
+	width: 228px;
+}
+.widgetFeedback .dijitContentPane {
+	padding: 0px;
+}
+.widgetFeedback .radio {
+	float: left;
+}
+.widgetFeedback .radio-label {
+	margin-left: 3px;
+}
