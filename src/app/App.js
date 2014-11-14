@@ -1,54 +1,73 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/App.html',
-    'app/MapDataFilter',
-    'app/ListProviders',
-    'app/HelpPopup',
-    'app/MapDisplayOptions',
-    'app/GeoSearch',
+    'agrc/widgets/map/BaseMap',
+
     'app/Feedback',
-    'dojo/dom-style',
+    'app/GeoSearch',
+    'app/HelpPopup',
+    'app/ListProviders',
+    'app/MapDataFilter',
+    'app/MapDisplayOptions',
+    'app/Router',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+    'dijit/registry',
+
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/event',
+    'dojo/_base/fx',
+    'dojo/_base/lang',
     'dojo/dom',
     'dojo/dom-construct',
-    'dijit/registry',
-    'dojo/topic',
-    'dojo/_base/event',
-    'dojo/_base/array',
+    'dojo/dom-style',
     'dojo/on',
-    'dojo/_base/fx',
-    'app/Router',
-    'dojo/_base/lang',
+    'dojo/text!app/templates/App.html',
+    'dojo/topic',
 
-    'agrc/widgets/map/BaseMap'
+    'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/tasks/QueryTask',
+    'esri/tasks/query',
+
+    'agrc/widgets/map/BaseMap',
+    'app/config'
 ],
 
 function (
-    declare, 
-    _WidgetBase, 
-    _TemplatedMixin, 
-    _WidgetsInTemplateMixin, 
-    template,
-    MapDataFilter,
-    ListProviders,
-    HelpPopup,
-    MapDisplayOptions,
-    GeoSearch,
+    BaseMap,
+
     Feedback,
-    domStyle,
+    GeoSearch,
+    HelpPopup,
+    ListProviders,
+    MapDataFilter,
+    MapDisplayOptions,
+    Router,
+
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+    registry,
+
+    array,
+    declare,
+    dojoEvent,
+    fx,
+    lang,
     dom,
     domConstruct,
-    registry,
-    topic,
-    dojoEvent,
-    array,
+    domStyle,
     on,
-    fx,
-    Router,
-    lang
-    ) {
+    template,
+    topic,
+
+    ArcGISDynamicMapServiceLayer,
+    ArcGISTiledMapServiceLayer,
+    QueryTask,
+    Query
+) {
     return declare('app.App', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: template,
@@ -76,19 +95,19 @@ function (
 
 
         constructor: function () {
-            console.log(this.declaredClass + "::constructor", arguments);
+            console.log('app/App:constructor', arguments);
 
             AGRC.app = this;
         },
         postCreate: function () {
             // summary:
             //      dom is ready
-            console.log(this.declaredClass + "::postCreate", arguments);
+            console.log('app/App:postCreate', arguments);
 
             // load only the associated provider data
             // TODO: hook up to url parameter
             //  filterByProviderIdNum();
-            
+
             // load all providers
             this.getProvidersList();
 
@@ -97,7 +116,7 @@ function (
         wireEvents: function () {
             // summary:
             //      wires the events for this widget
-            console.log(this.declaredClass + "::wireEvents", arguments);
+            console.log('app/App:wireEvents', arguments);
             var that = this;
             var mq;
 
@@ -128,7 +147,7 @@ function (
 
             // wire media query events
             if (window.matchMedia) {
-                mq = window.matchMedia("(max-width: 1024px)");
+                mq = window.matchMedia('(max-width: 1024px)');
                 mq.addListener(function (query) {
                     that.onMediaQueryChange(query);
                 });
@@ -144,8 +163,8 @@ function (
             // summary:
             //      fires when the media query changes
             // mq: MediaQuery
-            console.log(this.declaredClass + "::onMediaQueryChange", arguments);
-        
+            console.log('app/App:onMediaQueryChange', arguments);
+
             if (mq.matches) {
                 this.size = 'small';
                 domConstruct.place('left-nav', this.popoutMenu);
@@ -161,7 +180,7 @@ function (
         onPopoutLinkClick: function () {
             // summary:
             //      Fires when the user clicks on the popout menu link
-            console.log(this.declaredClass + "::onPopoutLinkClick", arguments);
+            console.log('app/App:onPopoutLinkClick', arguments);
 
             var animation;
             var that = this;
@@ -210,7 +229,7 @@ function (
         hideLoader: function () {
             // summary:
             //      description
-            console.log(this.declaredClass + "::hideLoader", arguments);
+            console.log('app/App:hideLoader', arguments);
 
             // show content - prevent flash of unstyled content
             fx.fadeOut({
@@ -233,21 +252,21 @@ function (
                     });
                 }),
                 onBegin: function () {
-                    
+
                 }
             }).play();
         },
         getProvidersList: function () {
-            console.log(this.declaredClass + "::getProvidersList", arguments);
+            console.log('app/App:getProvidersList', arguments);
 
             var that = this;
 
             // get providers list
-            var query = new esri.tasks.Query();
+            var query = new Query();
             query.returnGeometry = false;
             query.outFields = [AGRC.fieldNames.NAME, AGRC.fieldNames.ID, AGRC.fieldNames.URL];
-            query.where = this.makeQueryDirty("1 = 1");
-            var qTask = new esri.tasks.QueryTask(AGRC.broadbandMapURL + "/3");
+            query.where = this.makeQueryDirty('1 = 1');
+            var qTask = new QueryTask(AGRC.broadbandMapURL + '/3');
             qTask.execute(query, function(results){
                 array.forEach(results.features, function (g) {
                     AGRC.providers[g.attributes[AGRC.fieldNames.ID]] = {
@@ -255,8 +274,8 @@ function (
                         url: g.attributes[AGRC.fieldNames.URL]
                     };
                 });
-                
-                topic.publish("AGRC.ProvidersObtained", AGRC.providers);
+
+                topic.publish('AGRC.ProvidersObtained', AGRC.providers);
 
                 that.router = new Router();
             }, function (err) {
@@ -264,33 +283,33 @@ function (
             });
         },
         setUpMap: function () {
-            console.log(this.declaredClass + "::setUpMap", arguments);
+            console.log('app/App:setUpMap', arguments);
 
             var that = this;
             var mapOptions = {
                 'showInfoWindowOnClick': false,
                 'useDefaultBaseMap': false,
                 includeFullExtentButton: true,
-                sliderStyle: "large"
+                sliderStyle: 'large'
             };
-            AGRC.map = new agrc.widgets.map.BaseMap(this.mapDiv, mapOptions);
-            
+            AGRC.map = new BaseMap(this.mapDiv, mapOptions);
+
             // create layers
-            AGRC.bbLayer = new esri.layers.ArcGISDynamicMapServiceLayer(AGRC.broadbandMapURL, {
+            AGRC.bbLayer = new ArcGISDynamicMapServiceLayer(AGRC.broadbandMapURL, {
                 opacity: 0.5,
                 visible: false,
                 id: 'coverage'
             });
-            AGRC.bbLayerCached = new esri.layers.ArcGISTiledMapServiceLayer(AGRC.broadbandMapCachedURL, {
+            AGRC.bbLayerCached = new ArcGISTiledMapServiceLayer(AGRC.broadbandMapCachedURL, {
                 opacity: 0.5,
                 id: 'coverageCached'
             });
             AGRC.currentLayer = AGRC.bbLayerCached;
-            // AGRC.bbBasemaps = new esri.layers.ArcGISDynamicMapServiceLayer(AGRC.basemapsURL, {
+            // AGRC.bbBasemaps = new ArcGISDynamicMapServiceLayer(AGRC.basemapsURL, {
             //     id: 'basemaps',
             //     visible: false
             // });
-            
+
             // create new map display options widget
             var params = {
                 map: AGRC.map,
@@ -299,7 +318,7 @@ function (
                 // basemapsLayer: AGRC.bbBasemaps
             };
             new MapDisplayOptions(params, 'map-display-options');
-            
+
             AGRC.map.addLayer(AGRC.bbLayer);
             AGRC.map.addLoaderToLayer(AGRC.bbLayer);
             AGRC.map.addLayer(AGRC.bbLayerCached);
@@ -307,17 +326,17 @@ function (
             // AGRC.map.addLayer(AGRC.bbBasemaps);
             // AGRC.map.addLoaderToLayer(AGRC.bbBasemaps);
 
-            this.connect(AGRC.map, "onClick", function(){
+            this.connect(AGRC.map, 'onClick', function(){
                 if (this.size === 'small') {
                     if (!this.popoutOpen) {
                         this.onPopoutLinkClick();
                     }
                 }
             });
-            
+
             // set up new geosearch widget
             this.geoSearch = new GeoSearch({map: AGRC.map}, 'geo-search');
-            
+
             this.connect(AGRC.map, 'onLoad', function () {
                 that.connect(AGRC.map, 'onExtentChange', 'onExtentChange');
             });
@@ -332,16 +351,16 @@ function (
             this.listProviders.startup();
         },
         onFeedbackLinkClick: function () {
-            console.log(this.declaredClass + "::onFeedbackLinkClick", arguments);
+            console.log('app/App:onFeedbackLinkClick', arguments);
 
             // create new feedback widget and display it's containing dialog box
             if (!AGRC.feedbackWidget){
                 this.initFeedback();
-            }   
+            }
             AGRC.feedbackWidget.show();
         },
         initFeedback: function () {
-            console.log(this.declaredClass + "::initFeedback", arguments);
+            console.log('app/App:initFeedback', arguments);
 
             // create new widget
             AGRC.feedbackWidget = new Feedback({
@@ -353,11 +372,11 @@ function (
         onExtentChange: function (extent, delta, levelChange, lod) {
             // summary:
             //      Turns on appropriate layers if the cache level changed
-            console.log(this.declaredClass + "::onExtentChange", arguments);
+            console.log('app/App:onExtentChange', arguments);
 
             // only check if there was a level change & filters have not been touched
-            if (levelChange && 
-                AGRC.mapDataFilter.resetBtn.get('disabled') && 
+            if (levelChange &&
+                AGRC.mapDataFilter.resetBtn.get('disabled') &&
                 registry.byId('overlay-checkbox').get('value')) {
                 // turn on dynamic service when zoomed in further than the breakpoint level
                 if (lod.level >= AGRC.breakPointLevel) {
@@ -378,27 +397,27 @@ function (
             //      Gets the appropriate coverage layer (dynamic or cached) for the current lod
             // returns:
             //      esri.layer
-            console.log(this.declaredClass + "::getCurrentCoverageLayer", arguments);
-            
+            console.log('app/App:getCurrentCoverageLayer', arguments);
+
             return AGRC.currentLayer;
         },
         filterByProviderIdNum: function () {
-            console.log(this.declaredClass + "::filterByProviderIdNum", arguments);
+            console.log('app/App:filterByProviderIdNum', arguments);
 
             // check for provider id_num in URL
-            var id_num = this.getURLParameter('id_num');
-            
+            var id = this.getURLParameter('id_num');
+
             // disable provider selector
-            var mapFilterWidget = registry.byId("map-data-filter");
+            var mapFilterWidget = registry.byId('map-data-filter');
             mapFilterWidget.disableProviderSelector();
-            
+
             // set up query task
-            var query = new esri.tasks.Query();
+            var query = new Query();
             query.returnGeometry = false;
             query.outFields = [AGRC.fieldNames.ID, AGRC.fieldNames.NAME];
-            query.where = this.makeQueryDirty(AGRC.fieldNames.ID_NUM + " = '" + id_num + "'");
-            
-            var qTask = new esri.tasks.QueryTask(AGRC.broadbandMapURL + "/3");
+            query.where = this.makeQueryDirty(AGRC.fieldNames.ID_NUM + ' = \'' + id + '\'');
+
+            var qTask = new QueryTask(AGRC.broadbandMapURL + '/3');
             qTask.execute(query, function(featureSet){
                 // check to make sure that a provider was found
                 if (featureSet.features.length === 1)
@@ -407,43 +426,43 @@ function (
                     var graphicAtts = featureSet.features[0].attributes;
                     var provName = graphicAtts[AGRC.fieldNames.NAME];
                     var provID = graphicAtts[AGRC.fieldNames.ID];
-                    
+
                     // set title
                     dom.byId('red-text').innerHTML = provID + ' |';
-                    
+
                     // update datafilter
                     mapFilterWidget._onListPickerOK([[provName,provID]]);
-                    
+
                     // remove cached layer
                     AGRC.map.removeLayer(AGRC.bbLayerCached);
-                    
+
                     // show dynamic layer and prevent it from being hidden
                     AGRC.bbLayer.show();
                     AGRC.bbLayer.hide = function(){
                         this.show();
                     };
-                    
+
                 } else {
                     alert('There was no provider found with that id_num');
                     mapFilterWidget._onListPickerOK([['no provider found','no provider found']]);
-                }       
-                
-                // show provider map data filter        
+                }
+
+                // show provider map data filter
             }, function(error){
                 alert('There was an error with the provider id query');
                 console.error(error.message);
             });
         },
         getURLParameter: function (name) {
-            console.log(this.declaredClass + "::getURLParameter", arguments);
+            console.log('app/App:getURLParameter', arguments);
 
             // got from http://rockmanx.wordpress.com/2008/10/03/get-url-parameters-using-javascript/
-            // name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            // name = name.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+            var regexS = '[\\?&]' + name + '=([^&#]*)';
             var regex = new RegExp(regexS);
             var results = regex.exec(window.location.href);
             if (results === null) {
-                return "";
+                return '';
             }
             else {
                 return results[1];
@@ -452,15 +471,16 @@ function (
         makeQueryDirty: function (query) {
             // summary:
             //      appends a parameter to the text of the query to help with this problem
-            //      http://forums.arcgis.com/threads/73456-new-problem-REST-query-10.1-every-other-request-fails-(400-unable-to-complete-oper)
+            //      http://forums.arcgis.com/threads/73456-new-problem-REST-query-10.1-
+            //      every-other-request-fails-(400-unable-to-complete-oper)
             //      Can be removed after Server 10.1 SP2
             // query: String
-            console.log(this.declaredClass + "::makeQueryDirty", arguments);
-            
+            console.log('app/App:makeQueryDirty', arguments);
+
             if (query !== '') {
                 var dirty = new Date().getTime();
 
-                return query + " AND " + dirty + ' = ' + dirty;
+                return query + ' AND ' + dirty + ' = ' + dirty;
             } else {
                 return query;
             }
@@ -471,7 +491,7 @@ function (
             console.log('app/App:destroyRecursive', arguments);
 
             this.cbxDisclaimer.destroy();
-        
+
             this.inherited(arguments);
         }
     });

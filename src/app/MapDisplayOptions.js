@@ -1,47 +1,53 @@
 define([
-	'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/MapDisplayOptions.html',
-    'dojo/has',
-    'dojo/query',
-    'app/HelpPopup',
-    'dojo/dom-style',
-    'dojo/dom-construct',
+	'agrc/widgets/map/_BaseMapSelector',
+
+	'app/HelpPopup',
+
 	'dijit/TooltipDialog',
+	'dijit/_TemplatedMixin',
+	'dijit/_WidgetBase',
+	'dijit/_WidgetsInTemplateMixin',
 	'dijit/form/DropDownButton',
-	'dojo/dom-class',
-	'dojo/_base/array',
 	'dijit/registry',
 
-	'agrc/widgets/map/_BaseMapSelector',
+	'dojo/_base/array',
+	'dojo/_base/declare',
+	'dojo/dom-class',
+	'dojo/dom-construct',
+	'dojo/dom-style',
+	'dojo/has',
+	'dojo/query',
+	'dojo/text!app/templates/MapDisplayOptions.html',
+
 	'dijit/form/CheckBox',
 	'dijit/form/HorizontalSlider',
-	'dijit/form/Select',
 	'dijit/form/RadioButton',
+	'dijit/form/Select',
 	'dojo/_base/sniff'
-], 
+],
 
 function (
-	declare,
-    _WidgetBase,
+    _BaseMapSelector,
+
+    HelpPopup,
+
+    TooltipDialog,
     _TemplatedMixin,
+    _WidgetBase,
     _WidgetsInTemplateMixin,
-    template,
+    DropDownButton,
+    registry,
+
+    array,
+    declare,
+    domClass,
+    domConstruct,
+    domStyle,
     has,
     query,
-    HelpPopup,
-    domStyle,
-    domConstruct,
-    TooltipDialog,
-    DropDownButton,
-    domClass,
-    array,
-    registry
-	) {
-	return declare('broadband.MapDisplayOptions',
-	[_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, agrc.widgets.map._BaseMapSelector], {
+    template
+) {
+	return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _BaseMapSelector], {
 		// summary: Contains controls that adjust the map display along with the legend
 		// example:
 
@@ -58,10 +64,10 @@ function (
 
 
 		constructor: function () {
-			console.log(this.declaredClass + '::' + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:constructor', arguments);
 		},
 		postCreate: function() {
-			console.log(this.declaredClass + '::' + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:postCreate', arguments);
 
 			this.inherited(arguments);
 
@@ -83,27 +89,27 @@ function (
 				title: 'Map Display Help',
 				autoPosition: true
 			}, 'displayHelp');
-			
+
 			this.buildCAILegend();
 		},
 		buildCAILegend: function(){
-			console.log(this.declaredClass + '::' + arguments.callee.nom, arguments);
-			
+			console.log('app/MapDisplayOptions:buildCAILegend', arguments);
+
 			this.caiLegendImage = domConstruct.create('img', {
 				src: this.typeLegendImagePath,
-				alt: 'CAI Legend'	
+				alt: 'CAI Legend'
 			});
-			
+
 			var ttd = new TooltipDialog({
 				content: this.caiLegendImage
 			});
-			
+
 			new DropDownButton({
 				label: 'Legend',
 				dropDown: ttd,
 				disabled: true
 			}, 'drop-down');
-			
+
 			// this stuff is for getting a screen shot for the legend images. Couldn't get this to work otherwise.
 			// this.CAIlegend = new esri.dijit.Legend({
 					// map: this.map,
@@ -116,7 +122,7 @@ function (
 				// this.CAIlegend.startup();
 		},
 		addBasemapOptions: function() {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:addBasemapOptions', arguments);
 
 			// loop through layers in map service and add to select as options
 			//		dojo.forEach(this.basemapsLayer.layerInfos, function(layerInfo){
@@ -125,7 +131,8 @@ function (
 			//
 			//			// add to select
 			//			this.comboBox.addOption({
-			//				// add the base map (ie 'vector') from the end of the layer name to the id for later retrieval
+			//				// add the base map (ie 'vector') from the end of the layer
+			//              // name to the id for later retrieval
 			//				value: layerInfo.id + '|' + baseMapCache,
 			//				label: name
 			//			});
@@ -137,27 +144,27 @@ function (
 			this.connect(this.comboBox, 'onChange', this._onBasemapsComboBoxChange);
 		},
 		_updateLegendOpacity: function() {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_updateLegendOpacity', arguments);
 
 			// set legend block opacities
 			domStyle.set(this.sliderLegend, 'opacity', this.bbLayer.opacity);
 			domStyle.set(this.basemapsLegend, 'opacity', this.currentTheme.layers[0].opacity);
 		},
 		_onOverlayCheckBoxClick: function() {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_onOverlayCheckBoxClick', arguments);
 
 			var isChecked = this.overlayCheckBox.get('value');
 
 			// toggle layers
 			var layer = AGRC.app.getCurrentCoverageLayer();
 			layer.setVisibility(isChecked);
-			
+
 			this.overlaySlider.set('disabled', false);
 
 			domClass.toggle(this.sliderLegend, 'gray');
 		},
 		_onOverlaySliderChange: function(newValue) {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_onOverlaySliderChange', arguments);
 
 			// adjust layer opacity
 			this.bbLayer.setOpacity(newValue);
@@ -166,7 +173,7 @@ function (
 			this._updateLegendOpacity();
 		},
 		_onBasemapsCheckboxClick: function() {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_onBasemapsCheckboxClick', arguments);
 
 			// toggle layer visibility and select disable
 			if (this.basemapsLayer.visible) {
@@ -185,7 +192,7 @@ function (
 			this._onBasemapsComboBoxChange();
 		},
 		_onBasemapsComboBoxChange: function() {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_onBasemapsComboBoxChange', arguments);
 
 			// make sure that the checkbox is clicked
 			if (!this.comboBox.get('disabled')) {
@@ -202,7 +209,7 @@ function (
 			}
 		},
 		_onBasemapsSliderChange: function(newValue) {
-			console.log(this.declaredClass + "::" + arguments.callee.nom);
+			console.log('app/MapDisplayOptions:_onBasemapsSliderChange', arguments);
 
 			this._adjustLayerOpacity(newValue);
 
@@ -218,12 +225,12 @@ function (
 			// summary:
 			//		Handles the onChange event for the cai checkbox.
 			//		Toggles the layer visibility and widget disabled.
-			console.log(this.declaredClass + '::' + arguments.callee.nom, arguments);
-			
+			console.log('app/MapDisplayOptions://		', arguments);
+
 			var value = this.caiCheckbox.get('value');
-			
+
 			this.basemapsLayer.setVisibility(value);
-			
+
 			var widgets = query('[widgetId]', this.radioButtonContainer).map(registry.byNode);
 			array.forEach(widgets, function(w){
 				w.set('disabled', !value);
@@ -233,8 +240,8 @@ function (
 			// summary:
 			//		Handles when the CAI radio buttons change.
 			//		Switches the displayed layer within the map document.
-			console.log(this.declaredClass + '::' + arguments.callee.nom, arguments);
-			
+			console.log('app/MapDisplayOptions://		', arguments);
+
 			var layers = [];
 			if(event.currentTarget.id === 'type-radio'){
 				layers.push(0);

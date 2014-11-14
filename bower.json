@@ -1,0 +1,33 @@
+{
+  "name": "broadband",
+  "version": "2.0.2",
+  "homepage": "https://github.com/agrc/broadband",
+  "authors": [
+    "Scott Davis <stdavis@utah.gov>"
+  ],
+  "description": "broadband map",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "agrc": "agrc-widgets#~2.8.3",
+    "dojo": "~1.10.2",
+    "dijit": "~1.10.2",
+    "ijit": "agrc-ijit#~3.1.1",
+    "dojox": "~1.10.2",
+    "util": "dojo-util#~1.10.2",
+    "stubmodule": "~0.6.1"
+  },
+  "devDependencies": {
+    "jasmine-favicon-reporter": "*"
+  }
+}

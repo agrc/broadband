@@ -1,42 +1,51 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/Feedback.html',
-    'dijit/Dialog',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/json',
-    'dojo/io/script',
     'agrc/modules/HelperFunctions',
+
+    'dijit/Dialog',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/io/script',
+    'dojo/json',
+    'dojo/text!app/templates/Feedback.html',
+
+    'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/map',
 
     'dijit/form/Button',
     'dijit/form/Form',
-    'dojox/validate/regexp',
+    'dijit/form/RadioButton',
     'dijit/form/Textarea',
     'dijit/form/ValidationTextBox',
-    'dijit/layout/StackContainer',
     'dijit/layout/ContentPane',
-    'dijit/form/RadioButton'
+    'dijit/layout/StackContainer',
+    'dojox/validate/regexp'
 ],
 
 function (
-    declare,
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    template,
-    Dialog,
-    lang,
-    array,
-    dojoJson,
-    script,
-    helpers
-    ) {
+    helpers,
 
-    return declare("app.Feedback", 
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    Dialog,
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+
+    array,
+    declare,
+    lang,
+    script,
+    dojoJson,
+    template,
+
+    ArcGISTiledMapServiceLayer,
+    Map
+) {
+
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary
         //  displays a dialog box that users can submit feedback with
         //  based on widget with the same name in agrc.widgets.notify
@@ -45,43 +54,44 @@ function (
         templateString: template,
         
         dialog: null,
-        url: "http://mapserv.utah.gov/WSUT/Notify.svc/XFeedback",
+        url: 'http://mapserv.utah.gov/WSUT/Notify.svc/XFeedback',
         successText: 'Thanks, we really do appreciate and encourage your feedback!',
-        errorText: 'Sorry something went wrong and we did not receive your feedback. You can send an email directly to mpeters@utah.gov.',
+        errorText: 'Sorry something went wrong and we did not receive your feedback. ' +
+            'You can send an email directly to mpeters@utah.gov.',
         
         // properties that are passed in via constructor
         map: {},
         serviceName: 'None Provided',
         
         postMixInProperties: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:postMixInProperties', arguments);
             
             // create new dialog - this is a better method than trying to inherit from dijit.Dialog
             this.dialog = new Dialog({'class': 'feedback-dialog'});
         },  
 
         postCreate: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:postCreate', arguments);
             
             // set up dialog
             this.dialog.closeButtonNode.onClick = lang.hitch(this, 'hide');
-            this.dialog.set("title", 'Report a Problem');
+            this.dialog.set('title', 'Report a Problem');
             this.placeAt(this.dialog.containerNode); // set('content', this.domNode) doesn't work
         },
             
         _clearMessage: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:_clearMessage', arguments);
 
-            this.message.innerHTML = "";
+            this.message.innerHTML = '';
         },
         
         show: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:show', arguments);
             
             // reset form
             this.form.reset();
-            this.Feedback_Textarea.value = '';
-            this.Feedback_Submit.set('disabled', false);
+            this.textarea.value = '';
+            this.submitBtn.set('disabled', false);
             
             // show form
             // this.stackContainer.selectChild(this.formPane);
@@ -90,13 +100,13 @@ function (
         },
         
         hide: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:hide', arguments);
 
             this.dialog.hide();         
         },  
         
         determineMapLocation: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:determineMapLocation', arguments);
 
             var extent;
             var scale;
@@ -105,7 +115,7 @@ function (
             var centerX;
             var centerY;
 
-            if (this.map instanceof esri.Map) {
+            if (this.map instanceof Map) {
                 extent = this.map.extent;
                 scale = -1;
                 layer = {};
@@ -116,7 +126,7 @@ function (
                 
                 if (array.some(layerIds, function(id){
                     layer = this.map.getLayer(id);
-                    var x = layer instanceof esri.layers.ArcGISTiledMapServiceLayer;
+                    var x = layer instanceof ArcGISTiledMapServiceLayer;
                     return x;
                 }, this)) {
                     scale = layer.tileInfo.lods[this.map.getLevel()].scale;
@@ -136,16 +146,16 @@ function (
         },
         
         submit: function () {
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:submit', arguments);
 
             var that = this;
 
             if (this.validate()) {
-                this.Feedback_Submit.set('disabled', true);
+                this.submitBtn.set('disabled', true);
                 this._clearMessage();
                 
-                var email = this.Feedback_Email.value;
-                var feedback = this.Feedback_Textarea.value + '\n\n';
+                var email = this.emailTxt.value;
+                var feedback = this.textarea.value + '\n\n';
                 var category = helpers.getSelectedRadioValue('feedback_rbGroup');
                 
                 var json = {
@@ -171,13 +181,13 @@ function (
                         },
                         error: function (err) {
                             that.showMessage(that.errorText);
-                            that.Feedback_Submit.set('disabled', false);
+                            that.submitBtn.set('disabled', false);
                             
-                            if (err.status == 404) {
-                                console.error("404 service not found");
+                            if (err.status === 404) {
+                                console.error('404 service not found');
                             }
-                            else if (err.status == 500) {
-                                console.error("500");
+                            else if (err.status === 500) {
+                                console.error('500');
                             }
                         }
                     });
@@ -187,7 +197,7 @@ function (
                     // switch to this code after 1.8.4 going back to old dojo/io/script for now :(
 
                     // var jsonpArgs = {
-                    //     jsonp: "callback",
+                    //     jsonp: 'callback',
                     //     query: request,
                     //     timeout: 5000
                     // };
@@ -197,13 +207,13 @@ function (
                     //         that.displayMessage(this.successText);
                     //     }, function (err) {
                     //         that.showMessage(that.errorText);
-                    //         that.Feedback_Submit.set('disabled', false);
+                    //         that.submitBtn.set('disabled', false);
                             
                     //         if (err.status == 404) {
-                    //             console.error("404 service not found");
+                    //             console.error('404 service not found');
                     //         }
                     //         else if (err.status == 500) {
-                    //             console.error("500");
+                    //             console.error('500');
                     //         }
                     //     }
                     // );
@@ -212,13 +222,13 @@ function (
         },
         
         validate: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:validate', arguments);
 
-            return this.Feedback_Email.validate();
+            return this.emailTxt.validate();
         },
         
         displayMessage: function(msg){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/Feedback:displayMessage', arguments);
 
             // set message
             this.message.innerHTML = msg;

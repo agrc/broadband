@@ -1,23 +1,33 @@
 {
- "folders": [
-  {
-   "folder_exclude_patterns": [
-    "src/dojo", 
-    "src/dojox", 
-    "src/util", 
-    "dist/agrc", 
-    "dist/app", 
-    "dist/dijit", 
-    "dist/dojo", 
-    "dist/dojox", 
-    "dist/ijit", 
-    "dist/ChangeLog.html", 
-    "dist/index.html", 
-    "node_modules", 
-    "dist/polyfills", 
-    ".grunt"
-   ], 
-   "path": "/"
-  }
- ]
+	"build_systems":
+	[
+		{
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "python -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"*.sublime-workspace"
+			],
+			"folder_exclude_patterns":
+			[
+				"dist",
+				"src/dojo",
+				"src/dojox",
+				"src/util",
+				"node_modules",
+				".grunt"
+			],
+			"path": "/"
+		}
+	],
+	"settings":
+	{
+		"amd_packages_base_path": "/Users/stdavis/Documents/Projects/broadband/src"
+	}
 }

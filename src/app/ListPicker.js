@@ -1,35 +1,37 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/ListPicker.html',
     'dijit/Dialog',
-    'dojo/_base/lang',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+
     'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/dom-construct',
     'dojo/query',
+    'dojo/text!app/templates/ListPicker.html',
     'dojo/topic',
 
-    'dijit/form/MultiSelect',
-    'dijit/form/Button'
+    'dijit/form/Button',
+    'dijit/form/MultiSelect'
 ],
 
 function (
-    declare,
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    template,
     Dialog,
-    lang,
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+
     array,
+    declare,
+    lang,
     domConstruct,
     query,
+    template,
     topic
-    ) {
+) {
 
-    return declare("app.ListPicker", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         /**
          * Summary:
          * Widget used to create a subset from a large list of options.
@@ -46,7 +48,7 @@ function (
         
         // options
         // name of list
-        listName: "listName",
+        listName: 'listName',
         // Array that the available list values will be populated with
         availableListArray: [],
         
@@ -64,12 +66,12 @@ function (
             this.inherited(arguments);
             
             // set dialog content
-            this.dialog.set("content", this.domNode);
+            this.dialog.set('content', this.domNode);
             
             // set titles   
-            this.dialog.set("title", this.listName + ' Filter');
+            this.dialog.set('title', this.listName + ' Filter');
             this.availableTitle.innerHTML = this.listName;
-            this.selectedTitle.innerHTML = "Show Data For These " + this.listName;
+            this.selectedTitle.innerHTML = 'Show Data For These ' + this.listName;
             
             // sort values and populate multiselect from array
             this.availableListArray.sort();
@@ -87,14 +89,14 @@ function (
         },
         
         _wireControlEvents: function(){
-            this.connect(this.btnSelect, "onClick", "_onSelect");
-            this.connect(this.btnSelectAll, "onClick", "_onSelectAll");
-            this.connect(this.btnUnselect, "onClick", "_onUnselect");
-            this.connect(this.btnUnselectAll, "onClick", "_onUnselectAll");
-            this.connect(this.btnOK, "onClick", "_onOK");
-            this.connect(this.btnCancel, "onClick", "_onCancel");
-            this.connect(this.availableList, "onDblClick", "_onSelect");
-            this.connect(this.selectedList, "onDblClick", "_onUnselect");
+            this.connect(this.btnSelect, 'onClick', '_onSelect');
+            this.connect(this.btnSelectAll, 'onClick', '_onSelectAll');
+            this.connect(this.btnUnselect, 'onClick', '_onUnselect');
+            this.connect(this.btnUnselectAll, 'onClick', '_onUnselectAll');
+            this.connect(this.btnOK, 'onClick', '_onOK');
+            this.connect(this.btnCancel, 'onClick', '_onCancel');
+            this.connect(this.availableList, 'onDblClick', '_onSelect');
+            this.connect(this.selectedList, 'onDblClick', '_onUnselect');
         },
         
         _onSelect: function(){
@@ -102,7 +104,7 @@ function (
             this.selectedList.addSelected(this.availableList);
             
             // enable OK button
-            this.btnOK.set("disabled", false);
+            this.btnOK.set('disabled', false);
         },
         
         _onSelectAll: function(){
@@ -120,12 +122,12 @@ function (
             // disable OK button if there are no providers left in selected
             var v = this.selectedList.domNode.childNodes;
             if (v.length <= 0){
-                this.btnOK.set("disabled", true);
+                this.btnOK.set('disabled', true);
             }
         },
         
         _onUnselectAll: function(){
-            console.log(this.declaredClass + "::_onUnselectAll", arguments);
+            console.log(this.declaredClass + '::_onUnselectAll', arguments);
             // move all options from selected to available
             query('> option', this.selectedList.domNode).forEach(function(option){
                 option.selected = true;
@@ -142,7 +144,7 @@ function (
             
             this.hide();
             
-            topic.publish(AGRC.topics.listpicker_onOK, selectedItems);
+            topic.publish(AGRC.topics.listpickerOnOK, selectedItems);
         },
         
         _onCancel: function(){
@@ -175,7 +177,7 @@ function (
                 }, this);
                 
                 if (refNode) {
-                    domConstruct.place(n, refNode, "before");
+                    domConstruct.place(n, refNode, 'before');
                 } else {
                     // just slap it in there if there are no children
                     this.containerNode.appendChild(n);
@@ -195,7 +197,7 @@ function (
             // summary:
             //      manually selects the providers. Called by app/Router
             // providerValues: String[]
-            console.log(this.declaredClass + "::selectProviders", arguments);
+            console.log(this.declaredClass + '::selectProviders', arguments);
 
             var that = this;
 

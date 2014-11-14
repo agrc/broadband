@@ -1,19 +1,18 @@
 require([
     'app/Feedback',
-    'dojo/dom-construct',
-    'dojo/_base/window'
 
+    'dojo/dom-construct'
 ],
 
 function (
     Feedback,
-    domConstruct,
-    win
-    ) {
+
+    domConstruct
+) {
     describe('app/Feedback', function () {
         var testWidget;
         beforeEach(function () {
-            testWidget = new Feedback({}, domConstruct.create('div', {}, win.body()));
+            testWidget = new Feedback({}, domConstruct.create('div', {}));
         });
         afterEach(function () {
             testWidget.destroy();
@@ -24,8 +23,8 @@ function (
             expect(testWidget).toEqual(jasmine.any(Feedback));
         });
         describe('submit', function () {
-            it("doesn't do anything if form doesn't validate", function () {
-                spyOn(testWidget, 'validate').andReturn(false);
+            it('doesn\'t do anything if form doesn\'t validate', function () {
+                spyOn(testWidget, 'validate').and.returnValue(false);
                 spyOn(testWidget, '_clearMessage');
 
                 testWidget.submit();

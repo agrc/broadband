@@ -1,21 +1,26 @@
 define([
+    'dijit/Destroyable',
+
+    'dojo/_base/array',
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/hash',
     'dojo/router',
     'dojo/topic',
-    'dojo/_base/array',
-    'dojo/hash',
-    'dijit/Destroyable',
-    'dojo/_base/lang'
 
+    'esri/geometry/Extent'
 ], function (
+    Destroyable,
+
+    array,
     declare,
+    lang,
+    hash,
     router,
     topic,
-    array,
-    hash,
-    Destroyable,
-    lang
-    ) {
+
+    Extent
+) {
     return declare('app/Router', [Destroyable], {
         // currentRoute: Object
         //      keeps track of the current route to make sure that we don't
@@ -31,7 +36,7 @@ define([
             // summary:
             //      kicks off this object
             //      called in app/main.js
-            console.log("app/Router::constructor", arguments);
+            console.log('app/Router::constructor', arguments);
 
             this.wireEvents();
 
@@ -40,10 +45,10 @@ define([
         wireEvents: function () {
             // summary:
             //      wires all of the events for this object
-            console.log("app/Router::wireEvents", arguments);
+            console.log('app/Router::wireEvents', arguments);
 
             var that = this;
-            
+
             this.own(
                 topic.subscribe(AGRC.topics.Router.onDefQueryUpdate, function (params) {
                     that.onDefQueryUpdate(params);
@@ -64,8 +69,8 @@ define([
             //      fires when the def query gets updated from the map data filter
             // props: Object
             //      The object with all of the properties that make up the def query
-            console.log(this.declaredClass + "::onDefQueryUpdate", arguments);
-            
+            console.log(this.declaredClass + '::onDefQueryUpdate', arguments);
+
             // preserve extent
             var ex = this.currentRoute.extent;
 
@@ -82,10 +87,10 @@ define([
         updateHash: function () {
             // summary:
             //      updates the url with the currentRoute
-            console.log("app/Router::updateHash", arguments);
+            console.log('app/Router::updateHash', arguments);
 
             var newHash = AGRC.hashIdentifier + this.objectToQuery(this.currentRoute);
-        
+
             if (hash() !== newHash) {
                 router.go(newHash);
             }
@@ -94,7 +99,7 @@ define([
             // summary:
             //      fires when the /route/ hash changes
             // newRoute: Object
-            console.log("app/Router::onRouteHashChange", arguments);
+            console.log('app/Router::onRouteHashChange', arguments);
 
             var that = this;
             var extent;
@@ -113,7 +118,8 @@ define([
                         // arrays need special treatment
                         hasChanged = newRoute[parameter].toString() !== that.currentRoute[parameter].toString();
                     } else if (parameter === 'extent') {
-                        hasChanged = JSON.stringify(newRoute[parameter]) !== JSON.stringify(that.currentRoute[parameter]);
+                        hasChanged = JSON.stringify(newRoute[parameter]) !==
+                            JSON.stringify(that.currentRoute[parameter]);
                     } else {
                         hasChanged = newRoute[parameter] !== that.currentRoute[parameter];
                     }
@@ -125,7 +131,7 @@ define([
 
                 return hasChanged;
             }
-            
+
             if (newRoute !== this.currentRoute) {
                 if (hasParameterChanged('providers')) {
                     this.updateProviders(newRoute.providers);
@@ -140,7 +146,7 @@ define([
                     AGRC.mapDataFilter.setSlider('up', newRoute.minUpSpeed);
                 }
                 if (hasParameterChanged('extent')) {
-                    extent = new esri.geometry.Extent(lang.mixin({
+                    extent = new Extent(lang.mixin({
                         spatialReference: {wkid: 26912}
                     }, newRoute.extent));
                     AGRC.map.setExtent(extent);
@@ -156,8 +162,8 @@ define([
             // summary:
             //      updates the definition query and ui with the new providers
             // providers: String[] | String (queryToObject can't handle single arrays)
-            console.log("app/Router::updateProviders", arguments);
-        
+            console.log('app/Router::updateProviders', arguments);
+
             if (!AGRC.listPicker) {
                 AGRC.mapDataFilter.launchListPicker();
             }
@@ -172,8 +178,8 @@ define([
         onResetFilters: function () {
             // summary:
             //      fires when the user clicks the reset filters button
-            console.log(this.declaredClass + "::onResetFilters", arguments);
-        
+            console.log(this.declaredClass + '::onResetFilters', arguments);
+
             this.currentRoute.providers = [];
             this.currentRoute.transTypes = [];
             this.currentRoute.endUserCats = [];
@@ -184,8 +190,8 @@ define([
             // summary:
             //      fires when the map extent changes
             // extent: map extent
-            console.log(this.declaredClass + "::onMapExtentChange", arguments);
-        
+            console.log(this.declaredClass + '::onMapExtentChange', arguments);
+
             lang.mixin(this.currentRoute, {
                 extent: {
                     xmin: Math.round(extent.xmin),
@@ -203,8 +209,8 @@ define([
             // summary:
             //      my custom replacement for dojo.objectToQuery
             // obj: {} (this.currentProperty)
-            console.log(this.declaredClass + "::objectToQuery", arguments);
-            
+            console.log(this.declaredClass + '::objectToQuery', arguments);
+
             var props = [];
             var value;
             var arrayValues;
@@ -218,7 +224,7 @@ define([
                     } else if (prop === 'extent') {
                         props.push(prop + '=' + [value.xmin, value.ymin, value.xmax, value.ymax].join('|'));
                     } else if (prop.match(/.+Speed/) && value && value !== -1) {
-                        props.push(prop + '=' + AGRC.speedValues[value - 1].slice(1, -1));
+                        props.push(prop + '=' + AGRC.speedValues[value - 1]);
                     } else {
                         props.push(prop + '=' + encodeURIComponent(obj[prop]));
                     }
@@ -231,8 +237,8 @@ define([
             // summary:
             //      my custom replacement for dojo.queryToObject
             // query: String
-            console.log(this.declaredClass + "::queryToObject", arguments);
-        
+            console.log(this.declaredClass + '::queryToObject', arguments);
+
             var propHashes = query.split('&');
             var returnObj = {};
             var propTuple;
@@ -259,7 +265,7 @@ define([
                         returnObj[propName] = [propValue];
                     }
                 } else if (propName.match(/.+Speed/)) {
-                    returnObj[propName] = array.indexOf(AGRC.speedValues, "'" + propValue + "'") + 1;
+                    returnObj[propName] = array.indexOf(AGRC.speedValues, propValue) + 1;
                 } else {
                     returnObj[propName] = propValue;
                 }

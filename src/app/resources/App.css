@@ -1,14 +1,16 @@
-@import '../../agrc/themes/standard/locate/FindAddress.css';
-@import '../../agrc/themes/standard/locate/FindGeneric.css';
-@import '../../agrc/themes/standard/map/BaseMap.css';
-@import 'MapDataFilter.css';
-@import 'ListPicker.css';
-@import 'ListProviders.css';
-@import 'ProviderResult.css';
-@import 'MapDisplayOptions.css';
+@import '../../agrc/resources/locate/FindAddress.css';
+@import '../../agrc/resources/locate/FindGeneric.css';
+@import '../../agrc/resources/map/BaseMap.css';
+@import '../../dijit/themes/claro/claro.css';
+@import '../../esri/css/esri.css';
+@import 'Feedback.css';
 @import 'GeoSearch.css';
 @import 'HelpPopup.css';
-@import 'Feedback.css';
+@import 'ListPicker.css';
+@import 'ListProviders.css';
+@import 'MapDataFilter.css';
+@import 'MapDisplayOptions.css';
+@import 'ProviderResult.css';
 @import 'SmallerScreens.css';
 
 .broadband-app {

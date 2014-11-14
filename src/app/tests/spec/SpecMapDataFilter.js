@@ -1,39 +1,52 @@
 require([
     'app/MapDataFilter',
-    'dojo/dom-construct',
-    'dojo/_base/window',
-    'dojo/query',
-    'dojo/topic',
-    'dojo/hash'
 
+    'dijit/registry',
+    'dijit/registry',
+
+    'dojo/_base/window',
+    'dojo/dom-construct',
+    'dojo/hash',
+    'dojo/query',
+    'dojo/topic'
 ],
 
 function (
     MapDataFilter,
-    domConstruct,
+
+    registry,
+    dijitRegistry,
+
     win,
+    domConstruct,
+    hash,
     query,
-    topic,
-    hash
-    ) {
+    topic
+) {
     describe('app/MapDataFilter', function () {
         var testWidget;
         beforeEach(function () {
-            this.addMatchers({
+            jasmine.addMatchers({
                 toBeChecked: function () {
-                    var that = this;
-                    var notText = this.isNot ? " not": "";
-                    this.message = function () {
-                        return 'Expected ' + that.actual.dojoAttachPoint + notText + ' to have been checked.';
+                    return {
+                        compare: function (actual) {
+                            var result = {
+                                pass: actual.get('checked') === true
+                            };
+                            var notText = result.pass ? ' not': '';
+                            result.message = function () {
+                                return 'Expected ' + actual.dojoAttachPoint + notText + ' to have been checked.';
+                            };
+                            return result;
+                        }
                     };
-                    return this.actual.get('checked') === true;
                 }
             });
             testWidget = new MapDataFilter({}, domConstruct.create('div', {}, win.body()));
         });
         afterEach(function () {
             testWidget.destroyRecursive(false);
-            dojo.destroy(testWidget.domNode);
+            domConstruct.destroy(testWidget.domNode);
             testWidget = null;
             hash('');
         });
@@ -43,7 +56,7 @@ function (
         });
 
         describe('wireControlEvents', function () {
-            it("wires the sub checkboxes", function () {
+            it('wires the sub checkboxes', function () {
                 spyOn(testWidget, '_onSubCheckBoxChange');
                 testWidget.wireControlEvents();
 
@@ -59,7 +72,7 @@ function (
 
                 expect(testWidget._onSubCheckBoxChange).toHaveBeenCalledWith(testWidget.cbxWireless);
             });
-            it("wires the trans checkboxes", function () {
+            it('wires the trans checkboxes', function () {
                 spyOn(testWidget, '_onTransCheckBoxChange');
                 testWidget.wireControlEvents();
 
@@ -78,35 +91,35 @@ function (
             });
         });
         describe('_getTransTypes', function () {
-            it("returns all values when all checked", function () {
+            it('returns all values when all checked', function () {
                 expect(testWidget._getTransTypes()).toEqual([40, 41, 10, 20, 30, 50, 70, 71, 80]);
             });
-            it("returns some values when some are checked", function () {
+            it('returns some values when some are checked', function () {
                 testWidget.cbxCable.set('value', false);
                 testWidget.cbxMobileWireless.set('value', false);
 
                 expect(testWidget._getTransTypes()).toEqual([10, 20, 30, 50, 70, 71]);
             });
-            it("returns an empty array if none are checked", function () {
+            it('returns an empty array if none are checked', function () {
                 query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
-                    dijit.getEnclosingWidget(node).set('value', false);
+                    registry.getEnclosingWidget(node).set('value', false);
                 });
 
                 expect(testWidget._getTransTypes()).toEqual([]);
             });
         });
         describe('resetFilters', function () {
-            it("resets the sub checkboxes", function () {
+            it('resets the sub checkboxes', function () {
                 var widget;
                 query('.sub-trans-list input').forEach(function (node) {
-                    widget = dijit.getEnclosingWidget(node);
+                    widget = registry.getEnclosingWidget(node);
                     widget.set('value', false);
                 });
 
                 testWidget.resetFilters();
 
                 query('.sub-trans-list input').forEach(function (node) {
-                    widget = dijit.getEnclosingWidget(node);
+                    widget = registry.getEnclosingWidget(node);
                     expect(widget.get('value')).not.toEqual(false);
                 });
 
@@ -115,21 +128,21 @@ function (
             });
         });
         describe('_onSubCheckBoxChange', function () {
-            it("sets the parentCheckBox to checked if all subs are checked", function () {
+            it('sets the parentCheckBox to checked if all subs are checked', function () {
                 testWidget.cbxWireless.set('value', false);
 
                 testWidget._onSubCheckBoxChange(testWidget.cbxWireless);
 
                 expect(testWidget.cbxWireless.get('value')).toEqual('on');
             });
-            it("sets the parentCheckBox to mixed if some subs are checked", function () {
+            it('sets the parentCheckBox to mixed if some subs are checked', function () {
                 testWidget.cbxCable.set('value', false);
 
                 testWidget._onSubCheckBoxChange(testWidget.cbxWireBased);
 
                 expect(testWidget.cbxWireBased.get('value')).toEqual('mixed');
             });
-            it("sets the parentCheckBox to false if no subs are checked", function () {
+            it('sets the parentCheckBox to false if no subs are checked', function () {
                 testWidget.cbxFixedWireless.set('value', false);
                 testWidget.cbxMobileWireless.set('value', false);
 
@@ -137,24 +150,27 @@ function (
 
                 expect(testWidget.cbxWireless.get('value')).toEqual(false);
             });
-            it("fires updateDefQuery if updateDefQuery is true", function () {
+            it('fires updateDefQuery if updateDefQuery is true', function () {
                 spyOn(testWidget, 'updateDefQuery');
 
                 testWidget._onSubCheckBoxChange(testWidget.cbxWireless);
                 testWidget._onSubCheckBoxChange(testWidget.cbxWireless, false);
 
-                expect(testWidget.updateDefQuery.callCount).toBe(1);
+                expect(testWidget.updateDefQuery.calls.count()).toBe(1);
             });
         });
         describe('_onTransCheckBoxChange', function () {
-            it("forces the checkbox to 'on' if the new value is 'mixed'", function () {
+            beforeEach(function () {
+                spyOn(testWidget, 'updateDefQuery');
+            });
+            it('forces the checkbox to \'on\' if the new value is \'mixed\'', function () {
                 testWidget.cbxWireless.set('value', 'mixed');
 
                 testWidget.cbxWireless.onClick();
 
                 expect(testWidget.cbxWireless.get('value')).toEqual('on');
             });
-            it("sets all subs to checked if new value is checked", function () {
+            it('sets all subs to checked if new value is checked', function () {
                 testWidget.cbxCable.set('value', false);
                 testWidget.cbxWireBased.set('value', 'on');
 
@@ -162,7 +178,7 @@ function (
 
                 expect(testWidget.cbxCable.get('checked')).toEqual(true);
             });
-            it("sets all subs to unchecked if new value is unchecked", function () {
+            it('sets all subs to unchecked if new value is unchecked', function () {
                 testWidget.cbxCable.set('checked', true);
                 testWidget.cbxWireBased.set('value', false);
 
@@ -170,9 +186,7 @@ function (
 
                 expect(testWidget.cbxCable.get('checked')).toEqual(false);
             });
-            it("fires updateDefQuery", function () {
-                spyOn(testWidget, 'updateDefQuery');
-
+            it('fires updateDefQuery', function () {
                 testWidget.cbxWireBased.onClick();
 
                 expect(testWidget.updateDefQuery).toHaveBeenCalled();
@@ -189,7 +203,7 @@ function (
                     defQueryReturned = query;
                 });
             });
-            it("fires the onDefQueryUpdate topic", function () {
+            it('fires the onDefQueryUpdate topic', function () {
                 var returned;
                 var expected = {
                     minDownSpeed: testWidget.downloadSlider.value,
@@ -204,7 +218,7 @@ function (
 
                 expect(returned).toEqual(expected);
             });
-            it("doesn't put empty IN statement in the def query", function () {
+            it('doesn\'t put empty IN statement in the def query', function () {
                 var routerExpected = {
                     minDownSpeed: testWidget.downloadSlider.value,
                     minUpSpeed: testWidget.uploadSlider.value,
@@ -212,11 +226,11 @@ function (
                     providers: -1,
                     endUserCats: ['con']
                 };
-                var defQueryExpected = "MAXADDOWN IN ('11','10','9','8','7','6','5','4','3') " +
-                    "AND MAXADUP IN ('11','10','9','8','7','6','5','4','3','2') AND TRANSTECH = -1 " +
-                    "AND UTProvCode = '-1' AND EndUserCat <> '2'";
+                var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
+                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND TRANSTECH ' +
+                    '= -1 AND UTProvCode = \'-1\' AND EndUserCat <> \'2\'';
                 query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
-                    dijit.getEnclosingWidget(node).set('value', false);
+                    dijitRegistry.getEnclosingWidget(node).set('value', false);
                 });
                 testWidget.chbxShowOnly.set('checked', true);
 
@@ -229,10 +243,10 @@ function (
                 var routerExpected = {
                     minDownSpeed: testWidget.downloadSlider.value,
                     minUpSpeed: testWidget.uploadSlider.value,
-                    endUserCats: ['bus', 'con']
+                    endUserCats: ['con', 'bus']
                 };
-                var defQueryExpected = "MAXADDOWN IN ('11','10','9','8','7','6','5','4','3') " +
-                    "AND MAXADUP IN ('11','10','9','8','7','6','5','4','3','2')";
+                var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
+                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\')';
 
                 testWidget.cbxBusiness.set('checked', true);
 
@@ -246,9 +260,9 @@ function (
                     minUpSpeed: testWidget.uploadSlider.value,
                     endUserCats: -1
                 };
-                defQueryExpected = "MAXADDOWN IN ('11','10','9','8','7','6','5','4','3') " +
-                    "AND MAXADUP IN ('11','10','9','8','7','6','5','4','3','2') AND " +
-                    "EndUserCat = '-1'";
+                defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
+                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND ' +
+                    'EndUserCat = \'-1\'';
 
                 testWidget.cbxBusiness.set('checked', false);
                 testWidget.cbxResidential.set('checked', false);
@@ -261,7 +275,7 @@ function (
         });
         describe('selectTransTypes', function () {
             var testTypes = ['70', '71', '80'];
-            it("selects only the passed in checkboxes", function () {
+            it('selects only the passed in checkboxes', function () {
                 testWidget.selectTransTypes(testTypes);
 
                 expect(testWidget.cbxCable).not.toBeChecked();
@@ -270,7 +284,7 @@ function (
                 expect(testWidget.cbxFixedWireless).toBeChecked();
                 expect(testWidget.cbxMobileWireless).toBeChecked();
 
-                var anotherTest = ["40","41","10","20","30","50","70","71"];
+                var anotherTest = ['40','41','10','20','30','50','70','71'];
                 testWidget.selectTransTypes(anotherTest);
 
                 expect(testWidget.cbxCable).toBeChecked();
@@ -279,22 +293,22 @@ function (
                 expect(testWidget.cbxFixedWireless).toBeChecked();
                 expect(testWidget.cbxMobileWireless).not.toBeChecked();
             });
-            it("fires _onSubCheckBoxChange", function () {
+            it('fires _onSubCheckBoxChange', function () {
                 spyOn(testWidget, '_onSubCheckBoxChange');
 
                 testWidget.selectTransTypes(testTypes);
 
-                expect(testWidget._onSubCheckBoxChange.calls[0].args[1]).toEqual(false);
-                expect(testWidget._onSubCheckBoxChange.callCount).toBe(2);
+                expect(testWidget._onSubCheckBoxChange.calls.count()).toBe(2);
+                expect(testWidget._onSubCheckBoxChange.calls.argsFor(1)[1]).toEqual(false);
             });
-            it("fires updateDefQuery", function () {
+            it('fires updateDefQuery', function () {
                 spyOn(testWidget, 'updateDefQuery');
 
                 testWidget.selectTransTypes(testTypes);
 
                 expect(testWidget.updateDefQuery).toHaveBeenCalled();
             });
-            it("selects all checkboxes if null is passed", function () {
+            it('selects all checkboxes if null is passed', function () {
                 testWidget.cbxCable.set('checked', false);
                 testWidget.cbxDSL.set('checked', false);
                 testWidget.cbxFiber.set('checked', false);
@@ -311,7 +325,7 @@ function (
             });
         });
         describe('setSlider', function () {
-            it("set the appropriate slider value", function () {
+            it('set the appropriate slider value', function () {
                 testWidget.setSlider('up', 5);
 
                 expect(testWidget.uploadSlider.value).toEqual(5);
@@ -320,7 +334,7 @@ function (
 
                 expect(testWidget.downloadSlider.value).toEqual(3);
             });
-            it("fires updateDefQuery", function () {
+            it('fires updateDefQuery', function () {
                 spyOn(testWidget, 'updateDefQuery');
 
                 testWidget.setSlider('up', 5);

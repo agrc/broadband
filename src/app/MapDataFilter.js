@@ -1,49 +1,54 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/MapDataFilter.html',
-    'dojo/has',
-    'dojo/dom-style',
     'app/HelpPopup',
-    'dojo/topic',
-    'dojo/_base/lang',
-    'dojo/query',
     'app/ListPicker',
-    'dojo/dom-construct',
-    'dojo/_base/array',
-    'dojo/_base/event',
 
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+    'dijit/registry',
+
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/event',
+    'dojo/_base/lang',
+    'dojo/dom-construct',
+    'dojo/dom-style',
+    'dojo/has',
+    'dojo/query',
+    'dojo/text!app/templates/MapDataFilter.html',
+    'dojo/topic',
+
+    'dijit/Dialog',
+    'dijit/form/Button',
+    'dijit/form/CheckBox',
     'dijit/form/HorizontalRule',
     'dijit/form/HorizontalRuleLabels',
-    'dojox/form/TriStateCheckBox',
-    'dijit/form/Button',
-    'dijit/Dialog',
     'dijit/form/Slider',
     'dojo/_base/sniff',
-    'dijit/form/CheckBox'
+    'dojox/form/TriStateCheckBox'
 ],
 
 function (
-    declare,
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    template,
-    has,
-    domStyle,
     HelpPopup,
-    topic,
-    lang,
-    query,
     ListPicker,
-    domConstruct,
+
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+    registry,
+
     array,
-    dojoEvent
-    ) {
-    return declare("app.MapDataFilter", 
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    declare,
+    dojoEvent,
+    lang,
+    domConstruct,
+    domStyle,
+    has,
+    query,
+    template,
+    topic
+) {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      Adjust's the definition query for the service areas
         
@@ -68,18 +73,18 @@ function (
 
 
         postCreate: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:postCreate', arguments);
 
             var that = this;
 
             this.wireControlEvents();
             
             // listen for mapLayerLoaded event
-            this.subscribe("AGRC.ProvidersObtained", "_setProvidersList");
+            this.subscribe('AGRC.ProvidersObtained', '_setProvidersList');
             
             // IE hack
             if (has('ie') <= 8){
-                domStyle.set(this.downloadSlider.domNode, "width", "240px");
+                domStyle.set(this.downloadSlider.domNode, 'width', '240px');
             }
             
             // create new Help Popups - has to be done programmatically here or offsets are not correct
@@ -98,7 +103,7 @@ function (
             });
         },
         wireControlEvents: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:wireControlEvents', arguments);
 
             var dij;
             var that = this;
@@ -107,20 +112,20 @@ function (
                 slider._mouseWheeled = function () {};
             }
 
-            this.connect(this.downloadSlider, "onChange", this._setTimer);
+            this.connect(this.downloadSlider, 'onChange', this._setTimer);
             disableMouseWheel(this.downloadSlider);
-            this.connect(this.uploadSlider, "onChange", this._setTimer);
+            this.connect(this.uploadSlider, 'onChange', this._setTimer);
             disableMouseWheel(this.uploadSlider);
-            this.connect(this.cbxWireBased, "onClick", function () {
+            this.connect(this.cbxWireBased, 'onClick', function () {
                 that._onTransCheckBoxChange(that.cbxWireBased);
             });
-            this.connect(this.cbxWireless, "onClick", function () {
+            this.connect(this.cbxWireless, 'onClick', function () {
                 that._onTransCheckBoxChange(that.cbxWireless);
             });
-            this.connect(this.btnSelectProviders, "onClick", this.launchListPicker);
-            this.connect(this.chbxShowAll, "onChange", this.updateDefQuery);
-            this.connect(this.chbxShowOnly, "onClick", this.updateDefQuery);
-            this.connect(this.btnResetOK, "onClick", this._onResetOK);
+            this.connect(this.btnSelectProviders, 'onClick', this.launchListPicker);
+            this.connect(this.chbxShowAll, 'onChange', this.updateDefQuery);
+            this.connect(this.chbxShowOnly, 'onClick', this.updateDefQuery);
+            this.connect(this.btnResetOK, 'onClick', this._onResetOK);
             this.connect(this.btnSatelliteOK, 'onClick', this._onSatelliteOK);
             this.connect(this.moreInfoLink, 'onclick', this._onSatelliteInfoClick);
             this.connect(this.resetBtn, 'onClick', this._onResetClick);
@@ -128,8 +133,8 @@ function (
             this.connect(this.cbxBusiness, 'onClick', this.updateDefQuery);
 
             function wireSubCheckBoxes(parentCheckBoxId) {
-                query('label[for="' + parentCheckBoxId + '"] + .sub-trans-list input').forEach(function (node) {
-                    dij = dijit.getEnclosingWidget(node);
+                query('label[for=\'' + parentCheckBoxId + '\'] + .sub-trans-list input').forEach(function (node) {
+                    dij = registry.getEnclosingWidget(node);
                     that.connect(dij, 'onClick', function () {
                         that._onSubCheckBoxChange(that[parentCheckBoxId]);
                     });
@@ -140,30 +145,32 @@ function (
             wireSubCheckBoxes(this.cbxWireless.id);
         },
         _setProvidersList: function(providersObject){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_setProvidersList', arguments);
 
             // create new array and populate from object
             for (var i in providersObject){
-    //          // filter out Qwest
-    //          if (providersObject[i].name != 'Qwest') {
-                    this.providersList.push([providersObject[i].name, i]);
-    //          }
+                if (providersObject.hasOwnProperty(i)) {
+        //          // filter out Qwest
+        //          if (providersObject[i].name != 'Qwest') {
+                        this.providersList.push([providersObject[i].name, i]);
+        //          }
+                }
             }
             
             // enable Select button
             if (this.restricted === false) {
-                this.btnSelectProviders.set("disabled", false);
+                this.btnSelectProviders.set('disabled', false);
             }
         },
         _setTimer: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_setTimer', arguments);
 
             // use a timer to make sure that this function doesn't fire a lot when changing range sliders
             clearTimeout(this.updateTimer);
             this.updateTimer = setTimeout(lang.hitch(this, this.updateDefQuery), 500);
         },
         updateDefQuery: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:updateDefQuery', arguments);
 
             var that = this;
             var defQueryProps = {};
@@ -178,12 +185,12 @@ function (
             // Download slider
             // get start and end values for slice function on array
             var downQueryArray = AGRC.speedValues.slice(0, this.downloadSlider.value);
-            var queryTxt = AGRC.fieldNames.MAXADDOWN + " IN (" + downQueryArray.join() + ")";
+            var queryTxt = AGRC.fieldNames.MAXADDOWN + ' IN (\'' + downQueryArray.join('\',\'') + '\')';
             defQueryProps.minDownSpeed = this.downloadSlider.get('value');
             
             // Upload slider
             var upQueryArray = AGRC.speedValues.slice(0, this.uploadSlider.value);
-            queryTxt += " AND " + AGRC.fieldNames.MAXADUP + " IN (" + upQueryArray.join() + ")";
+            queryTxt += ' AND ' + AGRC.fieldNames.MAXADUP + ' IN (\'' + upQueryArray.join('\',\'') + '\')';
             defQueryProps.minUpSpeed = this.uploadSlider.get('value');
 
             // check to see if we should show the satellite providers link in results table
@@ -194,49 +201,47 @@ function (
             if (transTypes.length > 0) {
                 if (transTypes.length < 9) {
                     defQueryProps.transTypes = transTypes;
-                    queryTxt += " AND " + AGRC.fieldNames.TRANSTECH + " IN (" + transTypes + ")";
+                    queryTxt += ' AND ' + AGRC.fieldNames.TRANSTECH + ' IN (' + transTypes + ')';
                 }
             } else {
                 defQueryProps.transTypes = -1;
-                queryTxt += " AND " + AGRC.fieldNames.TRANSTECH + " = -1";
+                queryTxt += ' AND ' + AGRC.fieldNames.TRANSTECH + ' = -1';
             }
 
             // Providers
             if (this.chbxShowOnly.checked){
-                domStyle.set(this.providerList, "color", "black");
+                domStyle.set(this.providerList, 'color', 'black');
                 if (this.selectedProvidersIDs.length > 0) {
-                    queryTxt += " AND " + AGRC.fieldNames.UTProvCode + " IN (" + this.selectedProvidersIDs + ")";
+                    queryTxt += ' AND ' + AGRC.fieldNames.UTProvCode + ' IN (' + this.selectedProvidersIDs + ')';
                     defQueryProps.providers = array.map(this.selectedProvidersIDs, function (id) {
                         return id.slice(1, id.length - 1);
                     });
                 } else {
-                    queryTxt += ' AND ' + AGRC.fieldNames.UTProvCode + " = '-1'";
+                    queryTxt += ' AND ' + AGRC.fieldNames.UTProvCode + ' = \'-1\'';
                     defQueryProps.providers = -1;
                 }
             }
             else {
-                domStyle.set(this.providerList, "color", "grey");
+                domStyle.set(this.providerList, 'color', 'grey');
             }
 
             // End User Categories
             var bus = this.cbxBusiness.get('checked');
             var res = this.cbxResidential.get('checked');
+            defQueryProps.endUserCats = [];
             if (!res && !bus) {
-                queryTxt += " AND " + AGRC.fieldNames.EndUserCat + " = '-1'";
+                queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' = \'-1\'';
             } else {
                 if (!res) {
-                    queryTxt += " AND " + AGRC.fieldNames.EndUserCat + " = '2'";
+                    queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' = \'2\'';
+                } else {
+                    defQueryProps.endUserCats.push('con');
                 }
                 if (!bus) {
-                    queryTxt += " AND " + AGRC.fieldNames.EndUserCat + " <> '2'";
+                    queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' <> \'2\'';
+                } else {
+                    defQueryProps.endUserCats.push('bus');
                 }
-            }
-            defQueryProps.endUserCats = [];
-            if (bus) {
-                defQueryProps.endUserCats.push('bus');
-            } 
-            if (res) {
-                defQueryProps.endUserCats.push('con');
             }
             if (defQueryProps.endUserCats.length === 0) {
                 defQueryProps.endUserCats = -1;
@@ -267,13 +272,13 @@ function (
         _getTransTypes: function () {
             // summary:
             //      returns the values associates with the trans types checkboxes
-            console.log(this.declaredClass + "::_getTransTypes", arguments);
+            console.log('app/MapDataFilter:_getTransTypes', arguments);
             var ttValues = [];
             var newArray;
             var widget;
 
             query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
-                widget = dijit.getEnclosingWidget(node);
+                widget = registry.getEnclosingWidget(node);
                 newArray = widget.get('value');
                 ttValues = ttValues.concat(newArray);
             });
@@ -281,7 +286,7 @@ function (
             return ttValues;
         },
         launchListPicker: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:launchListPicker', arguments);
 
             var that = this;
 
@@ -289,12 +294,12 @@ function (
             if (!AGRC.listPicker){          
                 // create new list picker
                 AGRC.listPicker = new ListPicker({
-                    listName: "Providers",            
+                    listName: 'Providers',            
                     availableListArray: this.providersList
                 });
                 
                 // wire event to listen for OK button
-                topic.subscribe(AGRC.topics.listpicker_onOK, function(selectedItems){              
+                topic.subscribe(AGRC.topics.listpickerOnOK, function(selectedItems){              
                     that._onListPickerOK(selectedItems);
                 });
             }
@@ -302,7 +307,7 @@ function (
             AGRC.listPicker.show();
         },
         _onListPickerOK: function(selectedItems){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_onListPickerOK', arguments);
 
             this.resetFilters(false);
             
@@ -312,31 +317,31 @@ function (
             }
             
             // clear existing lists
-            this.providerList.innerHTML = "";
+            this.providerList.innerHTML = '';
             this.selectedProvidersIDs = [];
             
             // process new providers list
             if (selectedItems.length === 0) {
                 // switch back to showing all providers
-                this.chbxShowAll.set("checked", true);
+                this.chbxShowAll.set('checked', true);
                 
                 // add no providers
-                var li = domConstruct.create("li");
-                li.innerHTML = "No Providers Selected";
+                var li = domConstruct.create('li');
+                li.innerHTML = 'No Providers Selected';
                 this.providerList.appendChild(li);
             }
             else {      
                 array.forEach(selectedItems, function(item){
                     // add to id list
-                    this.selectedProvidersIDs.push("'" + item[1] + "'");
+                    this.selectedProvidersIDs.push('\'' + item[1] + '\'');
                     
                     // add to list
-                    var li = domConstruct.create("li");
+                    var li = domConstruct.create('li');
                     li.innerHTML = item[0].replace('&', '&amp;'); // replace & for IE;
                     this.providerList.appendChild(li);
                 }, this);
                 
-                this.chbxShowOnly.set("checked", true);
+                this.chbxShowOnly.set('checked', true);
             }
             
             this.updateDefQuery();
@@ -349,7 +354,7 @@ function (
             AGRC.bbLayerCached.hide();
         },
         disableProviderSelector: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:disableProviderSelector', arguments);
 
             // this method was built for the provider preview to disable the ability to see other
             // provider's data
@@ -369,7 +374,7 @@ function (
             this.restricted = true;
         },
         _onResetOK: function () {
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_onResetOK', arguments);
 
             // store checkbox value
             this.showResetDialog = !this.chbxShowAgain.get('checked');
@@ -377,7 +382,7 @@ function (
             this.resetDialog.hide();
         },
         resetFilters: function(resetProviders){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:resetFilters', arguments);
 
             // reset controls
             this.downloadSlider.set('value', '9');
@@ -385,25 +390,25 @@ function (
             this.cbxWireBased.set('value', 'on');
             this.cbxWireless.set('value', 'on');
             query('.sub-trans-list input').forEach(function (node) {
-                dijit.getEnclosingWidget(node).set('checked', true);
+                registry.getEnclosingWidget(node).set('checked', true);
             });
             if (resetProviders && this.restricted === false){
                 this.chbxShowAll.set('checked', true);
             }
         },
         _onSatelliteInfoClick: function(event){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_onSatelliteInfoClick', arguments);
 
             this.satelliteDialog.show();
             dojoEvent.stop(event);
         },
         _onSatelliteOK: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_onSatelliteOK', arguments);
 
             this.satelliteDialog.hide();
         },
         _onResetClick: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/MapDataFilter:_onResetClick', arguments);
             
             this.resetFilters(true);
             
@@ -423,7 +428,7 @@ function (
         destroyRecursive: function () {
             // summary:
             //      need to remove the associated dialogs manually for tests to work
-            console.log(this.declaredClass + "::destroyRecursive", arguments);
+            console.log('app/MapDataFilter:destroyRecursive', arguments);
             
             array.forEach(this.dialogs, function (d) {
                 d.destroyRecursive(false);
@@ -436,7 +441,7 @@ function (
             //      updates the parent checkbox
             // parentCheckBox: TriStateCheckBox
             // updateDefQuery: ?Boolean (defaults to true)
-            console.log(this.declaredClass + "::_onSubCheckBoxChange", arguments);
+            console.log('app/MapDataFilter:_onSubCheckBoxChange', arguments);
             var dij;
             var falseValues = [];
             var value;
@@ -447,8 +452,8 @@ function (
             }
 
             // query for related sub checkboxes
-            boxes = query('label[for="' + parentCheckBox.id + '"] + .sub-trans-list input').forEach(function (node) {
-                dij = dijit.getEnclosingWidget(node);
+            boxes = query('label[for=\'' + parentCheckBox.id + '\'] + .sub-trans-list input').forEach(function (node) {
+                dij = registry.getEnclosingWidget(node);
                 value = dij.get('value');
                 if (value === false) {
                     falseValues.push(value);
@@ -474,12 +479,12 @@ function (
             // summary:
             //      updates the sub checkboxes for the trans checkbox
             // chbox: TriStateCheckBox
-            console.log(this.declaredClass + "::_onTransCheckBoxChange", arguments);
+            console.log('app/MapDataFilter:_onTransCheckBoxChange', arguments);
             var value = chbox.get('value');
 
             function setSubs(checked) {
-                query('label[for="' + chbox.id + '"] + .sub-trans-list input').forEach(function (node) {
-                    dijit.getEnclosingWidget(node).set('checked', checked);
+                query('label[for=\'' + chbox.id + '\'] + .sub-trans-list input').forEach(function (node) {
+                    registry.getEnclosingWidget(node).set('checked', checked);
                 });
             }
 
@@ -498,13 +503,13 @@ function (
             // summary:
             //      called by app/Router
             // transTypes: Number[]
-            console.log(this.declaredClass + "::selectTransType", arguments);
+            console.log('app/MapDataFilter:selectTransTypes', arguments);
             
             var chbox;
             var values;
 
             query('.sub-trans-list input').forEach(function (input) {
-                chbox = dijit.getEnclosingWidget(input);
+                chbox = registry.getEnclosingWidget(input);
                 // need to do this to make sure that we get
                 // the correct return value for value
                 chbox.set('checked', true);
@@ -530,7 +535,7 @@ function (
             //      called by app/Router to manually set the slider values
             // sliderType: String (up || down)
             // value: Number
-            console.log(this.declaredClass + "::setSlider", arguments);
+            console.log('app/MapDataFilter:setSlider', arguments);
         
             var slider = (sliderType === 'down') ? this.downloadSlider : this.uploadSlider;
 

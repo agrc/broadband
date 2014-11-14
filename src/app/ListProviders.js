@@ -1,47 +1,72 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/ListProviders.html',
-    'dojox/widget/Standby',
+    'agrc/widgets/locate/FindAddress',
+
     'app/HelpPopup',
-    'dojo/has',
-    'dojo/dom-style',
-    'dojo/topic',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/dom-construct',
-    'dojo/_base/window',
     'app/ProviderResult',
+
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
     'dijit/registry',
+
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/_base/window',
+    'dojo/dom-construct',
+    'dojo/dom-style',
+    'dojo/has',
     'dojo/query',
+    'dojo/text!app/templates/ListProviders.html',
+    'dojo/topic',
+
+    'dojox/widget/Standby',
+
+    'esri/SpatialReference',
+    'esri/geometry/Point',
+    'esri/graphic',
+    'esri/symbols/PictureMarkerSymbol',
+    'esri/tasks/GeometryService',
+    'esri/tasks/QueryTask',
+    'esri/tasks/query',
 
     'agrc/widgets/locate/FindAddress',
     'dojo/_base/sniff'
 ], 
 
 function (
-    declare, 
-    _WidgetBase, 
-    _TemplatedMixin, 
-    _WidgetsInTemplateMixin, 
-    template,
-    Standby,
+    FindAddress,
+
     HelpPopup,
-    has,
-    domStyle,
-    topic,
-    lang,
-    array,
-    domConstruct,
-    win,
     ProviderResult,
+
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
     registry,
-    query
-    ) {
-    return declare("broadband.ListProviders",
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+
+    array,
+    declare,
+    lang,
+    win,
+    domConstruct,
+    domStyle,
+    has,
+    query,
+    template,
+    topic,
+
+    Standby,
+
+    SpatialReference,
+    Point,
+    Graphic,
+    PictureMarkerSymbol,
+    GeometryService,
+    QueryTask,
+    Query
+) {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         /**
          * Widget used to display providers at a clicked point on the map
          * @author Scott Davis
@@ -84,15 +109,16 @@ function (
         lastPoint: null,
         
         postCreate: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:postCreate', arguments);
 
             this._setUpQueryTasks();
             
             // create new symbol
-            this._markerSymbol = new esri.symbol.PictureMarkerSymbol("http://168.180.161.9/broadband/app/resources/images/push_pin.png", 40, 40).setOffset(0, 17);
+            this._markerSymbol = new PictureMarkerSymbol(
+                'http://168.180.161.9/broadband/app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
             
             // create new find address widget
-            new agrc.widgets.locate.FindAddress({
+            new FindAddress({
                 map: AGRC.map,
                 title: 'Street Address',
                 symbol: this._markerSymbol
@@ -119,14 +145,14 @@ function (
             new HelpPopup({title: 'Provider Results Legend', autoPosition: false}, 'resultsHelp');
             
             // get geometry service
-            this.geoService = new esri.tasks.GeometryService(this.geoServiceURL);
+            this.geoService = new GeometryService(this.geoServiceURL);
         },
         
         /**
          * wires events
          */
         _wireEvents: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_wireEvents', arguments);
 
             var that = this;
 
@@ -137,8 +163,8 @@ function (
             });
             
             // search for providers on successful address find
-            topic.subscribe("agrc.widgets.locate.FindAddress.OnFind", function(result){
-                var point = new esri.geometry.Point(result.UTM_X, result.UTM_Y, AGRC.map.spatialReference);
+            topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function(result){
+                var point = new Point(result.UTM_X, result.UTM_Y, AGRC.map.spatialReference);
                 
                 // search for providers
                 that.searchMapPoint(point, false);
@@ -157,7 +183,7 @@ function (
             });
             
             // widget controls
-            this.connect(this.btnClear, "onClick", this.clearResultsOnClick);
+            this.connect(this.btnClear, 'onClick', this.clearResultsOnClick);
             this.connect(this.satMsg, 'onclick', function(evt){
                 evt.preventDefault();
                 topic.publish('broadband.ListProviders.onSatLinkClick');
@@ -179,12 +205,12 @@ function (
          * Sets up the different query tasks and wires necessary events
          */
         _setUpQueryTasks: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_setUpQueryTasks', arguments);
 
             // set up query - same query used for all tasks
-            this.query = new esri.tasks.Query();
+            this.query = new Query();
             this.query.returnGeometry = false;
-            this.query.where = AGRC.app.makeQueryDirty("1 = 1"); // get all values
+            this.query.where = AGRC.app.makeQueryDirty('1 = 1'); // get all values
             this.query.outFields = [
                 AGRC.fieldNames.UTProvCode, 
                 AGRC.fieldNames.MAXADDOWN, 
@@ -193,17 +219,17 @@ function (
             
             // create new query task for each layer
             // tried identify task, but performance was horribly slow (40 seconds to get a return from server)
-            this.qTaskRoadSegs = new esri.tasks.QueryTask(AGRC.broadbandMapURL + "/0");
-            this.qTaskCensus = new esri.tasks.QueryTask(AGRC.broadbandMapURL + "/1");
-            this.qTaskWireless = new esri.tasks.QueryTask(AGRC.broadbandMapURL + "/2");
+            this.qTaskRoadSegs = new QueryTask(AGRC.broadbandMapURL + '/0');
+            this.qTaskCensus = new QueryTask(AGRC.broadbandMapURL + '/1');
+            this.qTaskWireless = new QueryTask(AGRC.broadbandMapURL + '/2');
             
             // wire events
-            this.connect(AGRC.map, "onClick", function(event){
+            this.connect(AGRC.map, 'onClick', function(event){
                 this.searchMapPoint(event.mapPoint, true);
             });
-            this.connect(this.qTaskRoadSegs, "onError", this._onQTaskError);
-            this.connect(this.qTaskCensus, "onError", this._onQTaskError);
-            this.connect(this.qTaskWireless, "onError", this._onQTaskError);
+            this.connect(this.qTaskRoadSegs, 'onError', this._onQTaskError);
+            this.connect(this.qTaskCensus, 'onError', this._onQTaskError);
+            this.connect(this.qTaskWireless, 'onError', this._onQTaskError);
         },
         
         /**
@@ -212,7 +238,7 @@ function (
          * @param {Boolean} displayGraphic - whether or not to add a graphic
          */
         searchMapPoint: function(mapPoint, displayGraphic){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:searchMapPoint', arguments);
 
             this.standby.show();
 
@@ -266,7 +292,7 @@ function (
          * @param {Object} results
          */
         _addResultsToList: function(results){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_addResultsToList', arguments);
 
             // append new providers, if any, to list
             array.forEach(results.features, function(g){
@@ -290,12 +316,12 @@ function (
                         }
                         var transtypeCode = atts[AGRC.fieldNames.TRANSTECH];
                         var perspectivItem = {
-                            "id": atts[AGRC.fieldNames.UTProvCode],
-                            "name": providerObj.name,
-                            "url": providerObj.url,
-                            "maxup": maxupCode,
+                            'id': atts[AGRC.fieldNames.UTProvCode],
+                            'name': providerObj.name,
+                            'url': providerObj.url,
+                            'maxup': maxupCode,
                             'maxupDesc': maxupDesc,
-                            "maxdown": maxdownCode,
+                            'maxdown': maxdownCode,
                             'maxdownDesc': maxdownDesc,
                             'transTypes': [AGRC.typesDomain[transtypeCode]]
                         };
@@ -338,7 +364,7 @@ function (
          * @param {Object} error
          */
         _onQTaskError: function(error){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_onQTaskError', arguments);
 
             console.error(error.message);
         },
@@ -349,13 +375,13 @@ function (
          * @param {Object} mapPoint
          */
         _addMarkerToMap: function(mapPoint){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_addMarkerToMap', arguments);
 
             // clear previous graphics
             AGRC.map.graphics.clear();
             
             // create new graphic
-            var g = new esri.Graphic(mapPoint, this._markerSymbol, {}, {});
+            var g = new Graphic(mapPoint, this._markerSymbol, {}, {});
             AGRC.map.graphics.add(g);
         },
         
@@ -365,7 +391,7 @@ function (
          * @param {String[String[]]} list The array of providers in this format: [Name, Maxup, Maxdown]
          */
         _populateResultsList: function(list){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:_populateResultsList', arguments);
 
             this.clearTable();
                     
@@ -388,7 +414,8 @@ function (
             } else {
                 // add none found message
                 // use the appropriate message based upon whether the sat link is show or not
-                var msg = (domStyle.get(this.satMsg, 'display') === 'block') ? this.noneFoundMsgWithSat : this.noneFoundMsgWithoutSat;
+                var msg = (domStyle.get(this.satMsg, 'display') === 'block') ?
+                    this.noneFoundMsgWithSat : this.noneFoundMsgWithoutSat;
                 domConstruct.create('div', {
                     'class': 'none-found-msg',
                     'innerHTML': msg
@@ -400,7 +427,7 @@ function (
             this.utmY.innerHTML = Math.round(this.lastPoint.y);
             
             // project point
-            var wgs = new esri.SpatialReference({wkid: 4326});
+            var wgs = new SpatialReference({wkid: 4326});
             this.geoService.project([this.lastPoint], wgs, lang.hitch(this, function(pnts){
                 var pnt = pnts[0];
                 this.lat.innerHTML = Math.round(pnt.y * 100000)/100000;
@@ -413,7 +440,6 @@ function (
         _createResult: function(item, i){
             //* create new ProviderResult widget
             // create empty div and assign to body - required to make tooltip work
-            // see http://o.dojotoolkit.org/forum/dijit-dijit-0-9/dijit-support/tooltips-do-not-work-programmatically-created-custom-widget
             var tmpDiv = win.body().appendChild(domConstruct.create('div'));
             
             // assign index value for even row class within widget
@@ -428,7 +454,7 @@ function (
          * @param {Object} event
          */
         clearResultsOnClick: function () {
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:clearResultsOnClick', arguments);
 
             // clear table
             this.clearTable();
@@ -440,7 +466,7 @@ function (
         },
         
         showResults: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:showResults', arguments);
 
             // hide sample image and header
             domStyle.set(this.placeholderImg, 'display', 'none');
@@ -449,7 +475,7 @@ function (
         },
         
         hideResults: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:hideResults', arguments);
 
             // show sample image and header
             domStyle.set(this.placeholderImg, 'display', 'block');
@@ -461,7 +487,7 @@ function (
          * clears rows from table
          */
         clearTable: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom);
+            console.log('app/ListProviders:clearTable', arguments);
 
             // destroy all Provider Results widgets
             registry.byClass('broadband.ProviderResult').forEach(function(widget){

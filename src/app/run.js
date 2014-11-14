@@ -1,34 +1,37 @@
 (function () {
-    var projectUrl;
-    if (typeof location === 'object') {
-        // ** begin dev code
-        // running in browser
-        projectUrl = location.pathname.replace(/\/[^\/]+$/, "");
-        projectUrl = (projectUrl === "") ? '/src' : projectUrl;
-        // ** end dev code
-
-        // // ** begin prod code
-        // projectUrl = 'http://mapserv.utah.gov/broadband/';
-        // // ** end prod code
-    } else {
-        // running in node build system
-        projectUrl = '../';
-    }
-    require({
+    var config = {
+        baseUrl: (
+            typeof window !== 'undefined' &&
+            window.dojoConfig &&
+            window.dojoConfig.isJasmineTestRunner
+            ) ? '/src': './',
         packages: [
+            'agrc',
+            'app',
+            'dijit',
+            'dojo',
+            'dojox',
+            'esri',
+            'ijit',
+            'polyfills',
             {
-                name: 'app',
-                location: projectUrl + '/app'
-            },{
-                name: 'agrc',
-                location: projectUrl + '/agrc'
-            },{
-                name: 'ijit',
-                location: projectUrl + '/ijit'
-            },{
-                name: 'polyfills',
-                location: projectUrl + '/polyfills'
+                name: 'spin',
+                location: 'spinjs',
+                main: 'spin'
             }
         ]
-    }, ['app']);
+    };
+        
+    require(config, [
+        'dojo/parser',
+        
+        'dojo/domReady!',
+        'polyfills/responsive'
+    ], function (parser) {
+        parser.parse();
+
+        AGRC.app.startup();
+        AGRC.app.setUpMap();
+        AGRC.app.hideLoader();
+    });
 })();

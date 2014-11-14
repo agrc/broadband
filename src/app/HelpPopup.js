@@ -1,24 +1,26 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/HelpPopup.html',
+
+    'dojo/_base/declare',
     'dojo/has',
+    'dojo/text!app/templates/HelpPopup.html',
 
     'dijit/Dialog',
     'dojo/_base/sniff'
 ],
 
 function (
-    declare,
-    _WidgetBase,
     _TemplatedMixin,
+    _WidgetBase,
     _WidgetsInTemplateMixin,
-    template,
-    has
-    ) {
-    return declare('app.HelpPopup', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+
+    declare,
+    has,
+    template
+) {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary: 
         // consists of a small icon that displays help content when clicked
         // it uses the contents of the original div to populate the dialog
@@ -43,7 +45,7 @@ function (
         title: '',
         
         postMixInProperties: function(){
-            console.log(this.declaredClass + '::' + arguments.callee.nom, arguments);
+            console.log('app/HelpPopup:postMixInProperties', arguments);
             
             // get dialog content from inner html of div
             if (has('ie')){
@@ -54,7 +56,7 @@ function (
         },
         
         postCreate: function(){
-            console.log(this.declaredClass + '::' + arguments.callee.nom, arguments);
+            console.log('app/HelpPopup:postCreate', arguments);
             
             // set dialog content & title
             this.dialog.set('content', this.content);
@@ -64,20 +66,20 @@ function (
         },
         
         _wireEvents: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/HelpPopup:_wireEvents', arguments);
             
             this.connect(this.image, 'onclick', this._onImageClick);
         },
         
         _onImageClick: function(){
-            console.log(this.declaredClass + "::" + arguments.callee.nom, arguments);
+            console.log('app/HelpPopup:_onImageClick', arguments);
 
             this.dialog.show();
         },
         destroyRecursive: function () {
             // summary:
             //      need to manually destroy the dialog
-            console.log(this.declaredClass + "::destroyRecursive", arguments);
+            console.log('app/HelpPopup:destroyRecursive', arguments);
         
             this.dialog.destroyRecursive();
 

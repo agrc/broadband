@@ -1,40 +1,40 @@
 define([
-    'dojo/_base/declare', 
-    'dijit/_WidgetBase', 
-    'dijit/_TemplatedMixin', 
-    'dijit/_WidgetsInTemplateMixin',
-    'dojo/text!app/templates/ProviderResult.html',
-    'dojo/dom-class',
     'dijit/Tooltip',
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+
+    'dojo/_base/declare',
+    'dojo/dom-class',
     'dojo/dom-construct',
+    'dojo/text!app/templates/ProviderResult.html',
+
     'dojox/charting/Chart2D',
     'dojox/charting/Theme'
-
-],
-
-function (
-    declare,
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    template,
-    domClass,
+], function (
     Tooltip,
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
+
+    declare,
+    domClass,
     domConstruct,
+    template,
+
     Chart2D,
     Theme
-    ) {
-    return declare("broadband.ProviderResult", 
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+) {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         /**
          * Summary:
          * The row in the provider results table that shows the name and speeds chart along
          * with associated tooltip
          */
-        
+
         widgetsInTemplate: true,
         templateString: template,
-        
+
         id: '', // unique id of provider
         url: '', // url to provider website
         name: '', // colloqial name
@@ -44,7 +44,7 @@ function (
         maxdownDesc: '', // description from domain
         maxupDesc: '', // description from domain
         transTypes: [], // list of transmission types
-        
+
     //  /**
     //   * Usually used to pass in parameters
     //   * @param {Object} options
@@ -53,21 +53,21 @@ function (
     //      // mixin options
     //      dojo.safeMixin(this, options);
     //  },
-        
+
         /**
          * Fires after all nodes are ready to use
          */
         postCreate: function(){
             // assign even row
             if ((this.index + 1) % 2 === 0) {
-                domClass.add(this.domNode, "even-row");
+                domClass.add(this.domNode, 'even-row');
             }
-            
+
             this.buildTooltip();
-            
+
             this.buildChart();
         },
-        
+
         buildTooltip: function(){
             // tooltip
             new Tooltip({
@@ -76,14 +76,14 @@ function (
                 showDelay: 0
             });
         },
-        
+
         /**
          * Build chart and puts it in td
          */
         buildChart: function(){
             var div = domConstruct.create('div', null, this.speedChart);
-            domClass.add(div, "chart-div");
-            
+            domClass.add(div, 'chart-div');
+
             // make new chart
             var chart1 = new Chart2D(div, {
                 fill: null,
@@ -94,13 +94,13 @@ function (
                     t: 0,
                     b: 0
                 }
-            }).addPlot("default", {
-                type: "ClusteredBars",
+            }).addPlot('default', {
+                type: 'ClusteredBars',
                 minBarSize: 7,
                 maxBarSize: 7,
                 gap: 5
-            }).addAxis("x", {
-                type: "Invisible",
+            }).addAxis('x', {
+                type: 'Invisible',
                 min: 1,
                 max: 12,
                 majorLabels: false,
@@ -112,22 +112,22 @@ function (
                 minorTick: {
                     length: 0
                 }
-            }).addSeries("Upload Series", [{
+            }).addSeries('Upload Series', [{
                 y: this.maxup
             }], {
-                fill: "#AAD0F2",
-                stroke: "#AAD0F2"
-            }).addSeries("Download Series", [{
+                fill: '#AAD0F2',
+                stroke: '#AAD0F2'
+            }).addSeries('Download Series', [{
                 y: this.maxdown
             }], {
-                fill: "#769DC0",
-                stroke: "#769DC0"
+                fill: '#769DC0',
+                stroke: '#769DC0'
             }).setTheme(new Theme({
                 plotarea: {
-                    fill: "transparent",
+                    fill: 'transparent',
                     stroke: null
                 }
-            }));        
+            }));
             chart1.render();
         }
     });

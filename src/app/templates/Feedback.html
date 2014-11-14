@@ -12,7 +12,7 @@
 		            	Email Address
 					</label>
 		        </div>
-		        <input data-dojo-attach-point="Feedback_Email" type="text" 
+		        <input data-dojo-attach-point="emailTxt" type="text" 
 					class='email-textbox' 
 					value="" data-dojo-type="dijit.form.ValidationTextBox"
 		            regexpgen="dojox.validate.regexp.emailAddress"
@@ -39,12 +39,12 @@
 		            	Comments
 		            </label>
 		        </div>
-		        <textarea data-dojo-attach-point='Feedback_Textarea' 
+		        <textarea data-dojo-attach-point='textarea' 
 					rows="8" class='text-area'
 					placeHolder='Your comments...'
 		            trim="true"
 		            required='true'></textarea>
-		        <button data-dojo-attach-point="Feedback_Submit" 
+		        <button data-dojo-attach-point="submitBtn" 
 					data-dojo-type="dijit.form.Button" 
 					data-dojo-attach-event='onClick: submit'>Submit</button>
 		    </form>

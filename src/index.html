@@ -9,20 +9,22 @@
 	<link rel='shortcut icon' type='image/png' href='images/favicon.png'>
 	
     <!-- CSS FILES -->
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/dojo/dijit/themes/claro/claro.css" />
-    <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.3/js/esri/css/esri.css">
     <link rel="stylesheet" type="text/css" href="app/resources/App.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
-	
 </head>
 <body class="claro">
     <div id='preloader'>Loading application...</div>
-    <div data-dojo-type="app.App"></div>
+    <div data-dojo-type="app/App"></div>
     
-	<!-- JAVASCRIPT FILES -->
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.3" data-dojo-config="async: 0, isDebug: 1, tlmSiblingOfDojo: 1"></script>
-    <script src="app/nls/run_en-us.js" defer></script> <!-- for built version -->
-    <script src="app/run.js" defer></script>
+	<!-- JAVASCRIPT -->
+    <!-- build:template
+    <script data-dojo-config="deps:['app/run']" src='dojo/dojo.js'></script>
+    /build -->
+
+    <!-- build:remove -->
+    <script data-dojo-config="isDebug: 1" src='dojo/dojo.js'></script>
+    <script src='app/run.js'></script>
+    <!-- /build -->
 	
 	<!-- GOOGLE ANALYTICS -->
 	<script type="text/javascript">

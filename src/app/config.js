@@ -1,14 +1,9 @@
 define([
-    'dojo/parser',
-
-    'app/App',
-    'polyfills/responsive' // media query event polyfill for IE
 ], 
 
 function (
-    parser
     ) {
-    var appServerPath = "http://168.180.161.9/ArcGIS/rest/services/";
+    var appServerPath = 'http://168.180.161.9/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -28,21 +23,21 @@ function (
         currentLayer: null,
 
         // used to point to base maps, i think
-        mapServerPath: "http://mapserv.utah.gov/ArcGIS/rest/services/",
+        mapServerPath: 'http://mapserv.utah.gov/ArcGIS/rest/services/',
 
         // path to app
         appServerPath: appServerPath,
-        broadbandMapURL: appServerPath + "Broadband/ProviderCoverage/MapServer",
+        broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
-        // basemapsURL: appServerPath + "Broadband/Basemaps/MapServer",
+        // basemapsURL: appServerPath + 'Broadband/Basemaps/MapServer',
         fieldNames: {
-            UTProvCode: "UTProvCode",
-            MAXADUP: "MAXADUP",
-            MAXADDOWN: "MAXADDOWN",
-            NAME: "Colloquial",
-            ID: "Code",
-            URL: "URL",
-            ID_NUM: "ID_NUM",
+            UTProvCode: 'UTProvCode',
+            MAXADUP: 'MAXADUP',
+            MAXADDOWN: 'MAXADDOWN',
+            NAME: 'Colloquial',
+            ID: 'Code',
+            URL: 'URL',
+            ID_NUM: 'ID_NUM',
             TRANSTECH: 'TRANSTECH',
             EndUserCat: 'EndUserCat'
         },
@@ -60,7 +55,7 @@ function (
             '11': 'greater than 1000 Mbps'
         },
         // TODO: refactor MapDataFilter.js to use speedsDomain and get rid of this property
-        speedValues: ["'11'","'10'","'9'","'8'","'7'","'6'","'5'","'4'","'3'","'2'"],
+        speedValues: ['11','10','9','8','7','6','5','4','3','2'],
         typesDomain: {
             '10': 'DSL',
             '20': 'DSL',
@@ -79,7 +74,7 @@ function (
             Router: {
                 onDefQueryUpdate: 'broadband.Router.onDefQueryUpdate'
             },
-            listpicker_onOK: 'broadband.listpicker_onOK',
+            listpickerOnOK: 'broadband.listpickerOnOK',
             MapDataFilter: {
                 onResetFilter: 'broadband.MapDataFilter.onResetFilter',
                 onQueryUpdate: 'broadband.MapDataFilter.onQueryUpdate'
@@ -91,17 +86,7 @@ function (
         hashIdentifier: '/route/',
 
         // disableFeedback: Boolean
-        //      Used to disable feedback being sent durning testing
+        //      Used to disable feedback being sent during testing
         disableFeedback: false
     };
-
-    // prevent parsing if this is running in unit tests
-    if (!dojo.config.isJasmineTestRunner) {
-        // lights...camera...action!
-        parser.parse();
-
-        AGRC.app.startup();
-        AGRC.app.setUpMap();
-        AGRC.app.hideLoader();
-    }
 });

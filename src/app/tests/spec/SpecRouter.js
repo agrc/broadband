@@ -1,17 +1,22 @@
 require([
     'app/Router',
-    'dojo/topic',
-    'dojo/router',
-    'dojo/_base/lang'
 
+    'dojo/_base/lang',
+    'dojo/router',
+    'dojo/topic',
+
+    'esri/geometry/Extent'
 ],
 
 function (
     Router,
-    topic,
+
+    lang,
     dojoRouter,
-    lang
-    ) {
+    topic,
+
+    Extent
+) {
     describe('app/Router', function () {
         var testObject;
         var selectProvidersSpy;
@@ -23,7 +28,7 @@ function (
         beforeEach(function () {
             selectProvidersSpy = jasmine.createSpy('selectProviders');
             launchListPickerSpy = jasmine.createSpy('launchListPicker')
-                .andCallFake(function () {
+                .and.callFake(function () {
                     AGRC.listPicker = {selectProviders: function () {}};
                 });
             selectTransTypesSpy = jasmine.createSpy();
@@ -53,10 +58,8 @@ function (
         it('creates a valid object', function () {
             expect(testObject).toEqual(jasmine.any(Router));
         });
-        describe('constructor', function () {
-        });
         describe('wireEvents', function () {
-            it("wires the onDefQueryUpdate event", function () {
+            it('wires the onDefQueryUpdate event', function () {
                 spyOn(testObject, 'onDefQueryUpdate');
                 var value = {
                     providers: []
@@ -66,7 +69,7 @@ function (
 
                 expect(testObject.onDefQueryUpdate).toHaveBeenCalledWith(value);
             });
-            it("wires the route hash event", function () {
+            it('wires the route hash event', function () {
                 spyOn(testObject, 'onRouteHashChange');
 
                 dojoRouter.go(AGRC.hashIdentifier + 'hello=bar&hello2=bar2');
@@ -76,14 +79,14 @@ function (
                     hello2: 'bar2'
                 });
             });
-            it("wires the _onResetFilters event", function () {
+            it('wires the _onResetFilters event', function () {
                 spyOn(testObject, 'onResetFilters');
 
                 topic.publish(AGRC.topics.MapDataFilter.onResetFilter);
 
                 expect(testObject.onResetFilters).toHaveBeenCalled();
             });
-            it("wires onMapExtentChange", function () {
+            it('wires onMapExtentChange', function () {
                 spyOn(testObject, 'onMapExtentChange');
                 var value = 'blah';
 
@@ -96,7 +99,7 @@ function (
             beforeEach(function () {
                 spyOn(testObject, 'updateHash');
             });
-            it("update currentRoute", function () {
+            it('update currentRoute', function () {
                 var value = {
                     providers: 'blah'
                 };
@@ -105,19 +108,19 @@ function (
 
                 expect(testObject.currentRoute.providers).toEqual(value.providers);
             });
-            it("calls updateHash", function () {
+            it('calls updateHash', function () {
                 testObject.onDefQueryUpdate('blah');
 
                 expect(testObject.updateHash).toHaveBeenCalled();
             });
-            it("doesn't call updateHash if paused", function () {
+            it('doesn\'t call updateHash if paused', function () {
                 testObject.pauseUpdateHash = true;
 
                 testObject.onDefQueryUpdate('blah');
 
                 expect(testObject.updateHash).not.toHaveBeenCalled();
             });
-            it("strips out parameters from currentRoute", function () {
+            it('strips out parameters from currentRoute', function () {
                 testObject.currentRoute = {
                     transTypes: [13,14],
                     minDownSpeed: 3,
@@ -133,7 +136,7 @@ function (
                 expect(testObject.currentRoute.minDownSpeed).toBe(5);
                 expect(testObject.currentRoute.minUpSpeed).toBe(6);
             });
-            it("doesn't strip out extent property", function () {
+            it('doesn\'t strip out extent property', function () {
                 testObject.currentRoute.extent = 'blah';
 
                 testObject.onDefQueryUpdate({providers: 'blah'});
@@ -156,7 +159,7 @@ function (
                 },
                 endUserCats: endUserCats
             };
-            it("updates currentRoute", function () {
+            it('updates currentRoute', function () {
 
                 testObject.onRouteHashChange(testHash);
 
@@ -166,7 +169,7 @@ function (
                 expect(testObject.currentRoute.minUpSpeed).toEqual(testHash.minUpSpeed);
                 expect(testObject.currentRoute.extent).toEqual(testHash.extent);
             });
-            it("won't clobber currentRoute", function () {
+            it('won\'t clobber currentRoute', function () {
                 var cr = testObject.currentRoute;
 
                 testObject.onRouteHashChange({
@@ -175,7 +178,7 @@ function (
 
                 expect(testObject.currentRoute).toEqual(cr);
             });
-            it("calls updateProviders if appropriate", function () {
+            it('calls updateProviders if appropriate', function () {
                 var testHash2 = {
                     transTypes: [1, 2, 3]
                 };
@@ -185,21 +188,21 @@ function (
                 testObject.onRouteHashChange(testHash);
                 testObject.onRouteHashChange(testHash2);
 
-                expect(testObject.updateProviders.callCount).toEqual(2);
+                expect(testObject.updateProviders.calls.count()).toEqual(2);
             });
-            it("calls MapDataFilter::selectTransTypes if appropriate", function () {
+            it('calls MapDataFilter::selectTransTypes if appropriate', function () {
                 var testHash2 = {
                     providers: ['blah1']
                 };
-                
+
                 testObject.onRouteHashChange(testHash);
                 testObject.onRouteHashChange(testHash);
                 testObject.onRouteHashChange(testHash2);
 
-                expect(selectTransTypesSpy.callCount).toBe(2);
-                expect(selectTransTypesSpy.calls[1].args[0]).toEqual(null);
+                expect(selectTransTypesSpy.calls.count()).toBe(2);
+                expect(selectTransTypesSpy.calls.argsFor(1)[0]).toEqual(null);
             });
-            it("calls MapDataFilter::setSlider if appropriate", function () {
+            it('calls MapDataFilter::setSlider if appropriate', function () {
                 var testHash2 = {
                     providers: ['blah1', 'blah2'],
                     transTypes: [1,2,3]
@@ -207,29 +210,29 @@ function (
 
                 testObject.onRouteHashChange(testHash);
 
-                expect(setSliderSpy.calls[0].args).toEqual(['down', 2]);
+                expect(setSliderSpy.calls.argsFor(0)).toEqual(['down', 2]);
 
                 testObject.onRouteHashChange(testHash);
 
                 testObject.onRouteHashChange(testHash2);
 
-                expect(setSliderSpy.callCount).toBe(4);
+                expect(setSliderSpy.calls.count()).toBe(4);
             });
-            it("calls setExtent if appropriate", function () {
+            it('calls setExtent if appropriate', function () {
                 testObject.onRouteHashChange(testHash);
-                var extent = new esri.geometry.Extent(lang.mixin(testHash.extent, {
+                var extent = new Extent(lang.mixin(testHash.extent, {
                     spatialReference: {wkid: 26912}
                 }));
                 var testHash2 = {
                     providers: ['halle', 'asdf']
                 };
 
-                expect(setExtentSpy.calls[0].args[0]).toEqual(extent);
+                expect(setExtentSpy.calls.argsFor(0)[0]).toEqual(extent);
 
                 testObject.onRouteHashChange(testHash2);
                 testObject.onRouteHashChange(testHash2);
 
-                expect(setExtentSpy.callCount).toBe(2);
+                expect(setExtentSpy.calls.count()).toBe(2);
             });
             it('calls setEndUserCategories if appropriate', function () {
                 testObject.onRouteHashChange(testHash);
@@ -239,12 +242,12 @@ function (
         });
         describe('updateProviders', function () {
             var provs = ['blah1', 'blah2'];
-            it("calls selectProviders on the listPicker", function () {
+            it('calls selectProviders on the listPicker', function () {
                 testObject.updateProviders(provs);
 
                 expect(selectProvidersSpy).toHaveBeenCalledWith(provs);
             });
-            it("inits the list picker if needed", function () {
+            it('inits the list picker if needed', function () {
                 delete AGRC.listPicker;
 
                 testObject.updateProviders(provs);
@@ -253,9 +256,9 @@ function (
 
                 testObject.updateProviders(provs);
 
-                expect(launchListPickerSpy.callCount).toBe(1);
+                expect(launchListPickerSpy.calls.count()).toBe(1);
             });
-            it("converts a single provider to an array", function () {
+            it('converts a single provider to an array', function () {
                 testObject.updateProviders('blah');
 
                 expect(selectProvidersSpy).toHaveBeenCalledWith(['blah']);
@@ -265,7 +268,7 @@ function (
             beforeEach(function () {
                 spyOn(testObject, 'updateHash');
             });
-            it("clear the filter properties of currentRoute", function () {
+            it('clear the filter properties of currentRoute', function () {
                 testObject.currentRoute.providers = ['blah'];
                 testObject.currentRoute.transTypes = ['blah'];
                 testObject.currentRoute.endUserCats = ['blah'];
@@ -276,21 +279,21 @@ function (
                 expect(testObject.currentRoute.transTypes).toEqual([]);
                 expect(testObject.currentRoute.endUserCats).toEqual([]);
             });
-            it("calls updateHash", function () {
+            it('calls updateHash', function () {
                 testObject.onResetFilters();
 
                 expect(testObject.updateHash).toHaveBeenCalled();
             });
         });
         describe('onMapExtentChange', function () {
-            it("updates the currentRoute object", function () {
+            it('updates the currentRoute object', function () {
                 var expected = {
                     xmin: 1,
                     ymin: 2,
                     xmax: 3,
                     ymax: 4
                 };
-                var extent = new esri.geometry.Extent(lang.mixin({
+                var extent = new Extent(lang.mixin({
                     spatialReference: {wkid: 26912}
                 }, expected));
                 var providers = ['blah2', 'blah3'];
@@ -301,7 +304,7 @@ function (
                 expect(JSON.stringify(testObject.currentRoute.extent)).toEqual(JSON.stringify(expected));
                 expect(testObject.currentRoute.providers).toEqual(providers);
             });
-            it("calls updateHash if appropriate", function () {
+            it('calls updateHash if appropriate', function () {
                 testObject.pauseUpdateHash = true;
                 spyOn(testObject, 'updateHash');
 
@@ -315,7 +318,7 @@ function (
 
                 expect(testObject.updateHash).toHaveBeenCalled();
             });
-            it("strips off decimal places", function () {
+            it('strips off decimal places', function () {
                 var values = {
                     xmin: 1.2,
                     ymin: 2.5,
@@ -328,7 +331,7 @@ function (
                     xmax: 4,
                     ymax: 4
                 };
-                var extent = new esri.geometry.Extent(lang.mixin({
+                var extent = new Extent(lang.mixin({
                     spatialReference: {wkid: 26912}
                 }, values));
 
@@ -344,27 +347,27 @@ function (
                 expect(testObject.objectToQuery(obj)).toEqual(query);
                 expect(testObject.queryToObject(query)).toEqual(obj);
             });
-            it("separates all properties with a '&'", function () {
+            it('separates all properties with a "&"', function () {
                 obj = {
                     param1: 'blah',
                     param2: 'blah2'
                 };
                 query = 'param1=blah&param2=blah2';
             });
-            it("encodes all property values", function () {
+            it('encodes all property values', function () {
                 obj = {
                     param1: 'bla&h',
                     param2: 'blah'
                 };
                 query = 'param1=bla%26h&param2=blah';
             });
-            it("handles arrays", function () {
+            it('handles arrays', function () {
                 obj = {
                     providers: ['AT&T', 'Hello']
                 };
                 query = 'providers=AT%26T|Hello';
             });
-            it("handles the extent property object", function () {
+            it('handles the extent property object', function () {
                 obj = {
                     extent: {
                         xmin: 4472002.148131457,
@@ -375,13 +378,13 @@ function (
                 };
                 query = 'extent=4472002.148131457|2|3|4';
             });
-            it("converts single values to arrays for transtypes", function () {
+            it('converts single values to arrays for transtypes', function () {
                 obj = {
                     transTypes: ['1']
                 };
                 query = 'transTypes=1';
             });
-            it("converts speed types to their domain values", function () {
+            it('converts speed types to their domain values', function () {
                 obj = {
                     minDownSpeed: 8,
                     minUpSpeed: 10
