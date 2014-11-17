@@ -114,8 +114,6 @@ function (
             this.wireEvents();
 
             this.setUpMap();
-
-            this.hideLoader();
         },
         wireEvents: function () {
             // summary:
@@ -171,13 +169,13 @@ function (
 
             if (mq.matches) {
                 this.size = 'small';
-                domConstruct.place('left-nav', this.popoutMenu);
-                domConstruct.place('right-nav', this.popoutMenu);
+                domConstruct.place(this.leftNav, this.popoutMenu);
+                domConstruct.place(this.rightNav, this.popoutMenu);
                 domConstruct.place(this.navBar, this.popoutMenu);
             } else {
                 this.size = 'large';
-                domConstruct.place('left-nav', this.middleContainer);
-                domConstruct.place('right-nav', this.middleContainer);
+                domConstruct.place(this.leftNav, this.middleContainer);
+                domConstruct.place(this.rightNav, this.middleContainer);
                 domConstruct.place(this.navBar, this.headerContainer);
             }
         },
@@ -229,36 +227,6 @@ function (
             }
 
             animation.play();
-        },
-        hideLoader: function () {
-            // summary:
-            //      description
-            console.log('app/App:hideLoader', arguments);
-
-            // show content - prevent flash of unstyled content
-            fx.fadeOut({
-                node: 'preloader',
-                duration: 400,
-                onEnd: lang.hitch(this, function(o){
-                    domConstruct.destroy(o);
-
-                    if (!localStorage.skipDisclaimer) {
-                        localStorage.skipDisclaimer = false;
-                    }
-
-                    // display disclaimer
-                    if (!JSON.parse(localStorage.skipDisclaimer)) {
-                        this.disclaimerDialog.show();
-                    }
-                    this.cbxDisclaimer.set('checked', JSON.parse(localStorage.skipDisclaimer));
-                    this.connect(this.disclaimerBtn, 'onClick', function(){
-                        this.disclaimerDialog.hide();
-                    });
-                }),
-                onBegin: function () {
-
-                }
-            }).play();
         },
         getProvidersList: function () {
             console.log('app/App:getProvidersList', arguments);

@@ -35,17 +35,10 @@ a, a:link, a:active {
 a:hover {
     color: #666666;
 }
-body, #preloader {
+body {
     height: 100%;
     width: 100%;
     background: url('http://168.180.161.9/broadband/app/resources/images/brillant.png') white;
-}
-#preloader {
-    position: absolute;
-    left: 0px;
-    z-index: 9999;
-    padding: 20px;
-    font-size: 1.5em;
 }
 .side-nav {
     width: 280px;
@@ -204,7 +197,7 @@ div.nav-menu {
 
 
 /* left */
-#left-nav {
+div[data-dojo-attach-point="leftNav"] {
     left: 15px;
 }
 #provider-results {
@@ -260,7 +253,7 @@ div.nav-menu {
 }
 
 /* right */
-#right-nav {
+div[data-dojo-attach-point="rightNav"] {
     right: 15px;
 }
 #map-data-filter {
