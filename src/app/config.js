@@ -1,8 +1,10 @@
 define([
+    'dojo/has'
 ], 
 
 function (
-    ) {
+    has
+) {
     var appServerPath = '/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -89,4 +91,15 @@ function (
         //      Used to disable feedback being sent during testing
         disableFeedback: false
     };
+
+    if (has('agrc-api-key') === 'prod') {
+        // mapserv.utah.gov
+        window.AGRC.apiKey = 'AGRC-A94B063C533889';
+    } else if (has('agrc-api-key') === 'stage') {
+        // test.mapserv.utah.gov
+        window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+    } else {
+        // localhost
+        window.AGRC.apiKey = 'AGRC-E5B94F99865799';
+    }
 });
