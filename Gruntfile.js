@@ -230,7 +230,8 @@ module.exports = function(grunt) {
         'esri_slurp:travis',
         'jshint',
         'connect',
-        'jasmine:app'
+        'jasmine:app',
+        'build-prod'
     ]);
 
     // PROD

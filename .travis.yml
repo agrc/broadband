@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - npm install -g grunt-cli
+  - npm install -g bower
+  - npm install
+  - bower install
+notifications:
+  email:
+    on_success: never
