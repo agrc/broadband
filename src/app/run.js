@@ -35,7 +35,13 @@
                 location: './ladda-bootstrap',
                 main: 'dist/ladda'
             }
-        ]
+        ],
+        map: {
+            '*': {
+                'agrc/widgets/locate/templates/FindAddress.html':
+                    'app/templates/FindAddress.html'
+            }
+        }
     };
         
     require(config, [

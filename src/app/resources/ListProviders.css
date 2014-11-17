@@ -2,7 +2,10 @@
 	margin: 0px 3px 5px 0px;
     overflow-y: auto;
 	position: relative;
-	width: 282px;
+	width: 280px;
+}
+.list-providers .grid-container,
+.list-providers .header-row {
 }
 .list-providers .header-row {
 	font-weight: bold;

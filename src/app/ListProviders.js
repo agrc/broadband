@@ -121,7 +121,8 @@ function (
             new FindAddress({
                 map: AGRC.map,
                 title: 'Street Address',
-                symbol: this._markerSymbol
+                symbol: this._markerSymbol,
+                apiKey: AGRC.apiKey
             }, 'find-address');
             
             this._wireEvents();
@@ -164,11 +165,14 @@ function (
                 }),
                 
                 // search for providers on successful address find
-                topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function(result){
-                    var point = new Point(result.UTM_X, result.UTM_Y, AGRC.map.spatialReference);
-                    
-                    // search for providers
-                    that.searchMapPoint(point, false);
+                topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function(results){
+                    if (results.length) {
+                        var returnCoords = results[0].location;
+                        var point = new Point(returnCoords.x, returnCoords.y, AGRC.map.spatialReference);
+                        
+                        // search for providers
+                        that.searchMapPoint(point, false);
+                    }
                 }),
                 
                 // store query def from map data filters
@@ -448,7 +452,7 @@ function (
             item.index = i;
             
             var provResult = new ProviderResult(item, tmpDiv);
-            domConstruct.place(provResult.domNode, this.satMsg, 'before');
+            domConstruct.place(provResult.domNode, this.providerResultsContainer);
         },
         
         /**
@@ -492,7 +496,7 @@ function (
             console.log('app/ListProviders:clearTable', arguments);
 
             // destroy all Provider Results widgets
-            registry.byClass('broadband.ProviderResult').forEach(function(widget){
+            registry.findWidgets(this.providerResultsContainer).forEach(function(widget){
                 widget.destroyRecursive(false);
             });
             
