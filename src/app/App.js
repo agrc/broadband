@@ -31,8 +31,10 @@ define([
     'esri/tasks/QueryTask',
     'esri/tasks/query',
 
-    'agrc/widgets/map/BaseMap',
-    'app/config'
+    'app/config',
+    'dijit/Dialog',
+    'dijit/form/Button',
+    'dijit/form/Checkbox'
 ],
 
 function (
@@ -122,30 +124,32 @@ function (
             var that = this;
             var mq;
 
-            // set up text links
-            this.connect(this.mapHelpText, 'onclick', function (evt) {
-                evt.preventDefault();
-                that.mapHelpDialog.show();
-            });
-            this.connect(this.aboutMapText, 'onclick', function (evt) {
-                evt.preventDefault();
-                that.aboutMapDialog.show();
-            });
-            this.connect(this.feedbackLink, 'onclick', function (evt) {
-                evt.preventDefault();
-                that.onFeedbackLinkClick();
-            });
-            on(this.popoutLink, 'click', function (evt) {
-                evt.preventDefault();
-                that.onPopoutLinkClick();
-            });
-            on(this.cbxDisclaimer, 'click', function () {
-                localStorage.skipDisclaimer = that.cbxDisclaimer.get('checked');
-            });
-            on(this.disclaimerLink, 'click', function (evt) {
-                evt.preventDefault();
-                that.disclaimerDialog.show();
-            });
+            this.own(
+                // set up text links
+                this.connect(this.mapHelpText, 'onclick', function (evt) {
+                    evt.preventDefault();
+                    that.mapHelpDialog.show();
+                }),                this.connect(this.aboutMapText, 'onclick', function (evt) {
+                    evt.preventDefault();
+                    that.aboutMapDialog.show();
+                }),                this.connect(this.feedbackLink, 'onclick', function (evt) {
+                    evt.preventDefault();
+                    that.onFeedbackLinkClick();
+                }),                on(this.popoutLink, 'click', function (evt) {
+                    evt.preventDefault();
+                    that.onPopoutLinkClick();
+                }),                on(this.cbxDisclaimer, 'click', function () {
+                    localStorage.skipDisclaimer = that.cbxDisclaimer.get('checked');
+                }),                on(this.disclaimerLink, 'click', function (evt) {
+                    evt.preventDefault();
+                    that.disclaimerDialog.show();
+                }),
+                on(this.headerContainer, 'click', function () {
+                    if (that.popoutOpen) {
+                        that.onPopoutLinkClick();
+                    }
+                })
+            );
 
             // wire media query events
             if (window.matchMedia) {
@@ -155,11 +159,6 @@ function (
                 });
             }
             this.onMediaQueryChange(mq);
-            on(this.headerContainer, 'click', function () {
-                if (that.popoutOpen) {
-                    that.onPopoutLinkClick();
-                }
-            });
         },
         onMediaQueryChange: function (mq) {
             // summary:
@@ -259,8 +258,8 @@ function (
 
             var that = this;
             var mapOptions = {
-                'showInfoWindowOnClick': false,
-                'useDefaultBaseMap': false,
+                showInfoWindowOnClick: false,
+                useDefaultBaseMap: false,
                 includeFullExtentButton: true,
                 sliderStyle: 'large'
             };
@@ -289,7 +288,7 @@ function (
                 bbLayerCached: AGRC.bbLayerCached
                 // basemapsLayer: AGRC.bbBasemaps
             };
-            new MapDisplayOptions(params, 'map-display-options');
+            this.own(new MapDisplayOptions(params, 'map-display-options'));
 
             AGRC.map.addLayer(AGRC.bbLayer);
             AGRC.map.addLoaderToLayer(AGRC.bbLayer);
@@ -298,28 +297,28 @@ function (
             // AGRC.map.addLayer(AGRC.bbBasemaps);
             // AGRC.map.addLoaderToLayer(AGRC.bbBasemaps);
 
-            this.connect(AGRC.map, 'onClick', function(){
-                if (this.size === 'small') {
-                    if (!this.popoutOpen) {
-                        this.onPopoutLinkClick();
+            this.own(this.connect(AGRC.map, 'onClick', function(){
+                if (that.size === 'small') {
+                    if (!that.popoutOpen) {
+                        that.onPopoutLinkClick();
                     }
                 }
-            });
+            }));
 
             // set up new geosearch widget
             this.geoSearch = new GeoSearch({map: AGRC.map}, 'geo-search');
 
-            this.connect(AGRC.map, 'onLoad', function () {
+            this.own(this.connect(AGRC.map, 'onLoad', function () {
                 that.connect(AGRC.map, 'onExtentChange', 'onExtentChange');
-            });
+            }));
 
             // create new map data filters widget
-            AGRC.mapDataFilter = new MapDataFilter({
+            this.own(AGRC.mapDataFilter = new MapDataFilter({
                 layer: AGRC.bbLayer
-            }, 'map-data-filter');
+            }, 'map-data-filter'));
 
             // create new provider results widget
-            this.listProviders = new ListProviders({}, 'list-providers');
+            this.own(this.listProviders = new ListProviders({}, 'list-providers'));
             this.listProviders.startup();
         },
         onFeedbackLinkClick: function () {

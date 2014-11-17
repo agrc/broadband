@@ -21,7 +21,6 @@ define([
 
 	'dijit/form/CheckBox',
 	'dijit/form/HorizontalSlider',
-	'dijit/form/RadioButton',
 	'dijit/form/Select',
 	'dojo/_base/sniff'
 ],
@@ -88,7 +87,7 @@ function (
 			new HelpPopup({
 				title: 'Map Display Help',
 				autoPosition: true
-			}, 'displayHelp');
+			}, this.displayHelp);
 
 			this.buildCAILegend();
 		},

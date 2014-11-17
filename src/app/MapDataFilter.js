@@ -89,11 +89,11 @@ function (
             
             // create new Help Popups - has to be done programmatically here or offsets are not correct
             this.dialogs = [];
-            this.dialogs.push(new HelpPopup({title: 'Maximum Advertised Speeds Help'}, 'speedsHelp'));
-            this.dialogs.push(new HelpPopup({title: 'Technology Type Help'}, 'typeHelp'));
+            this.dialogs.push(new HelpPopup({title: 'Maximum Advertised Speeds Help'}, this.speedsHelp));
+            this.dialogs.push(new HelpPopup({title: 'Technology Type Help'}, this.typeHelp));
             
-            this.dialogs.push(new HelpPopup({title: 'Broadband Providers Help'}, 'providersHelp'));
-            this.dialogs.push(new HelpPopup({title: 'Target Market Help'}, 'endUserHelp'));
+            this.dialogs.push(new HelpPopup({title: 'Broadband Providers Help'}, this.providersHelp));
+            this.dialogs.push(new HelpPopup({title: 'Target Market Help'}, this.endUserHelp));
             this.dialogs.push(this.satelliteDialog);
             this.dialogs.push(this.resetDialog);
             
