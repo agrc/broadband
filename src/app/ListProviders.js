@@ -136,13 +136,13 @@ function (
             this.standby.startup();
             
             // address help widget
-            new HelpPopup({title: 'Street Address Help', autoPosition: false}, 'addressHelp');
+            new HelpPopup({title: 'Street Address Help', autoPosition: false}, this.addressHelp);
             
             // click help widget
-            new HelpPopup({title: 'Map Click Help'}, 'clickHelp');
+            new HelpPopup({title: 'Map Click Help'}, this.clickHelp);
             
             // results help widget
-            new HelpPopup({title: 'Provider Results Legend', autoPosition: false}, 'resultsHelp');
+            new HelpPopup({title: 'Provider Results Legend', autoPosition: false}, this.resultsHelp);
             
             // get geometry service
             this.geoService = new GeometryService(this.geoServiceURL);
@@ -156,49 +156,51 @@ function (
 
             var that = this;
 
-            // clear table on search for address fail
-            topic.subscribe('agrc.widgets.locate.FindAddress.OnFindError', function(){
-    //          this.standby.show();
-                that.clearResultsOnClick();
-            });
-            
-            // search for providers on successful address find
-            topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function(result){
-                var point = new Point(result.UTM_X, result.UTM_Y, AGRC.map.spatialReference);
+            this.own(
+                // clear table on search for address fail
+                topic.subscribe('agrc.widgets.locate.FindAddress.OnFindError', function(){
+        //          this.standby.show();
+                    that.clearResultsOnClick();
+                }),
                 
-                // search for providers
-                that.searchMapPoint(point, false);
-            });
-            
-            // store query def from map data filters
-            topic.subscribe(AGRC.topics.MapDataFilter.onQueryUpdate, function(query){
-                that.defQuery = query;
+                // search for providers on successful address find
+                topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function(result){
+                    var point = new Point(result.UTM_X, result.UTM_Y, AGRC.map.spatialReference);
+                    
+                    // search for providers
+                    that.searchMapPoint(point, false);
+                }),
+                
+                // store query def from map data filters
+                topic.subscribe(AGRC.topics.MapDataFilter.onQueryUpdate, function(query){
+                    that.defQuery = query;
 
-                // rerun search if there is one
-                if (domStyle.get(that.placeholderImg, 'display') === 'none') {
-                    that.searchMapPoint(that.lastPoint);
-                }
+                    // rerun search if there is one
+                    if (domStyle.get(that.placeholderImg, 'display') === 'none') {
+                        that.searchMapPoint(that.lastPoint);
+                    }
+                    
+                    domStyle.set(that.warning, 'display', 'block');
+                }),
                 
-                domStyle.set(that.warning, 'display', 'block');
-            });
-            
-            // widget controls
-            this.connect(this.btnClear, 'onClick', this.clearResultsOnClick);
-            this.connect(this.satMsg, 'onclick', function(evt){
-                evt.preventDefault();
-                topic.publish('broadband.ListProviders.onSatLinkClick');
-            });
-            
-            // listen for reset filters button
-            topic.subscribe(AGRC.topics.MapDataFilter.onResetFilter, function(){
-                domStyle.set(that.warning, 'display', 'none');
-            });
-            
-            // listen for event to update the sat link visibility in the results list
-            topic.subscribe('broadband.MapDataFilter.UpdateSatLinkVisibility', function(show){
-                var displayValue = (show) ? 'block' : 'none';
-                domStyle.set(that.satMsg, 'display', displayValue);
-            });
+                // widget controls
+                this.connect(this.btnClear, 'onClick', this.clearResultsOnClick),
+                this.connect(this.satMsg, 'onclick', function(evt){
+                    evt.preventDefault();
+                    topic.publish('broadband.ListProviders.onSatLinkClick');
+                }),
+                
+                // listen for reset filters button
+                topic.subscribe(AGRC.topics.MapDataFilter.onResetFilter, function(){
+                    domStyle.set(that.warning, 'display', 'none');
+                }),
+                
+                // listen for event to update the sat link visibility in the results list
+                topic.subscribe('broadband.MapDataFilter.UpdateSatLinkVisibility', function(show){
+                    var displayValue = (show) ? 'block' : 'none';
+                    domStyle.set(that.satMsg, 'display', displayValue);
+                })
+            );
         },
         
         /**

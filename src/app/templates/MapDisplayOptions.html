@@ -2,7 +2,7 @@
 	<h2>Map Display</h2>
 	<div class='fieldset'>
 		<h3>Layers</h3>
-		<div id='displayHelp'>
+		<div data-dojo-attach-point='displayHelp'>
 			<div style='display: none;'>
 				Areas where broadband is available are shown in a semi-transparent blue color by default. User can control the transparency level for this map layer to see more of the background layer or to emphasize the service areas.
 				<p>The Map Background control allows users to select from several different background maps including aerial photography, terrain and topo maps, demographic maps, and more. Users can also control the transparency level of the map background to provide more or less emphasis for this contextual information.</p>
@@ -31,7 +31,7 @@
 		<!-- PROVIDER COVERAGE -->
 		<input data-dojo-attach-event='onClick: _onOverlayCheckBoxClick' 
 			data-dojo-attach-point='overlayCheckBox'
-			data-dojo-type='dijit.form.CheckBox' 
+			data-dojo-type='dijit/form/CheckBox' 
 			checked 
 			id='overlay-checkbox'>
 		<label for='overlay-checkbox'>Broadband Coverage</label>
@@ -41,7 +41,7 @@
 		<div class='slider-container'>			
 			<div data-dojo-attach-point='overlaySlider' 
 				data-dojo-attach-event='onChange: _onOverlaySliderChange' 
-				data-dojo-type='dijit.form.HorizontalSlider' 
+				data-dojo-type='dijit/form/HorizontalSlider' 
 				minimum='0' maximum='1' 
 				intermediateChanges='true'
 				discreteValues='50' 
@@ -56,12 +56,12 @@
 		<!-- BASEMAPS LAYER -->
 		<input data-dojo-attach-point='basemapsCheckBox' 
 			data-dojo-attach-event='onClick: _onBasemapsCheckboxClick' 
-			data-dojo-type='dijit.form.CheckBox'  
+			data-dojo-type='dijit/form/CheckBox'  
 			id='basemaps-checkbox' 
 			checked disabled>
 		<label for='basemaps-checkbox' class='basemap-label'>Map Background:</label>
 		<select data-dojo-attach-point='comboBox' 
-			data-dojo-type='dijit.form.Select' 
+			data-dojo-type='dijit/form/Select' 
 			class='combobox'>
 			<option value='Hybrid'>Hybrid</option>
 			<option value='Terrain'>Terrain</option>
@@ -75,7 +75,7 @@
 		<div class='slider-container'>
 			<div data-dojo-attach-point='basemapsSlider' 
 				data-dojo-attach-event='onChange: _onBasemapsSliderChange' 
-				data-dojo-type='dijit.form.HorizontalSlider' 
+				data-dojo-type='dijit/form/HorizontalSlider' 
 				minimum='0' maximum='1' 
 				intermediateChanges='true'
 				discreteValues='50' 

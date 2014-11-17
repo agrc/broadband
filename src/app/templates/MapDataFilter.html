@@ -4,7 +4,7 @@
     	<button data-dojo-attach-point='resetBtn' class='reset-button'
     		data-dojo-type='dijit.form.Button' disabled>Reset Filters</button>
         <h3>Maximum Advertised Speeds</h3>
-    	<div id='speedsHelp'>
+    	<div data-dojo-attach-point='speedsHelp'>
     		<div style='display: none;'>
     			<b>Interested in mapping where broadband service is available within a specific speed range?</b>
      			<p>Move slider knobs to the right to remove broadband service areas from the map where speeds are below thresholds that you supply. Both download and upload speed thresholds can be set.</p>
@@ -62,7 +62,7 @@
     </div>
 	<div id="tech-type-div" class='help-container'>
 		<h3>Technology Type</h3>
-		<div id='typeHelp'>
+		<div data-dojo-attach-point='typeHelp'>
 			<div style='display: none;'>
 				The checkboxes control the map display of broadband service areas by type of technology.
 				<p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
@@ -126,7 +126,7 @@
 	</div>
     <div class='end-user-div help-container'>
         <h3>Provider-Reported Market</h3>
-        <div id="endUserHelp">
+        <div data-dojo-attach-point="endUserHelp">
             <div style="display: none;">
                 <p style='margin-top: 0;'>The check boxes control display of the primary provider-specified target market for their reported broadband services.</p>
 
@@ -141,7 +141,7 @@
     </div>
 	<div class='providers-div help-container'>
 		<h3>Providers</h3>
-		<div id='providersHelp'>
+		<div data-dojo-attach-point='providersHelp'>
 			<div style='display: none;'>
 				<b>Interested in the availability of services from your current or other specific broadband provider?</b>
 				<p>By default the map shows broadband service areas of all terrestrial wireless and wireline broadband providers.</p>

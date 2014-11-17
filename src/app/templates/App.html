@@ -47,7 +47,7 @@
         data-dojo-attach-point='middleContainer'>
 
         <!-- LEFT -->
-        <div id="left-nav"
+        <div data-dojo-attach-point="leftNav"
             class="side-nav">
             <div id="list-providers"></div>
         </div>
@@ -70,7 +70,7 @@
         </div>
         
         <!-- RIGHT -->
-        <div id="right-nav" 
+        <div data-dojo-attach-point="rightNav" 
             class="side-nav">
             <div id="map-data-filter"></div>
             <div id='map-display-options'></div>
@@ -92,7 +92,7 @@
                                 |&nbsp;<a href="http://www.utah.gov/accessibility.html" class="links" target="new">Utah.gov Accessibility Policy</a> 
                                 | <a href="http://www.utah.gov/translate.html">Translate Utah.gov</a>
                                 <br>
-                                <b><font size="1">Copyright © 2013 State of Utah - All rights reserved. </font></b>
+                                <b><font size="1">Copyright © 2015 State of Utah - All rights reserved. </font></b>
                             </div>
                         </font>
                     </td>
@@ -101,7 +101,7 @@
         </table>
     </div>
     <div data-dojo-attach-point='disclaimerDialog'
-        data-dojo-type='dijit.Dialog' 
+        data-dojo-type='dijit/Dialog' 
         title='Disclaimer'
         class='disclaimer-dialog'>
         Broadband service availability and characteristics are depicted as derived from data assembled by the Utah Broadband Project. Data sources include biannual broadband service provider submissions and publicly available sources. Data has been modified, where necessary, to meet broadband mapping standards set by the National Telecommunications and Information Administration (NTIA).
@@ -109,13 +109,15 @@
         <p>Speeds shown are the 'maximum advertised' for the geographic features depicted, and must exceed 0.768 Mbps download and 0.2 Mbps upload (NTIA broadband definition) to be included. Actual speeds may vary within and along census blocks and roads, due to the granularity and currency of the data, technological limitations, and service plan limitations. Users of the site are encouraged to inquire directly to providers for current service availability and speed.</p>
         <p>All information presented on the Utah's interactive broadband map is for general reference purposes only and may contain errors and omissions. The State of Utah makes no warranty with respect to information available, express or implied, including but not limited to the fitness for use for a particular purpose.</p>
         <p>The Utah Broadband Project welcomes your comments (<a href='mailto:broadband@utah.gov'>broadband@utah.gov</a>).</p>
-        <input id='cbxDisclaimer' data-dojo-attach-point="cbxDisclaimer" data-dojo-type="dijit.form.CheckBox">
-        <label for="cbxDisclaimer">Don't show me this again.</label>
+        <label>
+            <input data-dojo-attach-point="cbxDisclaimer" data-dojo-type="dijit/form/CheckBox">
+            Don't show me this again.
+        </label>
         <button data-dojo-attach-point='disclaimerBtn' class='disclaimer-btn'
-            data-dojo-type='dijit.form.Button'>OK</button>
+            data-dojo-type='dijit/form/Button'>OK</button>
     </div>
     <div data-dojo-attach-point='mapHelpDialog'
-        data-dojo-type='dijit.Dialog'
+        data-dojo-type='dijit/Dialog'
         title='Map Help'
         class='map-help-dialog'>
         <b>Zoom:</b> The map scale slider (upper left corner of map area) zooms the map in and out to your desired map scale. 
@@ -131,7 +133,7 @@
         <p><b>Provider Search:</b> A single click on the map will return a set of broadband providers who can provider service at the map click location.</p>
     </div>
     <div data-dojo-attach-point='aboutMapDialog'
-        data-dojo-type='dijit.Dialog'
+        data-dojo-type='dijit/Dialog'
         title='About the Utah Broadband Map'
         class='about-map-dialog'>
         <p style='margin-top: 0px;'>Broadband service availability is depicted as derived from data assembled by the 

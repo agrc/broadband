@@ -1,31 +1,26 @@
 require([
     'app/App',
 
-    'dojo/_base/window',
     'dojo/dom-construct',
     'dojo/on',
-    'dojo/topic',
-
-    'stubmodule'
+    'dojo/topic'
 ], function (
     App,
 
-    win,
     domConstruct,
     on,
-    topic,
-
-    stubmodule
+    topic
 ) {
     describe('app/App', function () {
         var testWidget;
         beforeEach(function () {
-            testWidget = new App({}, domConstruct.create('div', {}, win.body()));
+            testWidget = new App({}, domConstruct.create('div', {}, window.body));
         });
         afterEach(function () {
-            testWidget.destroyRecursive(false);
+            testWidget.destroy();
             domConstruct.destroy(testWidget.domNode);
             testWidget = null;
+            window.AGRC.app = null;
         });
 
         it('creates a valid object', function () {
@@ -53,25 +48,6 @@ require([
                 testWidget.onExtentChange(value);
 
                 expect(spy).toHaveBeenCalledWith(value);
-            });
-        });
-        xdescribe('onPopoutLinkClick', function () {
-            var testWidget2;
-            var animatePropertySpy = jasmine.createSpy('animateProperty');
-            beforeEach(function (done) {
-                stubmodule('app/App', {
-                    'dojo/_base/fx': {
-                        animateProperty: animatePropertySpy
-                    }
-                }).then(function (StubbedWidget) {
-                    testWidget2 = new StubbedWidget({}, domConstruct.create('div', {}, win.body()));
-                    done();
-                });
-            });
-            it('create the animations', function () {
-                testWidget2.onPopoutLinkClick();
-
-                expect(animatePropertySpy.calls.length).toEqual(2);
             });
         });
         describe('makeQueryDirty', function () {
