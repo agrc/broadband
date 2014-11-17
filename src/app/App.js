@@ -68,7 +68,7 @@ function (
     QueryTask,
     Query
 ) {
-    return declare('app.App', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
         templateString: template,
         baseClass: 'broadband-app',
@@ -112,6 +112,10 @@ function (
             this.getProvidersList();
 
             this.wireEvents();
+
+            this.setUpMap();
+
+            this.hideLoader();
         },
         wireEvents: function () {
             // summary:

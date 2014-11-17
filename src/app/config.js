@@ -3,7 +3,7 @@ define([
 
 function (
     ) {
-    var appServerPath = 'http://168.180.161.9/ArcGIS/rest/services/';
+    var appServerPath = '/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,

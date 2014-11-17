@@ -18,25 +18,14 @@ var profile = {
                 'esri/dijit/Attribution',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
-                'dojox/gfx/shape',
-                'app/security/_RequestPane',
-                'ladda/dist/spin'
+                'dojox/gfx/shape'
             ],
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
-        },
-        'ijit/widgets/authentication/UserAdmin': {
-            include: [
-                'app/security/_UserAdminUser'
-            ],
-            exclude: ['dojo/dojo']
         }
     },
     packages: [{
-        name: 'matchers',
-        location: 'matchers/src'
-    },{
         name: 'stubmodule',
         location: 'stubmodule/src',
         main: 'stub-module'

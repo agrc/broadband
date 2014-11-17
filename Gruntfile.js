@@ -119,8 +119,7 @@ module.exports = function(grunt) {
             options: {},
             dist: {
                 files: {
-                    'dist/index.html': ['src/index.html'],
-                    'dist/user_admin.html': ['src/user_admin.html']
+                    'dist/index.html': ['src/index.html']
                 }
             }
         },

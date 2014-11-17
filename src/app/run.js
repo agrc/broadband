@@ -15,9 +15,25 @@
             'ijit',
             'polyfills',
             {
+                name: 'jquery',
+                location: './jquery/dist',
+                main: 'jquery'
+            },{
+                name: 'bootstrap',
+                location: './bootstrap',
+                main: 'dist/js/bootstrap'
+            },{
                 name: 'spin',
-                location: 'spinjs',
+                location: './spinjs',
                 main: 'spin'
+            },
+            'dgrid',
+            'put-selector',
+            'xstyle',
+            {
+                name: 'ladda',
+                location: './ladda-bootstrap',
+                main: 'dist/ladda'
             }
         ]
     };
@@ -29,9 +45,5 @@
         'polyfills/responsive'
     ], function (parser) {
         parser.parse();
-
-        AGRC.app.startup();
-        AGRC.app.setUpMap();
-        AGRC.app.hideLoader();
     });
 })();
