@@ -227,7 +227,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('travis', [
-        'esri_slurp:travis',
+        'if-missing:esri_slurp:travis',
         'jshint',
         'connect',
         'jasmine:app',

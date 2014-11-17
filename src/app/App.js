@@ -34,7 +34,7 @@ define([
     'app/config',
     'dijit/Dialog',
     'dijit/form/Button',
-    'dijit/form/Checkbox'
+    'dijit/form/CheckBox'
 ],
 
 function (
