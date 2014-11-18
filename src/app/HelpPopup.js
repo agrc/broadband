@@ -39,7 +39,7 @@ function (
         widgetsInTemplate: true,
         templateString: template,
         
-        // properites passed in via the constructor
+        // properties passed in via the constructor
 
         // the title of the dialog
         title: '',
@@ -48,11 +48,7 @@ function (
             console.log('app/HelpPopup:postMixInProperties', arguments);
             
             // get dialog content from inner html of div
-            if (has('ie')){
-                this.content = this.srcNodeRef.firstChild.innerHTML;
-            } else {
-                this.content = this.srcNodeRef.firstChild.nextSibling.innerHTML;
-            }
+            this.content = this.srcNodeRef.firstChild.nextSibling.innerHTML;
         },
         
         postCreate: function(){
