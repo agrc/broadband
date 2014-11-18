@@ -195,6 +195,9 @@ div.nav-menu {
     box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.2);
     border: 0 !important;
 }
+.full-extent-button-icon {
+    background-image: url(images/nav_fullextent.png);
+}
 
 
 /* left */
