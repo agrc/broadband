@@ -5,6 +5,10 @@
 }
 
 @media only screen and (max-width: 1024px) {
+    .broadband-app .map .spinner {
+        right: 80px;
+        left: auto !important;
+    }
     .broadband-app a[data-dojo-attach-point='popoutLink'] {
         background-image: url('http://168.180.161.9/broadband/app/resources/images/popout.png');
         width: 67px;
