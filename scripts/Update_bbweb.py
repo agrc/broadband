@@ -6,11 +6,11 @@
 # 4-14-11
 
 import arcpy
-from agrc import logging, email
+from agrc import logging, messaging
 
 # create new tools object
 logger = logging.Logger()
-emailer = email.Emailer('stdavis@utah.gov', True)
+emailer = messaging.Emailer('stdavis@utah.gov', True)
 
 # variables
 pathToSDE = r"C:\PythonScripts\DatabaseConnections\UBBMAP.sde"
