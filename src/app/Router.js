@@ -8,7 +8,7 @@ define([
     'dojo/router',
     'dojo/topic',
 
-    'esri/geometry/Extent'
+    'esri/geometry/Point'
 ], function (
     Destroyable,
 
@@ -19,7 +19,7 @@ define([
     router,
     topic,
 
-    Extent
+    Point
 ) {
     return declare('app/Router', [Destroyable], {
         // currentRoute: Object
@@ -59,9 +59,8 @@ define([
                 topic.subscribe(AGRC.topics.MapDataFilter.onResetFilter, function () {
                     that.onResetFilters();
                 }),
-                topic.subscribe(AGRC.topics.App.onMapExtentChange, function (extent) {
-                    that.onMapExtentChange(extent);
-                })
+                topic.subscribe(AGRC.topics.App.onMapExtentChange, 
+                    lang.hitch(this, 'onMapExtentChange'))
             );
         },
         onDefQueryUpdate: function (props) {
@@ -102,7 +101,6 @@ define([
             console.log('app/Router::onRouteHashChange', arguments);
 
             var that = this;
-            var extent;
 
             this.pauseUpdateHash = true;
 
@@ -146,10 +144,14 @@ define([
                     AGRC.mapDataFilter.setSlider('up', newRoute.minUpSpeed);
                 }
                 if (hasParameterChanged('extent')) {
-                    extent = new Extent(lang.mixin({
-                        spatialReference: {wkid: 26912}
-                    }, newRoute.extent));
-                    AGRC.map.setExtent(extent);
+                    if (newRoute.extent) {
+                        AGRC.map.setScale(newRoute.extent.scale);
+                        AGRC.map.centerAt(new Point({
+                            x: newRoute.extent.x,
+                            y: newRoute.extent.y,
+                            spatialReference: {wkid: 26912}
+                        }));
+                    }
                 }
                 if (hasParameterChanged('endUserCats')) {
                     AGRC.mapDataFilter.setEndUserCategories(newRoute.endUserCats);
@@ -186,18 +188,18 @@ define([
 
             this.updateHash();
         },
-        onMapExtentChange: function (extent) {
+        onMapExtentChange: function (center, scale) {
             // summary:
             //      fires when the map extent changes
-            // extent: map extent
+            // center: map extent
+            // scale: map scale
             console.log(this.declaredClass + '::onMapExtentChange', arguments);
 
             lang.mixin(this.currentRoute, {
                 extent: {
-                    xmin: Math.round(extent.xmin),
-                    ymin: Math.round(extent.ymin),
-                    xmax: Math.round(extent.xmax),
-                    ymax: Math.round(extent.ymax)
+                    x: Math.round(center.x),
+                    y: Math.round(center.y),
+                    scale: Math.round(scale)
                 }
             });
 
@@ -222,7 +224,7 @@ define([
                         arrayValues = array.map(value, encodeURIComponent);
                         props.push(prop + '=' + arrayValues.join('|'));
                     } else if (prop === 'extent') {
-                        props.push(prop + '=' + [value.xmin, value.ymin, value.xmax, value.ymax].join('|'));
+                        props.push(prop + '=' + [value.x, value.y, value.scale].join('|'));
                     } else if (prop.match(/.+Speed/) && value && value !== -1) {
                         props.push(prop + '=' + AGRC.speedValues[value - 1]);
                     } else {
@@ -253,10 +255,9 @@ define([
                 if (propName === 'extent') {
                     extents = propValue.split('|');
                     returnObj[propName] = {
-                        xmin: parseFloat(extents[0], 10),
-                        ymin: parseFloat(extents[1], 10),
-                        xmax: parseFloat(extents[2], 10),
-                        ymax: parseFloat(extents[3], 10)
+                        x: parseFloat(extents[0], 10),
+                        y: parseFloat(extents[1], 10),
+                        scale: parseFloat(extents[2], 10)
                     };
                 } else if (propName === 'transTypes' || propName === 'providers' || propName === 'endUserCats') {
                     if (propValue.split('|').length > 1) {

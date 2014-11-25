@@ -43,11 +43,19 @@ require([
             it('fires the extentChange topic', function () {
                 var spy = jasmine.createSpy('onExtentChangeSpy');
                 topic.subscribe(AGRC.topics.App.onMapExtentChange, spy);
-                var value = 'blah';
+                var scale = 'blah';
+                AGRC.map = {
+                    getScale: jasmine.createSpy('getScale').and.returnValue(scale)
+                };
+                var center = 'blah2';
 
-                testWidget.onExtentChange(value);
+                testWidget.onExtentChange({
+                    extent: {
+                        getCenter: function () { return center; }
+                    }
+                });
 
-                expect(spy).toHaveBeenCalledWith(value);
+                expect(spy).toHaveBeenCalledWith(center, scale);
             });
         });
         describe('makeQueryDirty', function () {

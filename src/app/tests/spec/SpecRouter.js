@@ -3,9 +3,7 @@ require([
 
     'dojo/_base/lang',
     'dojo/router',
-    'dojo/topic',
-
-    'esri/geometry/Extent'
+    'dojo/topic'
 ],
 
 function (
@@ -13,9 +11,7 @@ function (
 
     lang,
     dojoRouter,
-    topic,
-
-    Extent
+    topic
 ) {
     describe('app/Router', function () {
         var testObject;
@@ -23,7 +19,6 @@ function (
         var launchListPickerSpy;
         var selectTransTypesSpy;
         var setSliderSpy;
-        var setExtentSpy;
         var setEndUserCategoriesSpy;
         beforeEach(function () {
             selectProvidersSpy = jasmine.createSpy('selectProviders');
@@ -43,10 +38,7 @@ function (
                 setSlider: setSliderSpy,
                 setEndUserCategories: setEndUserCategoriesSpy
             };
-            setExtentSpy = jasmine.createSpy('setExtent');
-            AGRC.map = {
-                setExtent: setExtentSpy
-            };
+            AGRC.map = jasmine.createSpyObj('map', ['setScale', 'centerAt']);
             testObject = new Router();
         });
         afterEach(function () {
@@ -152,10 +144,9 @@ function (
                 minDownSpeed: 2,
                 minUpSpeed: 4,
                 extent: {
-                    xmin: 199793.4774791507,
-                    ymin: 4185516.1549837017,
-                    xmax: 681652.5225208492,
-                    ymax: 4562197.845016299
+                    x: 199793.4774791507,
+                    y: 4185516.1549837017,
+                    scale: 120000
                 },
                 endUserCats: endUserCats
             };
@@ -220,19 +211,22 @@ function (
             });
             it('calls setExtent if appropriate', function () {
                 testObject.onRouteHashChange(testHash);
-                var extent = new Extent(lang.mixin(testHash.extent, {
-                    spatialReference: {wkid: 26912}
-                }));
                 var testHash2 = {
                     providers: ['halle', 'asdf']
                 };
 
-                expect(setExtentSpy.calls.argsFor(0)[0]).toEqual(extent);
+                expect(AGRC.map.setScale).toHaveBeenCalledWith(testHash.extent.scale);
+                expect(AGRC.map.centerAt).toHaveBeenCalledWith(
+                    jasmine.objectContaining({
+                        x: testHash.extent.x,
+                        y: testHash.extent.y
+                    })
+                );
 
                 testObject.onRouteHashChange(testHash2);
                 testObject.onRouteHashChange(testHash2);
 
-                expect(setExtentSpy.calls.count()).toBe(2);
+                expect(AGRC.map.centerAt.calls.count()).toBe(1);
             });
             it('calls setEndUserCategories if appropriate', function () {
                 testObject.onRouteHashChange(testHash);
@@ -286,20 +280,17 @@ function (
             });
         });
         describe('onMapExtentChange', function () {
+            var center = {x: 1.5, y:2.3 };
             it('updates the currentRoute object', function () {
                 var expected = {
-                    xmin: 1,
-                    ymin: 2,
-                    xmax: 3,
-                    ymax: 4
+                    x: 2,
+                    y: 2,
+                    scale: 3
                 };
-                var extent = new Extent(lang.mixin({
-                    spatialReference: {wkid: 26912}
-                }, expected));
                 var providers = ['blah2', 'blah3'];
                 testObject.currentRoute.providers = providers;
 
-                testObject.onMapExtentChange(extent);
+                testObject.onMapExtentChange(center, 3);
 
                 expect(JSON.stringify(testObject.currentRoute.extent)).toEqual(JSON.stringify(expected));
                 expect(testObject.currentRoute.providers).toEqual(providers);
@@ -308,36 +299,15 @@ function (
                 testObject.pauseUpdateHash = true;
                 spyOn(testObject, 'updateHash');
 
-                testObject.onMapExtentChange('blah');
+                testObject.onMapExtentChange(center, 3);
 
                 expect(testObject.updateHash).not.toHaveBeenCalled();
 
                 testObject.pauseUpdateHash = false;
 
-                testObject.onMapExtentChange('blah');
+                testObject.onMapExtentChange(center, 3);
 
                 expect(testObject.updateHash).toHaveBeenCalled();
-            });
-            it('strips off decimal places', function () {
-                var values = {
-                    xmin: 1.2,
-                    ymin: 2.5,
-                    xmax: 3.6,
-                    ymax: 4.3
-                };
-                var expected = {
-                    xmin: 1,
-                    ymin: 3,
-                    xmax: 4,
-                    ymax: 4
-                };
-                var extent = new Extent(lang.mixin({
-                    spatialReference: {wkid: 26912}
-                }, values));
-
-                testObject.onMapExtentChange(extent);
-
-                expect(JSON.stringify(testObject.currentRoute.extent)).toEqual(JSON.stringify(expected));
             });
         });
         describe('objectToQuery/queryToObject', function () {
@@ -370,13 +340,12 @@ function (
             it('handles the extent property object', function () {
                 obj = {
                     extent: {
-                        xmin: 4472002.148131457,
-                        ymin: 2,
-                        xmax: 3,
-                        ymax: 4
+                        x: 4472002.148131457,
+                        y: 2,
+                        scale: 3
                     }
                 };
-                query = 'extent=4472002.148131457|2|3|4';
+                query = 'extent=4472002.148131457|2|3';
             });
             it('converts single values to arrays for transtypes', function () {
                 obj = {

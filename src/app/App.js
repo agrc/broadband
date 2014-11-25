@@ -308,8 +308,8 @@ function (
             // set up new geosearch widget
             this.geoSearch = new GeoSearch({map: AGRC.map}, 'geo-search');
 
-            this.own(this.connect(AGRC.map, 'onLoad', function () {
-                that.connect(AGRC.map, 'onExtentChange', 'onExtentChange');
+            this.own(AGRC.map.on('load', function () {
+                that.own(AGRC.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
             }));
 
             // create new map data filters widget
@@ -340,17 +340,17 @@ function (
             }, this.feedbackWidgetDiv);
             AGRC.feedbackWidget.startup();
         },
-        onExtentChange: function (extent, delta, levelChange, lod) {
+        onExtentChange: function (change) {
             // summary:
             //      Turns on appropriate layers if the cache level changed
             console.log('app/App:onExtentChange', arguments);
 
             // only check if there was a level change & filters have not been touched
-            if (levelChange &&
+            if (change.levelChange &&
                 AGRC.mapDataFilter.resetBtn.get('disabled') &&
                 registry.byId('overlay-checkbox').get('value')) {
                 // turn on dynamic service when zoomed in further than the breakpoint level
-                if (lod.level >= AGRC.breakPointLevel) {
+                if (change.lod.level >= AGRC.breakPointLevel) {
                     AGRC.bbLayer.show();
                     AGRC.bbLayerCached.hide();
                     AGRC.currentLayer = AGRC.bbLayer;
@@ -361,7 +361,7 @@ function (
                 }
             }
 
-            topic.publish(AGRC.topics.App.onMapExtentChange, extent);
+            topic.publish(AGRC.topics.App.onMapExtentChange, change.extent.getCenter(), AGRC.map.getScale());
         },
         getCurrentCoverageLayer: function () {
             // summary:
