@@ -194,7 +194,7 @@ function (
             defQueryProps.minUpSpeed = this.uploadSlider.get('value');
 
             // check to see if we should show the satellite providers link in results table
-            var showSatLink = (this.downloadSlider.value[0] <= 5 && this.uploadSlider.value[0] <= 3);
+            var showSatLink = (this.downloadSlider.value >= 5 && this.uploadSlider.value >= 7);
             topic.publish('broadband.MapDataFilter.UpdateSatLinkVisibility', showSatLink);
             
             transTypes = this._getTransTypes();    
