@@ -157,7 +157,7 @@ try:
             raise Exception("Not all special coverage features were appended to census blocks successfully! sdeFeatures: {}, fgdFeatures: {}".format(sdeFeatures, fgdCensusBlocksCount))
         
         # provider table
-        arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + providerTableName, pathToFGD, providerTableName.split('.')[2])
+        arcpy.TableToTable_conversion(pathToSDE + '\\' + providerTableName, pathToFGD, providerTableName.split('.')[2])
         logger.logGPMsg()
         # cai layer
         arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + caiSDE, pathToFGD, caiFGD)

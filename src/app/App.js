@@ -245,7 +245,7 @@ function (
             query.returnGeometry = false;
             query.outFields = [AGRC.fieldNames.NAME, AGRC.fieldNames.ID, AGRC.fieldNames.URL];
             query.where = this.makeQueryDirty('1 = 1');
-            var qTask = new QueryTask(AGRC.broadbandMapURL + '/3');
+            var qTask = new QueryTask(AGRC.broadbandMapURL + '/4');
             qTask.execute(query, function(results){
                 array.forEach(results.features, function (g) {
                     AGRC.providers[g.attributes[AGRC.fieldNames.ID]] = {
