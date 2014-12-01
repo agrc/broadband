@@ -1,61 +1,20 @@
-﻿<div class="agrc widgetFeedback">
-	<div data-dojo-type='dijit.layout.StackContainer'
-		data-dojo-attach-point='stackContainer'
-		data-dojo-props='doLayout: false'>
-		<div data-dojo-type='dijit.layout.ContentPane' 
-			data-dojo-attach-point='formPane' title='Form'>
-		    <form data-dojo-attach-point="form" 
-		    	method="post" 
-				enctype="application/x-www-form-urlencoded">
-		        <div class="labelContainer">
-		            <label data-dojo-attach-point="EmailText" class="feedbackLabel">
-		            	Email Address
-					</label>
-		        </div>
-		        <input data-dojo-attach-point="emailTxt" type="text" 
-					class='email-textbox' 
-					value="" data-dojo-type="dijit.form.ValidationTextBox"
-		            regexpgen="dojox.validate.regexp.emailAddress"
-					placeHolder='someone@example.com' 
-					trim="true" required="true" invalidmessage="Invalid Email Address."/>
-				<div class='labelContainer'>Category</div>
-				<input id='rbData' type='radio' data-dojo-type='dijit.form.RadioButton' 
-					name='feedback_rbGroup' value='Data' />
-				<label for='rbData'>Broadband Data</label>
-				<br>
-				<input id='rbWebsite' type='radio' data-dojo-type='dijit.form.RadioButton' 
-					name='feedback_rbGroup' value='Website' />
-				<label for='rbWebsite'>Mapping Website</label>
-				<br>
-				<input id='rbMyAddress' type='radio' data-dojo-type='dijit.form.RadioButton' 
-					name='feedback_rbGroup' value='My Address' />
-				<label for='rbMyAddress'>Broadband Availability at My Address</label>
-				<br>
-				<input id='rbOther' type='radio' data-dojo-type='dijit.form.RadioButton' 
-					name='feedback_rbGroup' value='Other' />
-				<label for='rbOther'>Other</label>
-		        <div class="labelContainer">
-		            <label class="feedbackLabel">
-		            	Comments
-		            </label>
-		        </div>
-		        <textarea data-dojo-attach-point='textarea' 
-					rows="8" class='text-area'
-					placeHolder='Your comments...'
-		            trim="true"
-		            required='true'></textarea>
-		        <button data-dojo-attach-point="submitBtn" 
-					data-dojo-type="dijit.form.Button" 
-					data-dojo-attach-event='onClick: submit'>Submit</button>
-		    </form>
-		</div>
-		<div data-dojo-type='dijit.layout.ContentPane' 
-			class="message" data-dojo-attach-point="messagePane" 
-			title='Message'>
-			<div data-dojo-attach-point='message' class='message'></div>
-			<button data-dojo-attach-point='closeButton'
-				data-dojo-type='dijit.form.Button' 
-				data-dojo-attach-event='onClick: hide'>Close</button>
-		</div>
-	</div>
+﻿<div>
+	<form data-dojo-attach-point='formRedline'>
+        <button data-dojo-type='dijit/form/Button' 
+        	data-dojo-attach-point='btnRedline'>Pinpoint Issue</button>
+
+        <div>
+        	<label for="${id}_txt_description">Describe Issue:</label>
+        	<textarea id="${id}_txt_description" rows='5'
+        		data-dojo-attach-point="txtDescription"></textarea>
+        	<span class="help-inline error">Required!</span>
+        </div>
+
+        <div>
+        	<button type="submit" class='submit-btn' data-dojo-type='dijit/form/Button'
+        		data-dojo-attach-point='btnSubmit'>Send</button>
+        	<span data-dojo-attach-point='errorMsg'
+        		class="help-inline error">Uh oh!</span>
+        </div>
+    </form>
 </div>

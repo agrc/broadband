@@ -1,21 +1,18 @@
-﻿.widgetFeedback {
-	width: 234px;
+﻿@import '../../ijit/resources/notify/ChangeRequest.css';
+
+.change-request {
+    width: 300px;
 }
-.widgetFeedback .dijitButton {
-    margin-left: 0px;
+.change-request textarea {
+    width: 98%;
 }
-.widgetFeedback .message {
-	text-align: center;
+.change-request .dijitButton {
+    margin-left: 0;
 }
-.widgetFeedback .text-area {
-	width: 228px;
+.change-request .submit-btn {
+    float: right;
+    margin-bottom: 8px;
 }
-.widgetFeedback .dijitContentPane {
-	padding: 0px;
-}
-.widgetFeedback .radio {
-	float: left;
-}
-.widgetFeedback .radio-label {
-	margin-left: 3px;
+.feedback-dialog {
+    background: white;
 }

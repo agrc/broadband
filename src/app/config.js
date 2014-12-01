@@ -32,6 +32,8 @@ function (
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
         // basemapsURL: appServerPath + 'Broadband/Basemaps/MapServer',
+        redlineUrl: '/chalkdust',
+        
         fieldNames: {
             UTProvCode: 'UTProvCode',
             MAXADUP: 'MAXADUP',

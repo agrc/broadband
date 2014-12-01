@@ -22,16 +22,5 @@ function (
         it('creates a valid object', function () {
             expect(testWidget).toEqual(jasmine.any(Feedback));
         });
-        describe('submit', function () {
-            it('doesn\'t do anything if form doesn\'t validate', function () {
-                spyOn(testWidget, 'validate').and.returnValue(false);
-                spyOn(testWidget, '_clearMessage');
-
-                testWidget.submit();
-
-                expect(testWidget.validate).toHaveBeenCalled();
-                expect(testWidget._clearMessage).not.toHaveBeenCalled();
-            });
-        });
     });
 });

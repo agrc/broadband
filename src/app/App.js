@@ -8,6 +8,7 @@ define([
     'app/MapDataFilter',
     'app/MapDisplayOptions',
     'app/Router',
+    'app/config',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -31,7 +32,6 @@ define([
     'esri/tasks/QueryTask',
     'esri/tasks/query',
 
-    'app/config',
     'dijit/Dialog',
     'dijit/form/Button',
     'dijit/form/CheckBox'
@@ -47,6 +47,7 @@ function (
     MapDataFilter,
     MapDisplayOptions,
     Router,
+    config,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -336,7 +337,8 @@ function (
             // create new widget
             AGRC.feedbackWidget = new Feedback({
                 map: AGRC.map,
-                serviceName: 'Broadband Map'
+                redliner: config.redlineUrl,
+                toIds: [4, 7]
             }, this.feedbackWidgetDiv);
             AGRC.feedbackWidget.startup();
         },
