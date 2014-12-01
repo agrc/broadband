@@ -3,16 +3,7 @@
 @import '../../agrc/resources/map/BaseMap.css';
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
-@import 'Feedback.css';
-@import 'GeoSearch.css';
-@import 'HelpPopup.css';
-@import 'ListPicker.css';
-@import 'ListProviders.css';
-@import 'MapDataFilter.css';
-@import 'MapDisplayOptions.css';
-@import 'ProviderResult.css';
 @import 'SmallerScreens.css';
-@import 'FindAddress.css';
 
 .broadband-app {
     height: 100%;

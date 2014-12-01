@@ -23,9 +23,11 @@ define([
     'dijit/form/CheckBox',
     'dijit/form/HorizontalRule',
     'dijit/form/HorizontalRuleLabels',
+    'dijit/form/RadioButton',
     'dijit/form/Slider',
     'dojo/_base/sniff',
-    'dojox/form/TriStateCheckBox'
+    'dojox/form/TriStateCheckBox',
+    'xstyle/css!app/resources/MapDataFilter.css'
 ],
 
 function (

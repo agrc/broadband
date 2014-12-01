@@ -22,16 +22,17 @@ define([
 
     'dojox/widget/Standby',
 
-    'esri/SpatialReference',
     'esri/geometry/Point',
     'esri/graphic',
+    'esri/SpatialReference',
     'esri/symbols/PictureMarkerSymbol',
     'esri/tasks/GeometryService',
-    'esri/tasks/QueryTask',
     'esri/tasks/query',
+    'esri/tasks/QueryTask',
 
     'agrc/widgets/locate/FindAddress',
-    'dojo/_base/sniff'
+    'dojo/_base/sniff',
+    'xstyle/css!app/resources/ListProviders.css'
 ], 
 
 function (
@@ -58,13 +59,13 @@ function (
 
     Standby,
 
-    SpatialReference,
     Point,
     Graphic,
+    SpatialReference,
     PictureMarkerSymbol,
     GeometryService,
-    QueryTask,
-    Query
+    Query,
+    QueryTask
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         /**

@@ -5,7 +5,7 @@ define([
 function (
     has
 ) {
-    var appServerPath = '/ArcGIS/rest/services/';
+    var appServerPath = window.location.protocol + '//' + window.location.hostname +'/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -33,6 +33,7 @@ function (
         broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
         // basemapsURL: appServerPath + 'Broadband/Basemaps/MapServer',
         redlineUrl: '/chalkdust',
+        exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
         
         fieldNames: {
             UTProvCode: 'UTProvCode',
@@ -68,9 +69,9 @@ function (
             '41': 'Cable',
             '50': 'Fiber',
             '60': 'Satellite',
-            '70': 'Wireless',
-            '71': 'Wireless',
-            '80': 'Wireless'
+            '70': 'Fixed Wireless',
+            '71': 'Fixed Wireless',
+            '80': 'Mobile Wireless'
         },
         layersDrawing: 0, // keeps track of layers that have draw - see addLoadingToLayer
         breakPointLevel: 9, // the level at which the dynamic coverage service turns on and the cached service turns off
@@ -104,4 +105,6 @@ function (
         // localhost
         window.AGRC.apiKey = 'AGRC-E5B94F99865799';
     }
+
+    return window.AGRC;
 });

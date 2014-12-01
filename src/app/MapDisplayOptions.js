@@ -3,12 +3,12 @@ define([
 
 	'app/HelpPopup',
 
-	'dijit/TooltipDialog',
 	'dijit/_TemplatedMixin',
 	'dijit/_WidgetBase',
 	'dijit/_WidgetsInTemplateMixin',
 	'dijit/form/DropDownButton',
 	'dijit/registry',
+	'dijit/TooltipDialog',
 
 	'dojo/_base/array',
 	'dojo/_base/declare',
@@ -22,7 +22,8 @@ define([
 	'dijit/form/CheckBox',
 	'dijit/form/HorizontalSlider',
 	'dijit/form/Select',
-	'dojo/_base/sniff'
+	'dojo/_base/sniff',
+	'xstyle/css!app/resources/MapDisplayOptions.css'
 ],
 
 function (
@@ -30,12 +31,12 @@ function (
 
     HelpPopup,
 
-    TooltipDialog,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
     DropDownButton,
     registry,
+    TooltipDialog,
 
     array,
     declare,
