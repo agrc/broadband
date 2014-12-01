@@ -1,14 +1,15 @@
 define([
     'agrc/widgets/map/BaseMap',
 
+    'app/config',
     'app/Feedback',
     'app/GeoSearch',
     'app/HelpPopup',
     'app/ListProviders',
     'app/MapDataFilter',
     'app/MapDisplayOptions',
+    'app/PrintDialog',
     'app/Router',
-    'app/config',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -29,8 +30,8 @@ define([
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/tasks/QueryTask',
     'esri/tasks/query',
+    'esri/tasks/QueryTask',
 
     'dijit/Dialog',
     'dijit/form/Button',
@@ -40,14 +41,15 @@ define([
 function (
     BaseMap,
 
+    config,
     Feedback,
     GeoSearch,
     HelpPopup,
     ListProviders,
     MapDataFilter,
     MapDisplayOptions,
+    PrintDialog,
     Router,
-    config,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -68,8 +70,8 @@ function (
 
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
-    QueryTask,
-    Query
+    Query,
+    QueryTask
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -130,18 +132,23 @@ function (
                 this.connect(this.mapHelpText, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.mapHelpDialog.show();
-                }),                this.connect(this.aboutMapText, 'onclick', function (evt) {
+                }),                
+                this.connect(this.aboutMapText, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.aboutMapDialog.show();
-                }),                this.connect(this.feedbackLink, 'onclick', function (evt) {
+                }),                
+                this.connect(this.feedbackLink, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.onFeedbackLinkClick();
-                }),                on(this.popoutLink, 'click', function (evt) {
+                }),                
+                on(this.popoutLink, 'click', function (evt) {
                     evt.preventDefault();
                     that.onPopoutLinkClick();
-                }),                on(this.cbxDisclaimer, 'click', function () {
+                }),                
+                on(this.cbxDisclaimer, 'click', function () {
                     localStorage.skipDisclaimer = that.cbxDisclaimer.get('checked');
-                }),                on(this.disclaimerLink, 'click', function (evt) {
+                }),                
+                on(this.disclaimerLink, 'click', function (evt) {
                     evt.preventDefault();
                     that.disclaimerDialog.show();
                 }),
@@ -338,7 +345,8 @@ function (
             AGRC.feedbackWidget = new Feedback({
                 map: AGRC.map,
                 redliner: config.redlineUrl,
-                toIds: [4, 7]
+                toIds: [4, 7],
+                title: 'Report a Problem'
             }, this.feedbackWidgetDiv);
             AGRC.feedbackWidget.startup();
         },
@@ -466,6 +474,24 @@ function (
             this.cbxDisclaimer.destroy();
 
             this.inherited(arguments);
+        },
+        onPrintLinkClick: function (evt) {
+            // summary:
+            //      description
+            // evt: Click Event
+            console.log('app/App:onPrintLinkClick', arguments);
+
+            evt.preventDefault();
+
+            if (!this.printDialog) {
+                this.printDialog = new PrintDialog({
+                    map: AGRC.map,
+                    title: 'Print Map to PDF'
+                }, this.printWidgetDiv);
+                this.printDialog.startup();
+                this.own(this.printDialog);
+            }
+            this.printDialog.show();
         }
     });
 });
