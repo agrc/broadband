@@ -2,7 +2,7 @@
     <div class='help-container'>
     	<h2 class='first-header'>Data Filters</h2>
     	<button data-dojo-attach-point='resetBtn' class='reset-button'
-    		data-dojo-type='dijit.form.Button' disabled>Reset Filters</button>
+    		data-dojo-type='dijit/form/Button' disabled>Reset Filters</button>
         <h3>Maximum Advertised Speeds</h3>
     	<div data-dojo-attach-point='speedsHelp'>
     		<div style='display: none;'>
@@ -23,8 +23,8 @@
     		discreteValues="9"
     		intermediateChanges="true" 
     		showButtons="false"	 
-    		data-dojo-type="dijit.form.HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
-            <ol data-dojo-type="dijit.form.HorizontalRuleLabels" class="slider-label">
+    		data-dojo-type="dijit/form/HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
+            <ol data-dojo-type="dijit/form/HorizontalRuleLabels" class="slider-label">
                 <li>1000</li>
     			<li>100</li>
     			<li>50</li>
@@ -44,8 +44,8 @@
     		discreteValues="10" 
     		intermediateChanges="true" 
     		showButtons="false"			 
-    		data-dojo-type="dijit.form.HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
-    		<ol data-dojo-type="dijit.form.HorizontalRuleLabels" container="topDecoration" class="slider-label">
+    		data-dojo-type="dijit/form/HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
+    		<ol data-dojo-type="dijit/form/HorizontalRuleLabels" container="topDecoration" class="slider-label">
                 <li>1000</li>
     			<li>100</li>
     			<li>50</li>
@@ -79,21 +79,21 @@
                 <li>
                     <input data-dojo-attach-point='cbxCable'
                         id='cbxCable'
-                        data-dojo-type='dijit.form.CheckBox'
+                        data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [40,41]'>
                     <label for="cbxCable">Cable</label>
                 </li>
                 <li>
                     <input data-dojo-attach-point='cbxDSL'
                         id='cbxDSL'
-                        data-dojo-type='dijit.form.CheckBox'
+                        data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [10, 20, 30]'>
                     <label for="cbxDSL">DSL</label>
                 </li>
                 <li>
                     <input data-dojo-attach-point='cbxFiber'
                         id='cbxFiber'
-                        data-dojo-type='dijit.form.CheckBox'
+                        data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [50]'>
                     <label for="cbxFiber">Fiber</label>
                 </li>
@@ -109,14 +109,14 @@
                 <li>
                     <input data-dojo-attach-point='cbxFixedWireless'
                         id='cbxFixedWireless'
-                        data-dojo-type='dijit.form.CheckBox'
+                        data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [70, 71]'>
                     <label for="cbxFixedWireless">Fixed Wireless</label>
                 </li>
                 <li>
                     <input data-dojo-attach-point='cbxMobileWireless'
                         id='cbxMobileWireless'
-                        data-dojo-type='dijit.form.CheckBox'
+                        data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [80]'>
                     <label for="cbxMobileWireless">Mobile Wireless</label>
                 </li>
@@ -133,10 +133,10 @@
                 <p>The map can display services that target the full market (residential and/or business), or services that a provider designates as marketed only to businesses.</p>
             </div>
         </div>
-        <input data-dojo-type='dijit.form.CheckBox' id='cbxResidential' data-dojo-attach-point="cbxResidential" data-dojo-props="checked: true">
+        <input data-dojo-type='dijit/form/CheckBox' id='cbxResidential' data-dojo-attach-point="cbxResidential" data-dojo-props="checked: true">
         <label for="cbxResidential">Residential and/or Business</label>
         <br>
-        <input data-dojo-type='dijit.form.CheckBox' id='cbxBusiness' data-dojo-attach-point="cbxBusiness">
+        <input data-dojo-type='dijit/form/CheckBox' id='cbxBusiness' data-dojo-attach-point="cbxBusiness">
         <label for="cbxBusiness">Business only</label>
     </div>
 	<div class='providers-div help-container'>
@@ -153,19 +153,19 @@
 		</div>
 	</div>
 	<input data-dojo-attach-point="chbxShowAll"
-		data-dojo-type="dijit.form.RadioButton"
+		data-dojo-type="dijit/form/RadioButton"
 		id="chbxShowAll"
 		name="providersGroup" 
 		checked>
 		<label for="chbxShowAll">Show All Providers</label>
 	<br>		
 	<input data-dojo-attach-point="chbxShowOnly"
-		data-dojo-type="dijit.form.RadioButton"
+		data-dojo-type="dijit/form/RadioButton"
 		id="chbxShowOnly" 
 		name="providersGroup">
 		<label for="chbxShowOnly">Show Only The Following Provider(s)</label>
 	<button data-dojo-attach-point="btnSelectProviders" class="indent select-providers-btn"
-		data-dojo-type="dijit.form.Button">Select Providers</button>
+		data-dojo-type="dijit/form/Button">Select Providers</button>
 	<ul class="list" data-dojo-attach-point="providerList" style="margin-top: 0px;">
 		<li>No Providers Selected</li>
 	</ul>
@@ -180,12 +180,12 @@
 		<input data-dojo-attach-point='chbxShowAgain'
 			id='chbxShowAgain' 
 			type='checkbox' 
-			data-dojo-type='dijit.form.CheckBox'
+			data-dojo-type='dijit/form/CheckBox'
 			class='ok-btn'
 			checked>
 		<label for='chbxShowAgain'>Don't show this dialog again.</label>
 		<button data-dojo-attach-point='btnResetOK' 
-			data-dojo-type="dijit.form.Button" 
+			data-dojo-type="dijit/form/Button" 
 			class='mdf-reset-ok-btn'>OK</button>
 	</div>
     <div data-dojo-attach-point='satelliteDialog' 
@@ -203,7 +203,7 @@
         <a href="http://www.starband.net/Default.aspx" target='_blank'>Starband</a><br>
         <a href='http://www.viasat.com//' target='_blank'>ViaSat</a>
 		<button data-dojo-attach-point='btnSatelliteOK' 
-			data-dojo-type="dijit.form.Button" 
+			data-dojo-type="dijit/form/Button" 
 			class='mdf-reset-ok-btn'>OK</button>
     </div>
 </div>
