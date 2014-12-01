@@ -3,8 +3,8 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    'dojo/_base/Color',
     'dojo/_base/array',
+    'dojo/_base/Color',
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/dom-class',
@@ -18,17 +18,18 @@ define([
     'esri/layers/GraphicsLayer',
     'esri/symbols/SimpleFillSymbol',
     'esri/symbols/SimpleLineSymbol',
-    'esri/tasks/QueryTask',
     'esri/tasks/query',
+    'esri/tasks/QueryTask',
 
-    'dijit/form/ValidationTextBox'
+    'dijit/form/ValidationTextBox',
+    'xstyle/css!app/resources/GeoSearch.css'
 ], function (
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    Color,
     array,
+    Color,
     declare,
     lang,
     domClass,
@@ -42,8 +43,8 @@ define([
     GraphicsLayer,
     SimpleFillSymbol,
     SimpleLineSymbol,
-    QueryTask,
-    Query
+    Query,
+    QueryTask
 ) {
     return declare('broadband.GeoSearch',
         [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {

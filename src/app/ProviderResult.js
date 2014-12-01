@@ -1,8 +1,8 @@
 define([
-    'dijit/Tooltip',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
+    'dijit/Tooltip',
 
     'dojo/_base/declare',
     'dojo/dom-class',
@@ -10,12 +10,14 @@ define([
     'dojo/text!app/templates/ProviderResult.html',
 
     'dojox/charting/Chart2D',
-    'dojox/charting/Theme'
+    'dojox/charting/Theme',
+
+    'xstyle/css!app/resources/ProviderResult.css'
 ], function (
-    Tooltip,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
+    Tooltip,
 
     declare,
     domClass,

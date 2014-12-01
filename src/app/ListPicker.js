@@ -1,8 +1,8 @@
 define([
-    'dijit/Dialog',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
+    'dijit/Dialog',
 
     'dojo/_base/array',
     'dojo/_base/declare',
@@ -13,14 +13,15 @@ define([
     'dojo/topic',
 
     'dijit/form/Button',
-    'dijit/form/MultiSelect'
+    'dijit/form/MultiSelect',
+    'xstyle/css!app/resources/ListPicker.css'
 ],
 
 function (
-    Dialog,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
+    Dialog,
 
     array,
     declare,

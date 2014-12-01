@@ -1,6 +1,6 @@
 define([
-    'dijit/Dialog',
     'dijit/_WidgetsInTemplateMixin',
+    'dijit/Dialog',
 
     'dojo/_base/declare',
     'dojo/_base/lang',
@@ -8,12 +8,13 @@ define([
 
     'ijit/widgets/notify/ChangeRequest',
 
-    'dijit/form/Button'
+    'dijit/form/Button',
+    'xstyle/css!app/resources/Feedback.css'
 ],
 
 function (
-    Dialog,
     _WidgetsInTemplateMixin,
+    Dialog,
 
     declare,
     lang,

@@ -22,7 +22,8 @@ var profile = {
             ],
             includeLocales: ['en-us'],
             customBase: true,
-            boot: true
+            boot: true,
+            targetStylesheet: 'app/resources/App.css'
         }
     },
     packages: [{
@@ -58,5 +59,8 @@ var profile = {
 
         // We aren’t loading tests in production
         'dojo-test-sniff':0
+    },
+    plugins: {
+        'xstyle/css': 'xstyle/build/amd-css'
     }
 };

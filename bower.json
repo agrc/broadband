@@ -19,15 +19,17 @@
     "tests"
   ],
   "dependencies": {
-    "agrc": "agrc-widgets#~2.8.3",
-    "dojo": "~1.10.2",
+    "agrc": "agrc-widgets#~2.8.4",
     "dijit": "~1.10.2",
-    "ijit": "agrc-ijit#~3.1.1",
+    "dojo": "~1.10.2",
     "dojox": "~1.10.2",
+    "ijit": "agrc-ijit#~3.1.1",
+    "jasmine-favicon-reporter": "*",
+    "stubmodule": "~0.6.1",
     "util": "dojo-util#~1.10.2",
-    "stubmodule": "~0.6.1"
+    "xstyle": "c74590a20ed00fc0020ee8102a6073caab32303d"
   },
-  "devDependencies": {
-    "jasmine-favicon-reporter": "*"
+  "resolutions": {
+    "xstyle": "c74590a20ed00fc0020ee8102a6073caab32303d"
   }
 }
