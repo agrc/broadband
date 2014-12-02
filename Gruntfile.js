@@ -281,7 +281,6 @@ module.exports = function(grunt) {
         'if-missing:esri_slurp:travis',
         'jshint',
         'jasmine:main:build',
-        'connect',
         'sauce',
         'build-prod'
     ]);
