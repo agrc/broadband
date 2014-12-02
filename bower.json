@@ -27,7 +27,8 @@
     "jasmine-favicon-reporter": "*",
     "stubmodule": "~0.6.1",
     "util": "dojo-util#~1.10.2",
-    "xstyle": "c74590a20ed00fc0020ee8102a6073caab32303d"
+    "xstyle": "c74590a20ed00fc0020ee8102a6073caab32303d",
+    "jasmine-jsreporter": "~0.1.2"
   },
   "resolutions": {
     "xstyle": "c74590a20ed00fc0020ee8102a6073caab32303d"
