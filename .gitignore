@@ -20,6 +20,7 @@ scripts/nightly/Logs
 scripts/nightly/scratch.gdb
 scripts/nightly/settings/__init__.py
 scripts/secrets.cfg
+scripts/secrets.py
 secrets.json
 src/agrc/*
 src/bootstrap-datepicker/
