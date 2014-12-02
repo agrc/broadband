@@ -1,4 +1,32 @@
 /* jshint camelcase: false */
+var osx = 'OS X 10.10';
+var windows = 'Windows 8.1';
+var browsers = [{
+
+    // OSX
+    browserName: 'safari',
+    platform: osx
+}, {
+
+    // Windows
+    browserName: 'firefox',
+    platform: windows
+}, {
+    browserName: 'chrome',
+    platform: windows
+}, {
+    browserName: 'internet explorer',
+    platform: windows,
+    version: '11'
+}, {
+    browserName: 'internet explorer',
+    platform: 'Windows 8',
+    version: '10'
+}, {
+    browserName: 'internet explorer',
+    platform: 'Windows 7',
+    version: '9'
+}];
 module.exports = function(grunt) {
     var jsFiles = 'src/app/**/*.js';
     var otherFiles = [
@@ -24,8 +52,19 @@ module.exports = function(grunt) {
     ];
     var deployDir = 'wwwroot/Broadband';
     var secrets;
+    var sauceConfig = {
+        urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
+        tunnelTimeout: 5,
+        build: process.env.TRAVIS_JOB_ID,
+        browsers: browsers,
+        testname: 'atlas',
+        maxRetries: 5,
+        'public': 'public'
+    };
     try {
         secrets = grunt.file.readJSON('secrets.json');
+        sauceConfig.username = secrets.sauce_name;
+        sauceConfig.key = secrets.sauce_key;
     } catch (e) {
         // swallow for build server
         secrets = {
@@ -40,15 +79,17 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jasmine: {
-            app: {
+            main: {
                 src: ['src/app/run.js'],
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
                         'src/jasmine-favicon-reporter/vendor/favico.js',
                         'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
+                        'src/jasmine-jsreporter/jasmine-jsreporter.js',
                         'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js',
+                        'src/app/tests/jsReporterSanitizer.js',
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
                     host: 'http://localhost:8000'
@@ -73,7 +114,7 @@ module.exports = function(grunt) {
             },
             jshint: {
                 files: jshintFiles,
-                tasks: ['jshint:main', 'jasmine:app:build']
+                tasks: ['jshint:main', 'jasmine:main:build']
             }
         },
         connect: {
@@ -151,6 +192,11 @@ module.exports = function(grunt) {
                 push: false
             }
         },
+        'saucelabs-jasmine': {
+            all: {
+                options: sauceConfig
+            }
+        },
         secrets: secrets,
         sftp: {
             stage: {
@@ -220,17 +266,23 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'if-missing:esri_slurp:dev',
-        'jasmine:app:build',
+        'jasmine:main:build',
         'jshint:main',
         'connect',
         'watch'
     ]);
 
+    grunt.registerTask('sauce', [
+        'jasmine:main:build',
+        'connect',
+        'saucelabs-jasmine'
+    ]);
+
     grunt.registerTask('travis', [
         'if-missing:esri_slurp:travis',
         'jshint',
-        'connect',
-        'jasmine:app',
+        'jasmine:main:build',
+        'sauce',
         'build-prod'
     ]);
 
