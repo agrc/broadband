@@ -60,7 +60,9 @@ module.exports = function(grunt) {
             stageHost: '',
             prodHost: '',
             username: '',
-            password: ''
+            password: '',
+            sauce_name: undefined,
+            sauce_key: undefined
         };
     }
 
