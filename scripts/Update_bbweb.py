@@ -1,20 +1,17 @@
-# Check UBBMAP sde data for errors 
-# and update bbweb if there aren't any.
-# Scheduled to run from the server.
-#
-# Scott Davis | stdavis@utah.gov
-# 4-14-11
+
 
 import arcpy
-from agrc import logging, messaging
+from agrc import logging, messaging, ags
+from settings import *
 
 # create new tools object
 logger = logging.Logger()
-emailer = messaging.Emailer('stdavis@utah.gov', True)
+emailer = messaging.Emailer('stdavis@utah.gov', not sendEmails)
 
 # variables
 pathToSDE = r"C:\PythonScripts\DatabaseConnections\UBBMAP.sde"
 pathToFGD = r"C:\MapData\Broadband.gdb"
+
 fltr = "Provider_Type = 1 AND NOT (UTProvCode IN ('Strata'))"
 fltr_wireless = "TRANSTECH <> 60"
 fcs = [
@@ -36,30 +33,40 @@ nonNullFields = [
                  ]
 errors = []
 mapServices = [
-#               'Broadband/ProviderCoverage',
-#               'Broadband/ProviderCoverageCached',
-#               'Broadband/Basemaps'
+              'Broadband/ProviderCoverage',
+              'Broadband/ProviderCoverageCached'
                ]
 caiFGD = r'BB_Service_CAInstitutions'
 caiSDE = r'UBBMAP.UBBADMIN.BB_Service_CAInstitutions'
+scales = [
+    1.8489297737236E7,
+    9244648.868618,
+    4622324.434309,
+    2311162.217155,
+    1155581.108577,
+    577790.554289,
+    288895.277114,
+    144447.638572,
+    72223.819286
+]
 
 try:
     logger.logMsg('setting workspace to sde database')
     arcpy.env.workspace = pathToSDE
-    
+
     # loop through coverage feature classes
     logger.logMsg('Looping through polygon feature classes')
     for fc in fcs:
         logger.logMsg(fc[0])
-        
+
         logger.logMsg("checking non-null fields")
-        
+
         # create layer for selecting
         logger.logMsg('creating layer')
         layerName = fc[0] + 'Layer'
         arcpy.MakeFeatureLayer_management(fc[0], layerName, fc[1]);
         logger.logGPMsg()
-        
+
         # loop through fields
         for query in nonNullFields:
             logger.logMsg('query: ' + query)
@@ -67,26 +74,26 @@ try:
             logger.logGPMsg()
             cnt = arcpy.GetCount_management(layerName)
             logger.logGPMsg()
-            
+
             if int(str(cnt)) > 0:
                 errors.append('ERROR: null or empty values found in ' + fc[0] + ':' + query)
-        
+
         # get search cursor
         logger.logMsg("building list of providers in coverage feature class")
         cur = arcpy.SearchCursor(fc[0], fc[1], "", coverageFieldName)
         row = cur.next()
         while row:
             code = row.getValue(coverageFieldName)
-            
+
             # add to list of providers
             if not [code, fc[0]] in coverageProviders:
                 coverageProviders.append([code, fc[0]])
 
             row = cur.next()
         del cur
-        
+
         logger.logMsg("Finished with " + fc[0])
-    
+
     # get cursor for provider table
     logger.logMsg("building list of providers in providers table")
     prows = arcpy.SearchCursor(providerTableName, "Exclude IS NULL")
@@ -96,14 +103,14 @@ try:
 
         row = prows.next()
     del prows, row
-    
+
     # loop through coverage providers and make sure that they are in the provider table list
     logger.logMsg('looking for providers that show up in coverage data but not providers table')
     missingProviders = []
     for row in coverageProviders:
         if not row[0] in tableProviders:
             missingProviders.append(row)
-    
+
     # check for data errors
     if len(errors) > 0:
         logger.logMsg("ERRORS IN DATA:")
@@ -111,7 +118,7 @@ try:
             logger.logMsg(e)
     else:
         logger.logMsg("NO ERRORS IN DATA")
-    
+
     # check for mis matching providers
     if len(missingProviders) > 0:
         logger.logMsg("MISSING PROVIDERS THAT ARE IN THE COVERAGE DATA BUT NOT IN THE PROVIDERS TABLE:")
@@ -119,7 +126,7 @@ try:
             logger.logMsg(str(mp))
     else:
         logger.logMsg("NO PROVIDERS FOUND IN THE COVERAGE DATA THAT ARE NOT IN THE PROVIDERS TABLE.")
-    
+
     # if errors, bail on script and send an email
     if len(missingProviders) > 0 or len(errors) > 0:
         logger.logMsg('Sending error email')
@@ -128,13 +135,13 @@ try:
         # delete all feature classes
         logger.logMsg('switching workspace to local filegeodatabase')
         arcpy.env.workspace = pathToFGD
-        
+
         logger.logMsg('deleting all feature classes')
         fClasses = arcpy.ListFeatureClasses()
         for c in fClasses:
             arcpy.Delete_management(c)
             logger.logGPMsg()
-        
+
         logger.logMsg('importing new feature classes')
         for f in fcs:
             if f[2] != "BB_Service_CensusBlocks_Append":
@@ -143,7 +150,7 @@ try:
             else:
                 arcpy.Append_management(pathToSDE + '\\' + f[0], pathToFGD + '\\' + fcs[1][2], "NO_TEST")
                 logger.logMsg(f[0].split('.')[2] + ' appended successfully.')
-        
+
         # check to make sure that all features from special coverage polys got appended into census blocks
         sdeSpecialCoverageCount = int(arcpy.GetCount_management(pathToSDE + '\\' + fcs[3][0]).getOutput(0))
         logger.logMsg('sde special coverage: {}'.format(sdeSpecialCoverageCount))
@@ -152,18 +159,39 @@ try:
         logger.logMsg('sde census blocks: {}'.format(sdeCensusBlocksCount))
         fgdCensusBlocksCount = int(arcpy.GetCount_management(pathToFGD + '\\' + fcs[1][2]).getOutput(0))
         logger.logMsg('fgd census blocks: {}'.format(fgdCensusBlocksCount))
-        sdeFeatures = sdeSpecialCoverageCount + sdeCensusBlocksCount 
+        sdeFeatures = sdeSpecialCoverageCount + sdeCensusBlocksCount
         if sdeFeatures != fgdCensusBlocksCount:
             raise Exception("Not all special coverage features were appended to census blocks successfully! sdeFeatures: {}, fgdFeatures: {}".format(sdeFeatures, fgdCensusBlocksCount))
-        
+
         # provider table
+        arcpy.Delete_management(pathToFGD + '\\' + providerTableName.split('.')[2])
         arcpy.TableToTable_conversion(pathToSDE + '\\' + providerTableName, pathToFGD, providerTableName.split('.')[2])
         logger.logGPMsg()
         # cai layer
         arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + caiSDE, pathToFGD, caiFGD)
         logger.logGPMsg()
-        
-        emailer.sendEmail('Update_bbweb.py has run successfully', "Don't forgot to rebuild the Broadband Cache")
+
+        admin = ags.AGSAdmin(AGS_USER, AGS_PASSWORD, AGS_SERVER)
+
+        for s in mapServices:
+            logger.logMsg('stopping {}'.format(s))
+            admin.stopService(s, 'MapServer')
+
+        arcpy.Delete_management(pathToProdFGD)
+        logger.logGPMsg()
+        arcpy.Copy_management(pathToFGD, pathToProdFGD)
+        logger.logGPMsg()
+
+        for s in mapServices:
+            logger.logMsg('starting {}'.format(s))
+            admin.startService(s, 'MapServer')
+
+        logger.logMsg('recaching')
+
+        arcpy.ManageMapServerCacheTiles_server(cachedService, scales, 'RECREATE_ALL_TILES', 1)
+        logger.logGPMsg()
+
+        emailer.sendEmail('Update_bbweb.py has run successfully', "Nice work!")
         
 except arcpy.ExecuteError:
     logger.logMsg('arcpy.ExecuteError')
@@ -174,5 +202,3 @@ except arcpy.ExecuteError:
 except:
     logger.logError()
     emailer.sendEmail(logger.scriptName + ' - Python Error', logger.log)
-
-raw_input("\ndone. Press Enter to exit...")
