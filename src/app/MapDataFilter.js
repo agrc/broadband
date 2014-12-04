@@ -53,10 +53,10 @@ function (
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         //      Adjust's the definition query for the service areas
-        
+
         widgetsInTemplate: true,
         templateString: template,
-            
+
         layer: null, // set in setup - broadband map service layer
         updateTimer: null, // used to hold a timer in the onchange event of range sliders
         providersList: [], // list of all providers
@@ -73,6 +73,10 @@ function (
         //      see updateDefQuery
         setLayerDefTimeout: null,
 
+        // bizOnlyProviderIds: String[]
+        //      List of providers that are biz only
+        bizOnlyProviderIds: null,
+
 
         postCreate: function(){
             console.log('app/MapDataFilter:postCreate', arguments);
@@ -80,25 +84,25 @@ function (
             var that = this;
 
             this.wireControlEvents();
-            
+
             // listen for mapLayerLoaded event
             this.subscribe('AGRC.ProvidersObtained', '_setProvidersList');
-            
+
             // IE hack
             if (has('ie') <= 8){
                 domStyle.set(this.downloadSlider.domNode, 'width', '240px');
             }
-            
+
             // create new Help Popups - has to be done programmatically here or offsets are not correct
             this.dialogs = [];
             this.dialogs.push(new HelpPopup({title: 'Maximum Advertised Speeds Help'}, this.speedsHelp));
             this.dialogs.push(new HelpPopup({title: 'Technology Type Help'}, this.typeHelp));
-            
+
             this.dialogs.push(new HelpPopup({title: 'Broadband Providers Help'}, this.providersHelp));
             this.dialogs.push(new HelpPopup({title: 'Target Market Help'}, this.endUserHelp));
             this.dialogs.push(this.satelliteDialog);
             this.dialogs.push(this.resetDialog);
-            
+
             // show sat dialog onclick in provider results
             topic.subscribe('broadband.ListProviders.onSatLinkClick', function(){
                 that.satelliteDialog.show();
@@ -149,16 +153,22 @@ function (
         _setProvidersList: function(providersObject){
             console.log('app/MapDataFilter:_setProvidersList', arguments);
 
+            this.bizOnlyProviderIds = [];
+
             // create new array and populate from object
             for (var i in providersObject){
                 if (providersObject.hasOwnProperty(i)) {
+                    var prov = providersObject[i];
         //          // filter out Qwest
         //          if (providersObject[i].name != 'Qwest') {
-                        this.providersList.push([providersObject[i].name, i]);
+                        this.providersList.push([prov.name, i]);
         //          }
+                    if (prov.bizOnly === 'Y') {
+                        this.bizOnlyProviderIds.push(i);
+                    }
                 }
             }
-            
+
             // enable Select button
             if (this.restricted === false) {
                 this.btnSelectProviders.set('disabled', false);
@@ -183,13 +193,13 @@ function (
                 window.clearTimeout(this.setLayerDefTimeout);
                 this.setLayerDefTimeout = null;
             }
-            
+
             // Download slider
             // get start and end values for slice function on array
             var downQueryArray = AGRC.speedValues.slice(0, this.downloadSlider.value);
             var queryTxt = AGRC.fieldNames.MAXADDOWN + ' IN (\'' + downQueryArray.join('\',\'') + '\')';
             defQueryProps.minDownSpeed = this.downloadSlider.get('value');
-            
+
             // Upload slider
             var upQueryArray = AGRC.speedValues.slice(0, this.uploadSlider.value);
             queryTxt += ' AND ' + AGRC.fieldNames.MAXADUP + ' IN (\'' + upQueryArray.join('\',\'') + '\')';
@@ -198,8 +208,8 @@ function (
             // check to see if we should show the satellite providers link in results table
             var showSatLink = (this.downloadSlider.value >= 5 && this.uploadSlider.value >= 7);
             topic.publish('broadband.MapDataFilter.UpdateSatLinkVisibility', showSatLink);
-            
-            transTypes = this._getTransTypes();    
+
+            transTypes = this._getTransTypes();
             if (transTypes.length > 0) {
                 if (transTypes.length < 9) {
                     defQueryProps.transTypes = transTypes;
@@ -248,11 +258,11 @@ function (
             if (defQueryProps.endUserCats.length === 0) {
                 defQueryProps.endUserCats = -1;
             }
-            
+
             // update query definitions for first 3 layers
             var layerDefs = [queryTxt, queryTxt, queryTxt];
             console.info(layerDefs[1]);
-            
+
             // trying to prevent tons of calls to the server
             this.setLayerDefTimeout = window.setTimeout(function () {
                 that.layer.setLayerDefinitions(layerDefs);
@@ -266,7 +276,7 @@ function (
 
             // enable reset button
             this.resetBtn.set('disabled', false);
-            
+
             // publish new query
             topic.publish(AGRC.topics.MapDataFilter.onQueryUpdate, queryTxt);
             topic.publish(AGRC.topics.Router.onDefQueryUpdate, defQueryProps);
@@ -293,64 +303,70 @@ function (
             var that = this;
 
             // create list picker if needed
-            if (!AGRC.listPicker){          
+            if (!AGRC.listPicker){
                 // create new list picker
                 AGRC.listPicker = new ListPicker({
-                    listName: 'Providers',            
+                    listName: 'Providers',
                     availableListArray: this.providersList
                 });
-                
+
                 // wire event to listen for OK button
-                topic.subscribe(AGRC.topics.listpickerOnOK, function(selectedItems){              
+                topic.subscribe(AGRC.topics.listpickerOnOK, function(selectedItems){
                     that._onListPickerOK(selectedItems);
                 });
             }
-            
+
             AGRC.listPicker.show();
         },
         _onListPickerOK: function(selectedItems){
             console.log('app/MapDataFilter:_onListPickerOK', arguments);
 
             this.resetFilters(false);
-            
+
             // display dialog
             if (this.showResetDialog){
                 this.resetDialog.show();
             }
-            
+
             // clear existing lists
             this.providerList.innerHTML = '';
             this.selectedProvidersIDs = [];
-            
+
             // process new providers list
             if (selectedItems.length === 0) {
                 // switch back to showing all providers
                 this.chbxShowAll.set('checked', true);
-                
+
                 // add no providers
                 var li = domConstruct.create('li');
                 li.innerHTML = 'No Providers Selected';
                 this.providerList.appendChild(li);
             }
-            else {      
+            else {
                 array.forEach(selectedItems, function(item){
                     // add to id list
                     this.selectedProvidersIDs.push('\'' + item[1] + '\'');
-                    
+
                     // add to list
                     var li = domConstruct.create('li');
                     li.innerHTML = item[0].replace('&', '&amp;'); // replace & for IE;
                     this.providerList.appendChild(li);
                 }, this);
-                
+
+                var that = this;
+                var bizOnly = this.selectedProvidersIDs.some(function (id) {
+                    return (that.bizOnlyProviderIds.indexOf(id.slice(1, -1)) !== -1);
+                });
+                this.cbxBusiness.set('checked', bizOnly);
+
                 this.chbxShowOnly.set('checked', true);
             }
-            
+
             this.updateDefQuery();
-            
+
             // enable reset button
             this.resetBtn.set('disabled', false);
-            
+
             // change to dynamic coverage layer
             AGRC.bbLayer.show();
             AGRC.bbLayerCached.hide();
@@ -360,18 +376,18 @@ function (
 
             // this method was built for the provider preview to disable the ability to see other
             // provider's data
-            
+
             // disable warning dialog
             this.showResetDialog = false;
-            
+
             // check show only radio button
             this.chbxShowOnly.set('checked', true);
-            
+
             // disable controls
             this.chbxShowAll.set('disabled', true);
             this.chbxShowOnly.set('disabled', true);
             this.btnSelectProviders.set('disabled', true);
-            
+
             // set switch to prevent _setProvidersList from re-enabling the Select Providers button
             this.restricted = true;
         },
@@ -380,7 +396,7 @@ function (
 
             // store checkbox value
             this.showResetDialog = !this.chbxShowAgain.get('checked');
-            
+
             this.resetDialog.hide();
         },
         resetFilters: function(resetProviders){
@@ -411,14 +427,14 @@ function (
         },
         _onResetClick: function(){
             console.log('app/MapDataFilter:_onResetClick', arguments);
-            
+
             this.resetFilters(true);
-            
+
             topic.publish(AGRC.topics.MapDataFilter.onResetFilter);
-            
+
             // disable button
             this.resetBtn.set('disabled', true);
-            
+
             // only switch back to cached layer if zoomed out beyond break point
             if (AGRC.map.getLevel() < AGRC.breakPointLevel) {
                 // switch to cached layer
@@ -431,7 +447,7 @@ function (
             // summary:
             //      need to remove the associated dialogs manually for tests to work
             console.log('app/MapDataFilter:destroyRecursive', arguments);
-            
+
             array.forEach(this.dialogs, function (d) {
                 d.destroyRecursive(false);
             });
@@ -506,7 +522,7 @@ function (
             //      called by app/Router
             // transTypes: Number[]
             console.log('app/MapDataFilter:selectTransTypes', arguments);
-            
+
             var chbox;
             var values;
 
@@ -538,7 +554,7 @@ function (
             // sliderType: String (up || down)
             // value: Number
             console.log('app/MapDataFilter:setSlider', arguments);
-        
+
             var slider = (sliderType === 'down') ? this.downloadSlider : this.uploadSlider;
 
             slider.set('value', value);
