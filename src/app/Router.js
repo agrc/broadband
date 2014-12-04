@@ -1,3 +1,4 @@
+
 define([
     'dijit/Destroyable',
 
@@ -130,6 +131,14 @@ define([
                 return hasChanged;
             }
 
+            var zoom = function () {
+                AGRC.map.setScale(newRoute.extent.scale);
+                AGRC.map.centerAt(new Point({
+                    x: newRoute.extent.x,
+                    y: newRoute.extent.y,
+                    spatialReference: {wkid: 26912}
+                }));
+            };
             if (newRoute !== this.currentRoute) {
                 if (hasParameterChanged('providers')) {
                     this.updateProviders(newRoute.providers);
@@ -143,14 +152,13 @@ define([
                 if (hasParameterChanged('minUpSpeed')) {
                     AGRC.mapDataFilter.setSlider('up', newRoute.minUpSpeed);
                 }
-                if (hasParameterChanged('extent')) {
-                    if (newRoute.extent) {
-                        AGRC.map.setScale(newRoute.extent.scale);
-                        AGRC.map.centerAt(new Point({
-                            x: newRoute.extent.x,
-                            y: newRoute.extent.y,
-                            spatialReference: {wkid: 26912}
-                        }));
+                if (hasParameterChanged('extent') && newRoute.extent) {
+                    if (AGRC.map.loaded) {
+                        zoom();
+                    } else {
+                        AGRC.map.on('load', function () {
+                            zoom();
+                        });
                     }
                 }
                 if (hasParameterChanged('endUserCats')) {
