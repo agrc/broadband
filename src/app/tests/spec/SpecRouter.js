@@ -39,6 +39,7 @@ function (
                 setEndUserCategories: setEndUserCategoriesSpy
             };
             AGRC.map = jasmine.createSpyObj('map', ['setScale', 'centerAt']);
+            AGRC.map.loaded = true;
             testObject = new Router();
         });
         afterEach(function () {

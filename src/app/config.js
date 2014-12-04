@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 define([
     'dojo/has'
 ], 
@@ -44,7 +45,8 @@ function (
             URL: 'URL',
             ID_NUM: 'ID_NUM',
             TRANSTECH: 'TRANSTECH',
-            EndUserCat: 'EndUserCat'
+            EndUserCat: 'EndUserCat',
+            Biz_Only: 'Biz_Only'
         },
         providers: {},
         speedsDomain: {
