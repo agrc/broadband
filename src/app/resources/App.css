@@ -67,11 +67,12 @@ h3 {
     height: 67px;
 }
 .logo {
-    background: url("http://168.180.161.9/broadband/app/resources/images/logo-broadband.png") no-repeat scroll -22px -4px transparent;
-    width: 400px;
-    height: 60px;
+    background: url("http://168.180.161.9/broadband/app/resources/images/logo-broadband_2x.png") no-repeat scroll -22px -4px transparent;
+    width: 415px;
+    height: 75px;
     display: block;
     float: left;
+    background-size: 415px 75px;
 }
 /* Navigation Menu */
 .nav {
