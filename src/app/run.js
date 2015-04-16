@@ -1,10 +1,11 @@
 (function () {
     var config = {
-        baseUrl: (
-            typeof window !== 'undefined' &&
-            window.dojoConfig &&
-            window.dojoConfig.isJasmineTestRunner
-            ) ? '/src': './',
+        // baseUrl: (
+        //     typeof window !== 'undefined' &&
+        //     window.dojoConfig &&
+        //     window.dojoConfig.isJasmineTestRunner
+        //     ) ? '/src': './',
+        baseUrl: 'http://mapserv.utah.gov/broadband',
         packages: [
             'agrc',
             'app',
@@ -35,13 +36,7 @@
                 location: './ladda-bootstrap',
                 main: 'dist/ladda'
             }
-        ],
-        map: {
-            '*': {
-                'agrc/widgets/locate/templates/FindAddress.html':
-                    'app/templates/FindAddress.html'
-            }
-        }
+        ]
     };
         
     require(config, [
