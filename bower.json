@@ -27,10 +27,10 @@
     "jasmine-favicon-reporter": "*",
     "stubmodule": "~0.6.1",
     "util": "dojo-util#~1.10.2",
-    "xstyle": "8a80773bed850a3230451c6a38c1386e180b6070",
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
     "jasmine-jsreporter": "~0.1.2"
   },
   "resolutions": {
-    "xstyle": "8a80773bed850a3230451c6a38c1386e180b6070"
+    "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d"
   }
 }

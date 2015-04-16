@@ -1,5 +1,5 @@
 define([
-    'agrc/widgets/locate/FindAddress',
+    'app/FindAddress',
 
     'app/HelpPopup',
     'app/ProviderResult',
@@ -30,7 +30,6 @@ define([
     'esri/tasks/query',
     'esri/tasks/QueryTask',
 
-    'agrc/widgets/locate/FindAddress',
     'dojo/_base/sniff',
     'xstyle/css!app/resources/ListProviders.css'
 ], 

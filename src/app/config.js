@@ -6,7 +6,9 @@ define([
 function (
     has
 ) {
-    var appServerPath = window.location.protocol + '//' + window.location.hostname +'/ArcGIS/rest/services/';
+    // var appServerPath = window.location.protocol + '//' + window.location.hostname +'/ArcGIS/rest/services/';
+    // TODO to make work on broadband.utah.gov domain as well as local and test
+    var appServerPath = 'http://mapserv.utah.gov/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -98,8 +100,8 @@ function (
     };
 
     if (has('agrc-api-key') === 'prod') {
-        // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-A94B063C533889';
+        // *.utah.gov
+        window.AGRC.apiKey = 'AGRC-D3CDE591211690';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
