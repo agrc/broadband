@@ -96,7 +96,7 @@ try:
 
     # get cursor for provider table
     logger.logMsg("building list of providers in providers table")
-    prows = arcpy.SearchCursor(providerTableName, "Exclude IS NULL")
+    prows = arcpy.SearchCursor(providerTableName, "Exclude IS NULL OR Exclude = ''")
     row = prows.next()
     while row:
         tableProviders.append(row.getValue(providerTableFieldName))
