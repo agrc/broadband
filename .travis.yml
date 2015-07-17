@@ -11,8 +11,8 @@ notifications:
     on_success: never
 env:
   global:
-    - secure: me3cC1pS67StdaTcdxedzfyM9sCydWFbB7B73PrCxFIlJ9a1DHg+lu+c6itrbIVn6gKHFFqTHEFxXaXpYAPXJ99EtfuYuytDxNfYbUdrLuzo+AlvIisHe35WR1C/0qQ1kt3p7mpVnKrBEtyqVdv7NWP1qc4Y8mIDhiR/axwQgks=
-    - secure: RQgLa6mhrKOZDTuArbcsWEFpAp4+e3LpQ9PRRPqOIlEZk/nhwHM2laf43iHwaF0Y4PeADEfLxs/n3itaavlWNkS2IerVjC5BhUsEOuE9Tww4JM8RcgX/M5qLV/kreUO+QHxAFAw0Rj8Fum7veqCKXObpPu4B9ooH8s4wBhv89LE=
+    - secure: ZwOoo8tMXIszfsrh2EkDKI60sxbcA+/Jjrz5Q7bwVhRS5Nmo2etkAfjnU/verqjvpG+EaS6ey44I10DJjKq7JpuZaIMZYOBB3oz+y4FUC8xhQ+Zw4jO1Yj/KvUCAxKZ0Qg6ySysyjPKXOrT9ExmVOevYfQYdj2GGsq79398JM7k=
+    - secure: A970dUGDJ+oEfcCLdUmmPzceFJbDj+pBXi8tmExj1t4IIuRLngmRf1ZJklH3ok3ZceK8YssayClGy4yryW6/XWK1mwA18HB80iIxhNe3A7sxU88qaY/Fqvi9saJjHv/BKTPFA8b2BXsMNgK1306EgSdTbVDaNsoMIQk+7Rde2yg=
 sudo: false
 cache:
     directories:
