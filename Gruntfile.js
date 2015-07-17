@@ -27,7 +27,7 @@ var browsers = [{
     platform: 'Windows 7',
     version: '9'
 }];
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var jsFiles = 'src/app/**/*.js';
     var otherFiles = [
         'src/app/**/*.html',
@@ -54,12 +54,18 @@ module.exports = function(grunt) {
     var secrets;
     var sauceConfig = {
         urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
-        tunnelTimeout: 5,
+        tunnelTimeout: 120,
         build: process.env.TRAVIS_JOB_ID,
         browsers: browsers,
-        testname: 'atlas',
-        maxRetries: 5,
-        'public': 'public'
+        testname: 'broadband',
+        maxRetries: 10,
+        maxPollRetries: 10,
+        'public': 'public',
+        throttled: 5,
+        sauceConfig: {
+            'max-duration': 1800
+        },
+        statusCheckAttempts: 500
     };
     try {
         secrets = grunt.file.readJSON('secrets.json');
