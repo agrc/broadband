@@ -1,7 +1,7 @@
 /* jshint camelcase: false */
 define([
     'dojo/has'
-], 
+],
 
 function (
     has
@@ -37,7 +37,7 @@ function (
         // basemapsURL: appServerPath + 'Broadband/Basemaps/MapServer',
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
-        
+
         fieldNames: {
             UTProvCode: 'UTProvCode',
             MAXADUP: 'MAXADUP',

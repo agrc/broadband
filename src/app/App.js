@@ -133,22 +133,22 @@ function (
                 this.connect(this.mapHelpText, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.mapHelpDialog.show();
-                }),                
+                }),
                 this.connect(this.aboutMapText, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.aboutMapDialog.show();
-                }),                
+                }),
                 this.connect(this.feedbackLink, 'onclick', function (evt) {
                     evt.preventDefault();
                     that.onFeedbackLinkClick();
-                }),                
+                }),
                 on(this.popoutLink, 'click', function (evt) {
                     evt.preventDefault();
                     that.onPopoutLinkClick();
-                }),                
+                }),
                 on(this.cbxDisclaimer, 'click', function () {
                     localStorage.skipDisclaimer = that.cbxDisclaimer.get('checked');
-                }),                
+                }),
                 on(this.disclaimerLink, 'click', function (evt) {
                     evt.preventDefault();
                     that.disclaimerDialog.show();
