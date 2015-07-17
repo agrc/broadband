@@ -38,10 +38,10 @@
             }
         ]
     };
-        
+
     require(config, [
         'dojo/parser',
-        
+
         'dojo/domReady!',
         'polyfills/responsive'
     ], function (parser) {
