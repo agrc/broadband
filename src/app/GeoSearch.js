@@ -58,7 +58,7 @@ define([
         templateString: template,
 
         // the index of the layer within the map service to be searched
-        searchLayerIndex: 4,
+        searchLayerIndex: 3,
 
         // field name that is to be searched
         searchField: 'Name',
