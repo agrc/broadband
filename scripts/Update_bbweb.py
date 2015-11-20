@@ -1,5 +1,3 @@
-
-
 import arcpy
 from agrc import logging, messaging, ags
 from settings import *
@@ -9,8 +7,8 @@ logger = logging.Logger()
 emailer = messaging.Emailer('stdavis@utah.gov', not sendEmails)
 
 # variables
-pathToSDE = r"C:\PythonScripts\DatabaseConnections\UBBMAP.sde"
-pathToFGD = r"C:\MapData\Broadband.gdb"
+pathToSDE = r".\UBBMAP.sde"
+pathToFGD = r".\Broadband.gdb"
 
 fltr = "Provider_Type = 1 AND NOT (UTProvCode IN ('Strata'))"
 fltr_wireless = "TRANSTECH <> 60"
@@ -34,7 +32,8 @@ nonNullFields = [
 errors = []
 mapServices = [
               'Broadband/ProviderCoverage',
-              'Broadband/ProviderCoverageCached'
+              'Broadband/ProviderCoverageCached',
+              'BBEcon/MapService'
                ]
 caiFGD = r'BB_Service_CAInstitutions'
 caiSDE = r'UBBMAP.UBBADMIN.BB_Service_CAInstitutions'
@@ -192,13 +191,13 @@ try:
         logger.logGPMsg()
 
         emailer.sendEmail('Update_bbweb.py has run successfully', "Nice work!")
-        
+
 except arcpy.ExecuteError:
     logger.logMsg('arcpy.ExecuteError')
     logger.logError()
-    logger.logGPMsg()     
+    logger.logGPMsg()
     emailer.sendEmail(logger.scriptName + ' - arcpy.ExecuteError', logger.log)
- 
+
 except:
     logger.logError()
     emailer.sendEmail(logger.scriptName + ' - Python Error', logger.log)
