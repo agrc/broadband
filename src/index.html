@@ -2,29 +2,48 @@
 <html>
 <head>
     <title>Utah Broadband Map</title>
-	
+
 	<meta name='keywords' content='utah broadband map, utah broadband'>
 	<meta name='description' content='Utah Broadband Interactive Map'>
-	
+
 	<link rel='shortcut icon' type='image/png' href='images/favicon.png'>
-	
+
     <!-- CSS FILES -->
     <link rel="stylesheet" type="text/css" href="app/resources/App.css">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
 </head>
 <body class="claro">
     <div data-dojo-type="app/App"></div>
-    
+
 	<!-- JAVASCRIPT -->
-    <!-- build:template
+    <!-- build:template:prod
     <script data-dojo-config="deps:['app/run']" src='dojo/dojo.js'></script>
+    <script>
+        require({
+            baseUrl: 'http://mapserv.utah.gov/broadband'
+        });
+    </script>
+    /build -->
+
+    <!-- build:template:stage
+    <script data-dojo-config="deps:['app/run']" src='dojo/dojo.js'></script>
+    <script>
+        require({
+            baseUrl: './'
+        });
+    </script>
     /build -->
 
     <!-- build:remove -->
     <script data-dojo-config="isDebug: 1" src='dojo/dojo.js'></script>
+    <script>
+        require({
+            baseUrl: './'
+        });
+    </script>
     <script src='app/run.js'></script>
     <!-- /build -->
-	
+
 	<!-- GOOGLE ANALYTICS -->
 	<script type="text/javascript">
     	var _gaq = _gaq || [];
