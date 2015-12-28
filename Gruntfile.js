@@ -41,12 +41,20 @@ module.exports = function (grunt) {
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var deployExcludes = [
-        '!util/**',
+    var deployFiles = [
+        '**',
         '!**/*.uncompressed.js',
         '!**/*consoleStripped.js',
-        '!**/*.min.*',
-        '!build-report.txt'
+        '!**/bootstrap/less/**',
+        '!**/bootstrap/test-infra/**',
+        '!**/tests/**',
+        '!build-report.txt',
+        '!components-jasmine/**',
+        '!favico.js/**',
+        '!jasmine-favicon-reporter/**',
+        '!jasmine-jsreporter/**',
+        '!stubmodule/**',
+        '!util/**'
     ];
     var deployDir = 'wwwroot/Broadband';
     var secrets;
@@ -64,6 +72,11 @@ module.exports = function (grunt) {
             'max-duration': 1800
         },
         statusCheckAttempts: 500
+    };
+    var processhtmlOptions = {
+        files: {
+            'dist/index.html': ['src/index.html']
+        }
     };
     try {
         secrets = grunt.file.readJSON('secrets.json');
@@ -93,12 +106,12 @@ module.exports = function (grunt) {
             deploy: ['deploy']
         },
         compress: {
-            options: {
-                archive: 'deploy/dist.zip'
-            },
             main: {
+                options: {
+                    archive: 'deploy/deploy.zip'
+                },
                 files: [{
-                    src: ['**'].concat(deployExcludes),
+                    src: deployFiles,
                     dest: './',
                     cwd: 'dist/',
                     expand: true
@@ -192,12 +205,8 @@ module.exports = function (grunt) {
         },
         pkg: grunt.file.readJSON('package.json'),
         processhtml: {
-            options: {},
-            dist: {
-                files: {
-                    'dist/index.html': ['src/index.html']
-                }
-            }
+            stage: processhtmlOptions,
+            prod: processhtmlOptions
         },
         'saucelabs-jasmine': {
             all: {
@@ -208,7 +217,7 @@ module.exports = function (grunt) {
         sftp: {
             stage: {
                 files: {
-                    './': 'deploy/dist.zip'
+                    './': 'deploy/deploy.zip'
                 },
                 options: {
                     host: '<%= secrets.stageHost %>'
@@ -216,7 +225,7 @@ module.exports = function (grunt) {
             },
             prod: {
                 files: {
-                    './': 'deploy/dist.zip'
+                    './': 'deploy/deploy.zip'
                 },
                 options: {
                     host: '<%= secrets.prodHost %>'
@@ -236,13 +245,13 @@ module.exports = function (grunt) {
                 password: '<%= secrets.password %>'
             },
             stage: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
+                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
                     host: '<%= secrets.stageHost %>'
                 }
             },
             prod: {
-                command: ['cd ' + deployDir, 'unzip -o dist.zip', 'rm dist.zip'].join(';'),
+                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
                     host: '<%= secrets.prodHost %>'
                 }
@@ -291,7 +300,7 @@ module.exports = function (grunt) {
         'clean:build',
         'dojo:prod',
         'copy',
-        'processhtml:dist'
+        'processhtml:prod'
     ]);
     grunt.registerTask('deploy-prod', [
         'clean:deploy',
@@ -306,7 +315,7 @@ module.exports = function (grunt) {
         'clean:build',
         'dojo:stage',
         'copy',
-        'processhtml:dist'
+        'processhtml:stage'
     ]);
     grunt.registerTask('deploy-stage', [
         'clean:deploy',

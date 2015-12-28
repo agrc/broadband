@@ -8,7 +8,9 @@ function (
 ) {
     // var appServerPath = window.location.protocol + '//' + window.location.hostname +'/ArcGIS/rest/services/';
     // TODO to make work on broadband.utah.gov domain as well as local and test
-    var appServerPath = 'http://mapserv.utah.gov/ArcGIS/rest/services/';
+    // var appServerPath = 'http://mapserv.utah.gov/ArcGIS/rest/services/';
+    // get from require.baseUrl
+    var appServerPath = '/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -27,14 +29,10 @@ function (
         //      keeps track if the dynamic or cached layer is showing
         currentLayer: null,
 
-        // used to point to base maps, i think
-        mapServerPath: 'http://mapserv.utah.gov/ArcGIS/rest/services/',
-
         // path to app
         appServerPath: appServerPath,
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
-        // basemapsURL: appServerPath + 'Broadband/Basemaps/MapServer',
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
 

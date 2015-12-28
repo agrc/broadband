@@ -1,11 +1,5 @@
 (function () {
     var config = {
-        // baseUrl: (
-        //     typeof window !== 'undefined' &&
-        //     window.dojoConfig &&
-        //     window.dojoConfig.isJasmineTestRunner
-        //     ) ? '/src': './',
-        baseUrl: 'http://mapserv.utah.gov/broadband',
         packages: [
             'agrc',
             'app',
