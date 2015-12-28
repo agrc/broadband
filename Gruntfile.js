@@ -2,13 +2,9 @@
 var osx = 'OS X 10.10';
 var windows = 'Windows 8.1';
 var browsers = [{
-
-    // OSX
     browserName: 'safari',
     platform: osx
 }, {
-
-    // Windows
     browserName: 'firefox',
     platform: windows
 }, {
@@ -28,6 +24,8 @@ var browsers = [{
     version: '9'
 }];
 module.exports = function (grunt) {
+    require('load-grunt-tasks')(grunt);
+
     var jsFiles = 'src/app/**/*.js';
     var otherFiles = [
         'src/app/**/*.html',
@@ -83,7 +81,88 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        bump: {
+            options: {
+                files: bumpFiles,
+                commitFiles: bumpFiles,
+                push: false
+            }
+        },
+        clean: {
+            build: ['dist'],
+            deploy: ['deploy']
+        },
+        compress: {
+            options: {
+                archive: 'deploy/dist.zip'
+            },
+            main: {
+                files: [{
+                    src: ['**'].concat(deployExcludes),
+                    dest: './',
+                    cwd: 'dist/',
+                    expand: true
+                }]
+            }
+        },
+        connect: {
+            options: {
+                livereload: true
+            }
+        },
+        copy: {
+            main: {
+                files: [{expand: true, cwd: 'src/', src: ['*.html'], dest: 'dist/'}]
+            }
+        },
+        dojo: {
+            prod: {
+                options: {
+                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                }
+            },
+            stage: {
+                options: {
+                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                }
+            },
+            options: {
+                dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
+                releaseDir: '../dist',
+                require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
+                basePath: './src'
+            }
+        },
+        esri_slurp: {
+            options: {
+                version: '3.11'
+            },
+            dev: {
+                options: {
+                    beautify: true
+                },
+                dest: 'src/esri'
+            },
+            travis: {
+                options: {
+                    beautify: false
+                },
+                dest: 'src/esri'
+            }
+        },
+        imagemin: { // Task
+            dynamic: { // Another target
+                options: { // Target options
+                    optimizationLevel: 3
+                },
+                files: [{
+                    expand: true, // Enable dynamic expansion
+                    cwd: 'src/', // Src matches are relative to this path
+                    src: '**/*.{png,jpg,gif}', // Actual patterns to match
+                    dest: 'src/'
+                }]
+            }
+        },
         jasmine: {
             main: {
                 src: ['src/app/run.js'],
@@ -111,91 +190,13 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             }
         },
-        watch: {
-            src: {
-                files: jshintFiles.concat(otherFiles),
-                options: {
-                    livereload: true
-                }
-            },
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint:main', 'jasmine:main:build']
-            }
-        },
-        connect: {
-            uses_defaults: {}
-        },
-        dojo: {
-            prod: {
-                options: {
-                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
-                }
-            },
-            stage: {
-                options: {
-                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
-                }
-            },
-            options: {
-                dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
-                releaseDir: '../dist',
-                require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
-                basePath: './src'
-            }
-        },
-        imagemin: { // Task
-            dynamic: { // Another target
-                options: { // Target options
-                    optimizationLevel: 3
-                },
-                files: [{
-                    expand: true, // Enable dynamic expansion
-                    cwd: 'src/', // Src matches are relative to this path
-                    src: '**/*.{png,jpg,gif}', // Actual patterns to match
-                    dest: 'src/'
-                }]
-            }
-        },
-        copy: {
-            main: {
-                files: [{expand: true, cwd: 'src/', src: ['*.html'], dest: 'dist/'}]
-            }
-        },
+        pkg: grunt.file.readJSON('package.json'),
         processhtml: {
             options: {},
             dist: {
                 files: {
                     'dist/index.html': ['src/index.html']
                 }
-            }
-        },
-        clean: {
-            build: ['dist'],
-            deploy: ['deploy']
-        },
-        esri_slurp: {
-            options: {
-                version: '3.11'
-            },
-            dev: {
-                options: {
-                    beautify: true
-                },
-                dest: 'src/esri'
-            },
-            travis: {
-                options: {
-                    beautify: false
-                },
-                dest: 'src/esri'
-            }
-        },
-        bump: {
-            options: {
-                files: bumpFiles,
-                commitFiles: bumpFiles,
-                push: false
             }
         },
         'saucelabs-jasmine': {
@@ -247,27 +248,19 @@ module.exports = function (grunt) {
                 }
             }
         },
-        compress: {
-            options: {
-                archive: 'deploy/dist.zip'
+        watch: {
+            src: {
+                files: jshintFiles.concat(otherFiles),
+                options: {
+                    livereload: true
+                }
             },
-            main: {
-                files: [{
-                    src: ['**'].concat(deployExcludes),
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
+            jshint: {
+                files: jshintFiles,
+                tasks: ['jshint:main', 'jasmine:main:build']
             }
         }
     });
-
-    // Loading dependencies
-    for (var key in grunt.file.readJSON('package.json').devDependencies) {
-        if (key !== 'grunt' && key.indexOf('grunt') === 0) {
-            grunt.loadNpmTasks(key);
-        }
-    }
 
     // Default task.
     grunt.registerTask('default', [
