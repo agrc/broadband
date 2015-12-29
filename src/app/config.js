@@ -6,11 +6,9 @@ define([
 function (
     has
 ) {
-    // var appServerPath = window.location.protocol + '//' + window.location.hostname +'/ArcGIS/rest/services/';
-    // TODO to make work on broadband.utah.gov domain as well as local and test
-    // var appServerPath = 'http://mapserv.utah.gov/ArcGIS/rest/services/';
-    // get from require.baseUrl
-    var appServerPath = '/ArcGIS/rest/services/';
+    var appServerPath = (has('agrc-build') === 'prod') ?
+        'http://mapserv.utah.gov/ArcGIS/rest/services/' :
+        '/ArcGIS/rest/services/';
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
