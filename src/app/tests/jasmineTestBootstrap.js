@@ -1,8 +1,8 @@
 /* global JasmineFaviconReporter, jasmineRequire */
 /*jshint unused:false*/
 var dojoConfig = {
-    isJasmineTestRunner: true,
-    packages: [{
+    baseUrl: '/src',
+    packages: ['dojo', {
         name: 'matchers',
         location: 'matchers/src'
     },{

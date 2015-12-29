@@ -119,9 +119,7 @@ module.exports = function (grunt) {
             }
         },
         connect: {
-            options: {
-                livereload: true
-            }
+            use_defaults: {}
         },
         copy: {
             main: {
@@ -131,18 +129,18 @@ module.exports = function (grunt) {
         dojo: {
             prod: {
                 options: {
-                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js']
                 }
             },
             stage: {
                 options: {
-                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
+                    profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js']
                 }
             },
             options: {
-                dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
+                dojo: 'src/dojo/dojo.js',
                 releaseDir: '../dist',
-                require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
+                requires: ['src/app/packages.js', 'src/app/run.js'],
                 basePath: './src'
             }
         },
@@ -187,6 +185,7 @@ module.exports = function (grunt) {
                         'src/jasmine-jsreporter/jasmine-jsreporter.js',
                         'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js',
+                        'src/app/packages.js',
                         'src/app/tests/jsReporterSanitizer.js',
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
