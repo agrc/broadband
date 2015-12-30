@@ -22,6 +22,9 @@ var browsers = [{
     browserName: 'internet explorer',
     platform: 'Windows 7',
     version: '9'
+}, {
+    browserName: 'microsoftedge',
+    platform: 'Windows 10'
 }];
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
@@ -288,7 +291,6 @@ module.exports = function (grunt) {
     grunt.registerTask('travis', [
         'if-missing:esri_slurp:travis',
         'jshint',
-        'jasmine:main:build',
         'sauce',
         'build-prod'
     ]);

@@ -1,7 +1,7 @@
 /* global JasmineFaviconReporter, jasmineRequire */
 /*jshint unused:false*/
 var dojoConfig = {
-    baseUrl: '/src',
+    baseUrl: '/src/',
     packages: ['dojo', {
         name: 'matchers',
         location: 'matchers/src'
