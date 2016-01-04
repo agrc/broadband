@@ -116,11 +116,11 @@ h3 {
 .main-navigation .current_page_ancestor > a {color: #636363;font-weight: bold;}
 .menu-toggle {display: none;}
 /* Header Navigation */
-div.nav-menu { 
+div.nav-menu {
     padding-right: 8px;
 }
 .main-navigation {
-    margin-top: 0; 
+    margin-top: 0;
     width: 550px; position: absolute; top: 32px; right: 0;
 }
 .main-navigation ul.nav-menu, .main-navigation div.nav-menu > ul {
@@ -297,4 +297,9 @@ div[data-dojo-attach-point="rightNav"] {
 /* remove outline */
 span:focus {
     outline: none;
+}
+
+.assistive-text {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
 }
