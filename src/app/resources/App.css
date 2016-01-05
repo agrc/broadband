@@ -30,7 +30,7 @@ a:hover {
 body {
     height: 100%;
     width: 100%;
-    background: url('http://168.180.161.9/broadband/app/resources/images/brillant.png') white;
+    background: url('images/brillant.png') white;
 }
 .side-nav {
     width: 280px;
@@ -67,7 +67,7 @@ h3 {
     height: 67px;
 }
 .logo {
-    background: url("http://168.180.161.9/broadband/app/resources/images/logo-broadband_2x.png") no-repeat scroll -22px -4px transparent;
+    background: url("images/consumer-map-logo.png") no-repeat scroll -22px -4px transparent;
     width: 415px;
     height: 75px;
     display: block;
@@ -139,13 +139,8 @@ div.nav-menu {
 .main-navigation li ul li:first-child {display: block;}
 
 .main-navigation ul li:hover > ul {box-shadow: 0 5px 6px #2D2D2D;}
-.main-navigation li ul li a {background: url("http://168.180.161.9/broadband/app/resources/images/brillant.png") repeat scroll 0 0 #FFFFFF; width: 14rem; font-size: 12px;}
+.main-navigation li ul li a {background: url("images/brillant.png") repeat scroll 0 0 #FFFFFF; width: 14rem; font-size: 12px;}
 .main-navigation li ul li a:hover {background: none repeat scroll 0 0 #4c9bbb; color: #FFF;}
-
-
-.header-search {position: absolute; top:0; right:0;}
-.header-search input[type="text"] {background: url("../images/search.png") no-repeat scroll right 3px white; border-radius: 4px 4px 4px 4px; padding: 4px 9px; width: 190px;}
-.header-search #searchsubmit {display: none;}
 
 .nav-menu {
     padding: 0;
