@@ -11,18 +11,18 @@
     			<p>Remember that only the maximum advertised speeds, as reported by broadband providers or from available public sources, are displayed. Actual speeds will vary with the broadband technology employed and the customer's chosen service plan.</p>
     			<p>Also, please keep in mind that the speed filter works together with other filters to control the broadband service area shown on the map.</p>
     			<p><b>About Speed: What do the numbers mean?</b>
-    				<p>Broadband connection speed is measured in megabits per second (Mbps). The more Mbps the faster you are able to send and receive information 
-    			(text, data, audio, video, etc) over your connection (<a href='http://168.180.161.9/broadband/app/resources/images/downloadtime.png' target='_blank'>view chart</a>).</p> 
+    				<p>Broadband connection speed is measured in megabits per second (Mbps). The more Mbps the faster you are able to send and receive information
+    			(text, data, audio, video, etc) over your connection (<a href='http://168.180.161.9/broadband/app/resources/images/downloadtime.png' target='_blank'>view chart</a>).</p>
     		</div>
     	</div>
     	<div class="centered slider-title">Download Speeds</div>
-        <div data-dojo-attach-point="downloadSlider" 
+        <div data-dojo-attach-point="downloadSlider"
     		class="slider down-slider"
-    		value="9" 
-    		minimum="1" maximum="9" 
+    		value="9"
+    		minimum="1" maximum="9"
     		discreteValues="9"
-    		intermediateChanges="true" 
-    		showButtons="false"	 
+    		intermediateChanges="true"
+    		showButtons="false"
     		data-dojo-type="dijit/form/HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
             <ol data-dojo-type="dijit/form/HorizontalRuleLabels" class="slider-label">
                 <li>1000</li>
@@ -35,15 +35,15 @@
                 <li>1.5</li>
                 <li>0.7</li>
             </ol>
-    		<div class="centered slider-label" dir='ltr'>megabits per second (Mbps)</div>			
+    		<div class="centered slider-label" dir='ltr'>megabits per second (Mbps)</div>
     	</div>
-    	<div data-dojo-attach-point="uploadSlider" 
+    	<div data-dojo-attach-point="uploadSlider"
     		class="slider up-slider"
-    		value="10" 
-    		minimum="1" maximum="10" 
-    		discreteValues="10" 
-    		intermediateChanges="true" 
-    		showButtons="false"			 
+    		value="10"
+    		minimum="1" maximum="10"
+    		discreteValues="10"
+    		intermediateChanges="true"
+    		showButtons="false"
     		data-dojo-type="dijit/form/HorizontalSlider" dir='rtl'> <!-- rtl so that sliders are colored on the right side of thumb -->
     		<ol data-dojo-type="dijit/form/HorizontalRuleLabels" container="topDecoration" class="slider-label">
                 <li>1000</li>
@@ -55,7 +55,7 @@
                 <li>3</li>
                 <li>1.5</li>
                 <li>0.7</li>
-    			<li>0.2</li>				
+    			<li>0.2</li>
             </ol>
     	</div>
     	<div class="centered slider-title">Upload Speeds</div>
@@ -66,12 +66,12 @@
 			<div style='display: none;'>
 				The checkboxes control the map display of broadband service areas by type of technology.
 				<p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
-				<p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p> 
+				<p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p>
 			</div>
 		</div>
-		<input data-dojo-attach-point="cbxWireBased" 
+		<input data-dojo-attach-point="cbxWireBased"
 			id="cbxWireBased"
-			data-dojo-type="dojox/form/TriStateCheckBox" 
+			data-dojo-type="dojox/form/TriStateCheckBox"
 			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
 		<label for="cbxWireBased">Wire Based (DSL, Cable, Fiber, Other)</label>
         <div class='sub-trans-list'>
@@ -99,9 +99,9 @@
                 </li>
             </ul>
         </div>
-		<input data-dojo-attach-point="cbxWireless" 
+		<input data-dojo-attach-point="cbxWireless"
 			id="cbxWireless"
-			data-dojo-type="dojox/form/TriStateCheckBox" 
+			data-dojo-type="dojox/form/TriStateCheckBox"
 			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
 		<label for="cbxWireless">Wireless</label>
 		<div class='sub-trans-list'>
@@ -124,21 +124,6 @@
         </div>
 		Satellite (<a data-dojo-attach-point='moreInfoLink' href=''>more info</a>)
 	</div>
-    <div class='end-user-div help-container'>
-        <h3>Provider-Reported Market</h3>
-        <div data-dojo-attach-point="endUserHelp">
-            <div style="display: none;">
-                <p style='margin-top: 0;'>The check boxes control display of the primary provider-specified target market for their reported broadband services.</p>
-
-                <p>The map can display services that target the full market (residential and/or business), or services that a provider designates as marketed only to businesses.</p>
-            </div>
-        </div>
-        <input data-dojo-type='dijit/form/CheckBox' id='cbxResidential' data-dojo-attach-point="cbxResidential" data-dojo-props="checked: true">
-        <label for="cbxResidential">Residential and/or Business</label>
-        <br>
-        <input data-dojo-type='dijit/form/CheckBox' id='cbxBusiness' data-dojo-attach-point="cbxBusiness">
-        <label for="cbxBusiness">Business only</label>
-    </div>
 	<div class='providers-div help-container'>
 		<h3>Providers</h3>
 		<div data-dojo-attach-point='providersHelp'>
@@ -146,22 +131,22 @@
 				<b>Interested in the availability of services from your current or other specific broadband provider?</b>
 				<p>By default the map shows broadband service areas of all terrestrial wireless and wireline broadband providers.</p>
 				<p>Users can view the reported service area of a specific provider or a subset of providers by clicking on the Select Providers button to open the Select Providers window.</p>
-				<p>The Select Providers window allows users to build a subset of providers to view on the map. To add to the subset, click on a provider from the Available Providers list and click the '>' button to add that provider the Show Data For These Providers list. Additional providers can be added in the same manner. The '<' button removes selected providers in the Show Data For These Providers list. The '>>' and '<<' buttons add and remove, respectively, all providers.</p> 
+				<p>The Select Providers window allows users to build a subset of providers to view on the map. To add to the subset, click on a provider from the Available Providers list and click the '>' button to add that provider the Show Data For These Providers list. Additional providers can be added in the same manner. The '<' button removes selected providers in the Show Data For These Providers list. The '>>' and '<<' buttons add and remove, respectively, all providers.</p>
 				<p>After building your intended subset of providers, click OK to close the Select Providers window and see the subset of providers displayed on the map.</p>
-				<p>Clicking the Show All Providers button removes the provider subset filter to display all providers again. The provider subset filter can be applied to the map again by clicking Show Only The Following Providers, which will apply the current provider filter again.</p>  
+				<p>Clicking the Show All Providers button removes the provider subset filter to display all providers again. The provider subset filter can be applied to the map again by clicking Show Only The Following Providers, which will apply the current provider filter again.</p>
 			</div>
 		</div>
 	</div>
 	<input data-dojo-attach-point="chbxShowAll"
 		data-dojo-type="dijit/form/RadioButton"
 		id="chbxShowAll"
-		name="providersGroup" 
+		name="providersGroup"
 		checked>
 		<label for="chbxShowAll">Show All Providers</label>
-	<br>		
+	<br>
 	<input data-dojo-attach-point="chbxShowOnly"
 		data-dojo-type="dijit/form/RadioButton"
-		id="chbxShowOnly" 
+		id="chbxShowOnly"
 		name="providersGroup">
 		<label for="chbxShowOnly">Show Only The Following Provider(s)</label>
 	<button data-dojo-attach-point="btnSelectProviders" class="indent select-providers-btn"
@@ -169,28 +154,28 @@
 	<ul class="list" data-dojo-attach-point="providerList" style="margin-top: 0px;">
 		<li>No Providers Selected</li>
 	</ul>
-	
-	<div data-dojo-attach-point='resetDialog' 
-		data-dojo-type='dijit/Dialog' 
-		class='mdf-reset-dialog' 
+
+	<div data-dojo-attach-point='resetDialog'
+		data-dojo-type='dijit/Dialog'
+		class='mdf-reset-dialog'
 		title='Warning'>
 		Any time you change the displayed providers the speeds and technology types are reset.
 		<br>
 		<br>
 		<input data-dojo-attach-point='chbxShowAgain'
-			id='chbxShowAgain' 
-			type='checkbox' 
+			id='chbxShowAgain'
+			type='checkbox'
 			data-dojo-type='dijit/form/CheckBox'
 			class='ok-btn'
 			checked>
 		<label for='chbxShowAgain'>Don't show this dialog again.</label>
-		<button data-dojo-attach-point='btnResetOK' 
-			data-dojo-type="dijit/form/Button" 
+		<button data-dojo-attach-point='btnResetOK'
+			data-dojo-type="dijit/form/Button"
 			class='mdf-reset-ok-btn'>OK</button>
 	</div>
-    <div data-dojo-attach-point='satelliteDialog' 
-		data-dojo-type='dijit/Dialog' 
-		title='Satellite Providers Information' 
+    <div data-dojo-attach-point='satelliteDialog'
+		data-dojo-type='dijit/Dialog'
+		title='Satellite Providers Information'
 		class='mdf-satellite-dialog'>
 		<img alt='satellite image' src='http://168.180.161.9/broadband/app/resources/images/bbsat.png'>
         Satellite broadband availability is, effectively, statewide. In some remote areas of the Utah where broadband services are not otherwise available, satellite-based service may be the best or only option for Internet access.
@@ -202,8 +187,8 @@
         <a href="http://www.skycasters.com/" target="_blank">Skycasters</a><br>
         <a href="http://www.starband.net/Default.aspx" target='_blank'>Starband</a><br>
         <a href='http://www.viasat.com//' target='_blank'>ViaSat</a>
-		<button data-dojo-attach-point='btnSatelliteOK' 
-			data-dojo-type="dijit/form/Button" 
+		<button data-dojo-attach-point='btnSatelliteOK'
+			data-dojo-type="dijit/form/Button"
 			class='mdf-reset-ok-btn'>OK</button>
     </div>
 </div>

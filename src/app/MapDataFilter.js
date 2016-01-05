@@ -99,7 +99,6 @@ function (
             this.dialogs.push(new HelpPopup({title: 'Technology Type Help'}, this.typeHelp));
 
             this.dialogs.push(new HelpPopup({title: 'Broadband Providers Help'}, this.providersHelp));
-            this.dialogs.push(new HelpPopup({title: 'Target Market Help'}, this.endUserHelp));
             this.dialogs.push(this.satelliteDialog);
             this.dialogs.push(this.resetDialog);
 
@@ -235,28 +234,6 @@ function (
             }
             else {
                 domStyle.set(this.providerList, 'color', 'grey');
-            }
-
-            // End User Categories
-            var bus = this.cbxBusiness.get('checked');
-            var res = this.cbxResidential.get('checked');
-            defQueryProps.endUserCats = [];
-            if (!res && !bus) {
-                queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' = \'-1\'';
-            } else {
-                if (!res) {
-                    queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' = \'2\'';
-                } else {
-                    defQueryProps.endUserCats.push('con');
-                }
-                if (!bus) {
-                    queryTxt += ' AND ' + AGRC.fieldNames.EndUserCat + ' <> \'2\'';
-                } else {
-                    defQueryProps.endUserCats.push('bus');
-                }
-            }
-            if (defQueryProps.endUserCats.length === 0) {
-                defQueryProps.endUserCats = -1;
             }
 
             // update query definitions for first 3 layers
@@ -558,17 +535,6 @@ function (
             var slider = (sliderType === 'down') ? this.downloadSlider : this.uploadSlider;
 
             slider.set('value', value);
-
-            this.updateDefQuery();
-        },
-        setEndUserCategories: function (cats) {
-            // summary:
-            //      sets the end user category checkboxes
-            // cats: String[]
-            console.log('app/MapDataFilter:setEndUserCategories', arguments);
-
-            this.cbxResidential.set('checked', array.indexOf(cats, 'con') !== -1);
-            this.cbxBusiness.set('checked', array.indexOf(cats, 'bus') !== -1);
 
             this.updateDefQuery();
         }

@@ -19,7 +19,6 @@ function (
         var launchListPickerSpy;
         var selectTransTypesSpy;
         var setSliderSpy;
-        var setEndUserCategoriesSpy;
         beforeEach(function () {
             selectProvidersSpy = jasmine.createSpy('selectProviders');
             launchListPickerSpy = jasmine.createSpy('launchListPicker')
@@ -31,12 +30,10 @@ function (
             AGRC.listPicker = {
                 selectProviders: selectProvidersSpy
             };
-            setEndUserCategoriesSpy = jasmine.createSpy('setEndUserCategories');
             AGRC.mapDataFilter = {
                 launchListPicker: launchListPickerSpy,
                 selectTransTypes: selectTransTypesSpy,
-                setSlider: setSliderSpy,
-                setEndUserCategories: setEndUserCategoriesSpy
+                setSlider: setSliderSpy
             };
             AGRC.map = jasmine.createSpyObj('map', ['setScale', 'centerAt']);
             AGRC.map.loaded = true;
@@ -138,7 +135,6 @@ function (
             });
         });
         describe('onRouteHashChange', function () {
-            var endUserCats = ['cat1', 'cat2'];
             var testHash = {
                 providers: ['blah1'],
                 transTypes: ['blah2'],
@@ -148,8 +144,7 @@ function (
                     x: 199793.4774791507,
                     y: 4185516.1549837017,
                     scale: 120000
-                },
-                endUserCats: endUserCats
+                }
             };
             it('updates currentRoute', function () {
 
@@ -229,11 +224,6 @@ function (
 
                 expect(AGRC.map.centerAt.calls.count()).toBe(1);
             });
-            it('calls setEndUserCategories if appropriate', function () {
-                testObject.onRouteHashChange(testHash);
-
-                expect(AGRC.mapDataFilter.setEndUserCategories).toHaveBeenCalledWith(endUserCats);
-            });
         });
         describe('updateProviders', function () {
             var provs = ['blah1', 'blah2'];
@@ -266,13 +256,11 @@ function (
             it('clear the filter properties of currentRoute', function () {
                 testObject.currentRoute.providers = ['blah'];
                 testObject.currentRoute.transTypes = ['blah'];
-                testObject.currentRoute.endUserCats = ['blah'];
 
                 testObject.onResetFilters();
 
                 expect(testObject.currentRoute.providers).toEqual([]);
                 expect(testObject.currentRoute.transTypes).toEqual([]);
-                expect(testObject.currentRoute.endUserCats).toEqual([]);
             });
             it('calls updateHash', function () {
                 testObject.onResetFilters();

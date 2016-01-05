@@ -64,7 +64,7 @@ class URLParams(basetest.BaseTest):
         self.assertIn('providers=-1', self.browser.current_url)
 
     def test_ReadURLParams(self):
-        url = self.url + r"#/route/minDownSpeed=4&minUpSpeed=3&transTypes=40|41|10|20|30&providers=All%20West|Baja&extent=406784|4461300|527249|4555471&endUserCats=res"
+        url = self.url + r"#/route/minDownSpeed=4&minUpSpeed=3&transTypes=40|41|10|20|30&providers=All%20West|Baja&extent=406784|4461300|527249|4555471"
         self.browser.get(url)
         self.browser.refresh()
 

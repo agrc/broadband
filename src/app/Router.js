@@ -60,7 +60,7 @@ define([
                 topic.subscribe(AGRC.topics.MapDataFilter.onResetFilter, function () {
                     that.onResetFilters();
                 }),
-                topic.subscribe(AGRC.topics.App.onMapExtentChange, 
+                topic.subscribe(AGRC.topics.App.onMapExtentChange,
                     lang.hitch(this, 'onMapExtentChange'))
             );
         },
@@ -161,9 +161,6 @@ define([
                         });
                     }
                 }
-                if (hasParameterChanged('endUserCats')) {
-                    AGRC.mapDataFilter.setEndUserCategories(newRoute.endUserCats);
-                }
             }
 
             this.pauseUpdateHash = false;
@@ -192,7 +189,6 @@ define([
 
             this.currentRoute.providers = [];
             this.currentRoute.transTypes = [];
-            this.currentRoute.endUserCats = [];
 
             this.updateHash();
         },
@@ -267,7 +263,7 @@ define([
                         y: parseFloat(extents[1], 10),
                         scale: parseFloat(extents[2], 10)
                     };
-                } else if (propName === 'transTypes' || propName === 'providers' || propName === 'endUserCats') {
+                } else if (propName === 'transTypes' || propName === 'providers') {
                     if (propValue.split('|').length > 1) {
                         returnObj[propName] = propValue.split('|');
                     } else {
