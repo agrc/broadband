@@ -179,7 +179,6 @@ module.exports = function (grunt) {
         },
         jasmine: {
             main: {
-                src: ['src/app/run.js'],
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
