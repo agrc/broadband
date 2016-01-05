@@ -166,8 +166,8 @@ function (
                 mq.addListener(function (query) {
                     that.onMediaQueryChange(query);
                 });
+                this.onMediaQueryChange(mq);
             }
-            this.onMediaQueryChange(mq);
         },
         onMediaQueryChange: function (mq) {
             // summary:
