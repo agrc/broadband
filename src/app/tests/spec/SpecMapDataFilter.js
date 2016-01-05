@@ -80,15 +80,6 @@ function (
 
                 expect(testWidget._onTransCheckBoxChange).toHaveBeenCalled();
             });
-            it('wires the end user category checkboxes', function () {
-                spyOn(testWidget, 'updateDefQuery');
-                testWidget.wireControlEvents();
-
-                testWidget.cbxResidential.onClick();
-                testWidget.cbxBusiness.onClick();
-
-                expect(testWidget.updateDefQuery).toHaveBeenCalled();
-            });
         });
         describe('_getTransTypes', function () {
             it('returns all values when all checked', function () {
@@ -207,8 +198,7 @@ function (
                 var returned;
                 var expected = {
                     minDownSpeed: testWidget.downloadSlider.value,
-                    minUpSpeed: testWidget.uploadSlider.value,
-                    endUserCats: ['con']
+                    minUpSpeed: testWidget.uploadSlider.value
                 };
                 topic.subscribe(AGRC.topics.Router.onDefQueryUpdate, function (param) {
                     returned = param;
@@ -223,49 +213,15 @@ function (
                     minDownSpeed: testWidget.downloadSlider.value,
                     minUpSpeed: testWidget.uploadSlider.value,
                     transTypes: -1,
-                    providers: -1,
-                    endUserCats: ['con']
+                    providers: -1
                 };
                 var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
                     'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND TRANSTECH ' +
-                    '= -1 AND UTProvCode = \'-1\' AND EndUserCat <> \'2\'';
+                    '= -1 AND UTProvCode = \'-1\'';
                 query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
                     dijitRegistry.getEnclosingWidget(node).set('value', false);
                 });
                 testWidget.chbxShowOnly.set('checked', true);
-
-                testWidget.updateDefQuery();
-
-                expect(routerReturned).toEqual(routerExpected);
-                expect(defQueryReturned).toEqual(defQueryExpected);
-            });
-            it('returns the correct def query for end user category', function () {
-                var routerExpected = {
-                    minDownSpeed: testWidget.downloadSlider.value,
-                    minUpSpeed: testWidget.uploadSlider.value,
-                    endUserCats: ['con', 'bus']
-                };
-                var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
-                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\')';
-
-                testWidget.cbxBusiness.set('checked', true);
-
-                testWidget.updateDefQuery();
-
-                expect(routerReturned).toEqual(routerExpected);
-                expect(defQueryReturned).toEqual(defQueryExpected);
-
-                routerExpected = {
-                    minDownSpeed: testWidget.downloadSlider.value,
-                    minUpSpeed: testWidget.uploadSlider.value,
-                    endUserCats: -1
-                };
-                defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
-                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND ' +
-                    'EndUserCat = \'-1\'';
-
-                testWidget.cbxBusiness.set('checked', false);
-                testWidget.cbxResidential.set('checked', false);
 
                 testWidget.updateDefQuery();
 
@@ -340,26 +296,6 @@ function (
                 testWidget.setSlider('up', 5);
 
                 expect(testWidget.updateDefQuery).toHaveBeenCalled();
-            });
-        });
-        describe('setEndUserCategories', function () {
-            it('con', function () {
-                testWidget.setEndUserCategories(['con']);
-
-                expect(testWidget.cbxResidential.get('checked')).toBe(true);
-                expect(testWidget.cbxBusiness.get('checked')).toBe(false);
-            });
-            it('bus', function () {
-                testWidget.setEndUserCategories(['bus']);
-
-                expect(testWidget.cbxResidential.get('checked')).toBe(false);
-                expect(testWidget.cbxBusiness.get('checked')).toBe(true);
-            });
-            it('both', function () {
-                testWidget.setEndUserCategories(['bus', 'con']);
-
-                expect(testWidget.cbxResidential.get('checked')).toBe(true);
-                expect(testWidget.cbxBusiness.get('checked')).toBe(true);
             });
         });
     });

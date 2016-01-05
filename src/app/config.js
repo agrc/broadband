@@ -43,7 +43,6 @@ function (
             URL: 'URL',
             ID_NUM: 'ID_NUM',
             TRANSTECH: 'TRANSTECH',
-            EndUserCat: 'EndUserCat',
             Biz_Only: 'Biz_Only'
         },
         providers: {},

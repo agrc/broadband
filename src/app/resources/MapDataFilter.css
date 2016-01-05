@@ -2,7 +2,7 @@
 @import '../../dojox/form/resources/TriStateCheckBox.css';
 
 .mapdatafilter {
-	
+
 }
 .mapdatafilter .slider {
     margin: 2px 0 0 0;
@@ -37,13 +37,12 @@
 	right: 24px;
 	top: -1px;
 }
-.mapdatafilter .providers-div, 
-.mapdatafilter #tech-type-div,
-.mapdatafilter .end-user-div {
+.mapdatafilter .providers-div,
+.mapdatafilter #tech-type-div {
     margin-top: 10px;
 }
 
-/* dialog styling cannot be within 
+/* dialog styling cannot be within
  * widget because dialogs
  * are automatically placed at the body level
  */
