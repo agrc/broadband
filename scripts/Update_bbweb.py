@@ -35,8 +35,6 @@ mapServices = [
               'Broadband/ProviderCoverageCached',
               'BBEcon/MapService'
                ]
-caiFGD = r'BB_Service_CAInstitutions'
-caiSDE = r'UBBMAP.UBBADMIN.BB_Service_CAInstitutions'
 scales = [
     1.8489297737236E7,
     9244648.868618,
@@ -165,9 +163,6 @@ try:
         # provider table
         arcpy.Delete_management(pathToFGD + '\\' + providerTableName.split('.')[2])
         arcpy.TableToTable_conversion(pathToSDE + '\\' + providerTableName, pathToFGD, providerTableName.split('.')[2])
-        logger.logGPMsg()
-        # cai layer
-        arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + caiSDE, pathToFGD, caiFGD)
         logger.logGPMsg()
 
         admin = ags.AGSAdmin(AGS_USER, AGS_PASSWORD, AGS_SERVER)
