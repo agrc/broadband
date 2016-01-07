@@ -1,27 +1,29 @@
 require([
+    'app/config',
     'app/MapDataFilter',
 
     'dijit/registry',
     'dijit/registry',
 
-    'dojo/_base/window',
     'dojo/dom-construct',
     'dojo/hash',
     'dojo/query',
-    'dojo/topic'
+    'dojo/topic',
+    'dojo/_base/window'
 ],
 
 function (
+    config,
     MapDataFilter,
 
     registry,
     dijitRegistry,
 
-    win,
     domConstruct,
     hash,
     query,
-    topic
+    topic,
+    win
 ) {
     describe('app/MapDataFilter', function () {
         var testWidget;
@@ -33,7 +35,7 @@ function (
                             var result = {
                                 pass: actual.get('checked') === true
                             };
-                            var notText = result.pass ? ' not': '';
+                            var notText = result.pass ? ' not' : '';
                             result.message = function () {
                                 return 'Expected ' + actual.dojoAttachPoint + notText + ' to have been checked.';
                             };
@@ -92,7 +94,7 @@ function (
                 expect(testWidget._getTransTypes()).toEqual([10, 20, 30, 50, 70, 71]);
             });
             it('returns an empty array if none are checked', function () {
-                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
+                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     registry.getEnclosingWidget(node).set('value', false);
                 });
 
@@ -187,10 +189,10 @@ function (
             var routerReturned;
             var defQueryReturned;
             beforeEach(function () {
-                topic.subscribe(AGRC.topics.Router.onDefQueryUpdate, function (param) {
+                topic.subscribe(config.topics.Router.onDefQueryUpdate, function (param) {
                     routerReturned = param;
                 });
-                topic.subscribe(AGRC.topics.MapDataFilter.onQueryUpdate, function(query) {
+                topic.subscribe(config.topics.MapDataFilter.onQueryUpdate, function (query) {
                     defQueryReturned = query;
                 });
             });
@@ -200,7 +202,7 @@ function (
                     minDownSpeed: testWidget.downloadSlider.value,
                     minUpSpeed: testWidget.uploadSlider.value
                 };
-                topic.subscribe(AGRC.topics.Router.onDefQueryUpdate, function (param) {
+                topic.subscribe(config.topics.Router.onDefQueryUpdate, function (param) {
                     returned = param;
                 });
 
@@ -218,7 +220,7 @@ function (
                 var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
                     'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND TRANSTECH ' +
                     '= -1 AND UTProvCode = \'-1\'';
-                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
+                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     dijitRegistry.getEnclosingWidget(node).set('value', false);
                 });
                 testWidget.chbxShowOnly.set('checked', true);

@@ -59,7 +59,7 @@ define([
         /**
          * Fires after all nodes are ready to use
          */
-        postCreate: function(){
+        postCreate: function () {
             // assign even row
             if ((this.index + 1) % 2 === 0) {
                 domClass.add(this.domNode, 'even-row');
@@ -70,7 +70,7 @@ define([
             this.buildChart();
         },
 
-        buildTooltip: function(){
+        buildTooltip: function () {
             // tooltip
             new Tooltip({
                 connectId: this.id,
@@ -82,7 +82,7 @@ define([
         /**
          * Build chart and puts it in td
          */
-        buildChart: function(){
+        buildChart: function () {
             var div = domConstruct.create('div', null, this.speedChart);
             domClass.add(div, 'chart-div');
 

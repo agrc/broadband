@@ -23,7 +23,7 @@ define([
 
     'dijit/form/Button',
     'xstyle/css!app/resources/PrintDialog.css'
-], function(
+], function (
     _DialogMixin,
     config,
     Router,
@@ -52,7 +52,7 @@ define([
         _WidgetsInTemplateMixin,
         _DialogMixin,
         _ErrorMessageMixin
-        ], {
+    ], {
         // description:
         //      Fires off the print task and reports back the link to the user.
 
@@ -71,8 +71,8 @@ define([
 
         // map: esri/Map
         map: null,
-        
-        postCreate: function() {
+
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -103,7 +103,7 @@ define([
             //      show download link
             // evt: {result: {url: String}}
             console.log('app/PrintDialog:onComplete', arguments);
-        
+
             this.downloadLink.href = evt.result.url;
             domClass.remove(this.downloadLink, 'hidden');
 
@@ -114,7 +114,7 @@ define([
             //      print service errored
             // evt: {error: Error}
             console.log('app/PrintDialog:onError', arguments);
-        
+
             this.showErrMsg(evt.error.message);
             this.hideLoader();
         },
@@ -123,7 +123,7 @@ define([
             //      disables the print button and sets message text
             // msg: String
             console.log('app/map/Print:showLoader', arguments);
-        
+
             this.hideErrMsg();
             this.hideLink();
 
@@ -138,7 +138,7 @@ define([
             // summary:
             //      resets the button
             console.log('app/map/Print:hideLoader', arguments);
-        
+
             this.printBtn.set('disabled', false);
             this.printBtn.set('innerHTML', this.btnText);
         },
@@ -146,14 +146,14 @@ define([
             // summary:
             //      hides the link after the user clicks on it
             console.log('app/map/Print:hideLink', arguments);
-        
+
             domClass.add(this.downloadLink, 'hidden');
         },
         print: function () {
             // summary:
             //      kicks off print service
             console.log('app/PrintDialog:print', arguments);
-        
+
             this.showLoader('Processing');
 
             this.params.template.layoutOptions = {
@@ -170,7 +170,7 @@ define([
             //      The string of the current hash
             // returns: Object[]
             console.log('app/PrintDialog:getCustomTextElements', arguments);
-        
+
             if (hash === '') {
                 return [];
             }

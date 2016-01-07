@@ -1,4 +1,3 @@
-/* jshint camelcase: false */
 define([
     'agrc/widgets/map/BaseMap',
 
@@ -37,9 +36,7 @@ define([
     'dijit/Dialog',
     'dijit/form/Button',
     'dijit/form/CheckBox'
-],
-
-function (
+], function (
     BaseMap,
 
     config,
@@ -103,7 +100,7 @@ function (
         constructor: function () {
             console.log('app/App:constructor', arguments);
 
-            AGRC.app = this;
+            config.app = this;
         },
         postCreate: function () {
             // summary:
@@ -245,23 +242,23 @@ function (
             var query = new Query();
             query.returnGeometry = false;
             query.outFields = [
-                AGRC.fieldNames.NAME,
-                AGRC.fieldNames.ID,
-                AGRC.fieldNames.URL,
-                AGRC.fieldNames.Biz_Only
+                config.fieldNames.NAME,
+                config.fieldNames.ID,
+                config.fieldNames.URL,
+                config.fieldNames.Biz_Only
             ];
             query.where = this.makeQueryDirty('1 = 1');
-            var qTask = new QueryTask(AGRC.broadbandMapURL + '/4');
-            qTask.execute(query, function(results){
+            var qTask = new QueryTask(config.broadbandMapURL + '/4');
+            qTask.execute(query, function (results) {
                 array.forEach(results.features, function (g) {
-                    AGRC.providers[g.attributes[AGRC.fieldNames.ID]] = {
-                        name: g.attributes[AGRC.fieldNames.NAME],
-                        url: g.attributes[AGRC.fieldNames.URL],
-                        bizOnly: g.attributes[AGRC.fieldNames.Biz_Only]
+                    config.providers[g.attributes[config.fieldNames.ID]] = {
+                        name: g.attributes[config.fieldNames.NAME],
+                        url: g.attributes[config.fieldNames.URL],
+                        bizOnly: g.attributes[config.fieldNames.Biz_Only]
                     };
                 });
 
-                topic.publish('AGRC.ProvidersObtained', AGRC.providers);
+                topic.publish(config.topics.App.providersObtained, config.providers);
 
                 that.router = new Router();
             }, function (err) {
@@ -278,41 +275,41 @@ function (
                 includeFullExtentButton: true,
                 sliderStyle: 'large'
             };
-            AGRC.map = new BaseMap(this.mapDiv, mapOptions);
+            config.map = new BaseMap(this.mapDiv, mapOptions);
 
             // create layers
-            AGRC.bbLayer = new ArcGISDynamicMapServiceLayer(AGRC.broadbandMapURL, {
+            config.bbLayer = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
                 opacity: 0.5,
                 visible: false,
                 id: 'coverage'
             });
-            AGRC.bbLayerCached = new ArcGISTiledMapServiceLayer(AGRC.broadbandMapCachedURL, {
+            config.bbLayerCached = new ArcGISTiledMapServiceLayer(config.broadbandMapCachedURL, {
                 opacity: 0.5,
                 id: 'coverageCached'
             });
-            AGRC.currentLayer = AGRC.bbLayerCached;
-            // AGRC.bbBasemaps = new ArcGISDynamicMapServiceLayer(AGRC.basemapsURL, {
+            config.currentLayer = config.bbLayerCached;
+            // config.bbBasemaps = new ArcGISDynamicMapServiceLayer(config.basemapsURL, {
             //     id: 'basemaps',
             //     visible: false
             // });
 
             // create new map display options widget
             var params = {
-                map: AGRC.map,
-                bbLayer: AGRC.bbLayer,
-                bbLayerCached: AGRC.bbLayerCached
-                // basemapsLayer: AGRC.bbBasemaps
+                map: config.map,
+                bbLayer: config.bbLayer,
+                bbLayerCached: config.bbLayerCached
+                // basemapsLayer: config.bbBasemaps
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));
 
-            AGRC.map.addLayer(AGRC.bbLayer);
-            AGRC.map.addLoaderToLayer(AGRC.bbLayer);
-            AGRC.map.addLayer(AGRC.bbLayerCached);
-            AGRC.map.addLoaderToLayer(AGRC.bbLayerCached);
-            // AGRC.map.addLayer(AGRC.bbBasemaps);
-            // AGRC.map.addLoaderToLayer(AGRC.bbBasemaps);
+            config.map.addLayer(config.bbLayer);
+            config.map.addLoaderToLayer(config.bbLayer);
+            config.map.addLayer(config.bbLayerCached);
+            config.map.addLoaderToLayer(config.bbLayerCached);
+            // config.map.addLayer(config.bbBasemaps);
+            // config.map.addLoaderToLayer(config.bbBasemaps);
 
-            this.own(this.connect(AGRC.map, 'onClick', function(){
+            this.own(this.connect(config.map, 'onClick', function () {
                 if (that.size === 'small') {
                     if (!that.popoutOpen) {
                         that.onPopoutLinkClick();
@@ -321,15 +318,15 @@ function (
             }));
 
             // set up new geosearch widget
-            this.geoSearch = new GeoSearch({map: AGRC.map}, 'geo-search');
+            this.geoSearch = new GeoSearch({map: config.map}, 'geo-search');
 
-            this.own(AGRC.map.on('load', function () {
-                that.own(AGRC.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
+            this.own(config.map.on('load', function () {
+                that.own(config.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
             }));
 
             // create new map data filters widget
-            this.own(AGRC.mapDataFilter = new MapDataFilter({
-                layer: AGRC.bbLayer
+            this.own(config.mapDataFilter = new MapDataFilter({
+                layer: config.bbLayer
             }, 'map-data-filter'));
 
             // create new provider results widget
@@ -340,22 +337,22 @@ function (
             console.log('app/App:onFeedbackLinkClick', arguments);
 
             // create new feedback widget and display it's containing dialog box
-            if (!AGRC.feedbackWidget){
+            if (!config.feedbackWidget) {
                 this.initFeedback();
             }
-            AGRC.feedbackWidget.show();
+            config.feedbackWidget.show();
         },
         initFeedback: function () {
             console.log('app/App:initFeedback', arguments);
 
             // create new widget
-            AGRC.feedbackWidget = new Feedback({
-                map: AGRC.map,
+            config.feedbackWidget = new Feedback({
+                map: config.map,
                 redliner: config.redlineUrl,
                 toIds: [4, 7],
                 title: 'Report a Problem'
             }, this.feedbackWidgetDiv);
-            AGRC.feedbackWidget.startup();
+            config.feedbackWidget.startup();
         },
         onExtentChange: function (change) {
             // summary:
@@ -364,21 +361,21 @@ function (
 
             // only check if there was a level change & filters have not been touched
             if (change.levelChange &&
-                AGRC.mapDataFilter.resetBtn.get('disabled') &&
+                config.mapDataFilter.resetBtn.get('disabled') &&
                 registry.byId('overlay-checkbox').get('value')) {
                 // turn on dynamic service when zoomed in further than the breakpoint level
-                if (change.lod.level >= AGRC.breakPointLevel) {
-                    AGRC.bbLayer.show();
-                    AGRC.bbLayerCached.hide();
-                    AGRC.currentLayer = AGRC.bbLayer;
+                if (change.lod.level >= config.breakPointLevel) {
+                    config.bbLayer.show();
+                    config.bbLayerCached.hide();
+                    config.currentLayer = config.bbLayer;
                 } else {
-                    AGRC.bbLayer.hide();
-                    AGRC.bbLayerCached.show();
-                    AGRC.currentLayer = AGRC.bbLayerCached;
+                    config.bbLayer.hide();
+                    config.bbLayerCached.show();
+                    config.currentLayer = config.bbLayerCached;
                 }
             }
 
-            topic.publish(AGRC.topics.App.onMapExtentChange, change.extent.getCenter(), AGRC.map.getScale());
+            topic.publish(config.topics.App.onMapExtentChange, change.extent.getCenter(), config.map.getScale());
         },
         getCurrentCoverageLayer: function () {
             // summary:
@@ -387,7 +384,7 @@ function (
             //      esri.layer
             console.log('app/App:getCurrentCoverageLayer', arguments);
 
-            return AGRC.currentLayer;
+            return config.currentLayer;
         },
         filterByProviderIdNum: function () {
             console.log('app/App:filterByProviderIdNum', arguments);
@@ -402,18 +399,17 @@ function (
             // set up query task
             var query = new Query();
             query.returnGeometry = false;
-            query.outFields = [AGRC.fieldNames.ID, AGRC.fieldNames.NAME];
-            query.where = this.makeQueryDirty(AGRC.fieldNames.ID_NUM + ' = \'' + id + '\'');
+            query.outFields = [config.fieldNames.ID, config.fieldNames.NAME];
+            query.where = this.makeQueryDirty(config.fieldNames.ID_NUM + ' = \'' + id + '\'');
 
-            var qTask = new QueryTask(AGRC.broadbandMapURL + '/3');
-            qTask.execute(query, function(featureSet){
+            var qTask = new QueryTask(config.broadbandMapURL + '/3');
+            qTask.execute(query, function (featureSet) {
                 // check to make sure that a provider was found
-                if (featureSet.features.length === 1)
-                {
+                if (featureSet.features.length === 1) {
                     // add provider to map data filter widget
                     var graphicAtts = featureSet.features[0].attributes;
-                    var provName = graphicAtts[AGRC.fieldNames.NAME];
-                    var provID = graphicAtts[AGRC.fieldNames.ID];
+                    var provName = graphicAtts[config.fieldNames.NAME];
+                    var provID = graphicAtts[config.fieldNames.ID];
 
                     // set title
                     dom.byId('red-text').innerHTML = provID + ' |';
@@ -422,11 +418,11 @@ function (
                     mapFilterWidget._onListPickerOK([[provName,provID]]);
 
                     // remove cached layer
-                    AGRC.map.removeLayer(AGRC.bbLayerCached);
+                    config.map.removeLayer(config.bbLayerCached);
 
                     // show dynamic layer and prevent it from being hidden
-                    AGRC.bbLayer.show();
-                    AGRC.bbLayer.hide = function(){
+                    config.bbLayer.show();
+                    config.bbLayer.hide = function () {
                         this.show();
                     };
 
@@ -436,7 +432,7 @@ function (
                 }
 
                 // show provider map data filter
-            }, function(error){
+            }, function (error) {
                 alert('There was an error with the provider id query');
                 console.error(error.message);
             });
@@ -451,8 +447,7 @@ function (
             var results = regex.exec(window.location.href);
             if (results === null) {
                 return '';
-            }
-            else {
+            } else {
                 return results[1];
             }
         },
@@ -492,7 +487,7 @@ function (
 
             if (!this.printDialog) {
                 this.printDialog = new PrintDialog({
-                    map: AGRC.map,
+                    map: config.map,
                     title: 'Print Map to PDF'
                 }, this.printWidgetDiv);
                 this.printDialog.startup();

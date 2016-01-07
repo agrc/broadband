@@ -1,12 +1,10 @@
 define([
+    'app/config',
+
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    'dojo/_base/array',
-    'dojo/_base/Color',
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/dom-class',
     'dojo/dom-style',
     'dojo/has',
@@ -14,6 +12,10 @@ define([
     'dojo/on',
     'dojo/query',
     'dojo/text!app/templates/GeoSearch.html',
+    'dojo/_base/array',
+    'dojo/_base/Color',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'esri/layers/GraphicsLayer',
     'esri/symbols/SimpleFillSymbol',
@@ -24,14 +26,12 @@ define([
     'dijit/form/ValidationTextBox',
     'xstyle/css!app/resources/GeoSearch.css'
 ], function (
+    config,
+
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    array,
-    Color,
-    declare,
-    lang,
     domClass,
     domStyle,
     has,
@@ -39,6 +39,10 @@ define([
     on,
     query,
     template,
+    array,
+    Color,
+    declare,
+    lang,
 
     GraphicsLayer,
     SimpleFillSymbol,
@@ -46,8 +50,7 @@ define([
     Query,
     QueryTask
 ) {
-    return declare('broadband.GeoSearch',
-        [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare('broadband.GeoSearch', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
         // example:
 
@@ -91,11 +94,11 @@ define([
         // properites passed in via params
         map: null, // reference to esri.Map
 
-        constructor: function() {
+        constructor: function () {
             console.log('app/GeoSearch:constructor', arguments);
         },
 
-        postCreate: function() {
+        postCreate: function () {
             console.log('app/GeoSearch:postCreate', arguments);
 
             this._setUpQueryTask();
@@ -107,7 +110,7 @@ define([
             this.inherited(arguments);
         },
 
-        _setUpQueryTask: function() {
+        _setUpQueryTask: function () {
             console.log('app/GeoSearch:_setUpQueryTask', arguments);
 
             // create new query parameter
@@ -116,17 +119,17 @@ define([
             this.query.outFields = ['OBJECTID', this.searchField];
 
             // create new query task
-            this.queryTask = new QueryTask(AGRC.broadbandMapURL + '/' + this.searchLayerIndex);
+            this.queryTask = new QueryTask(config.broadbandMapURL + '/' + this.searchLayerIndex);
 
             // wire events
             this.connect(this.queryTask, 'onError', this._onQueryTaskError);
         },
 
-        _setUpGraphicsLayer: function(){
+        _setUpGraphicsLayer: function () {
             console.log('app/GeoSearch:_setUpGraphicsLayer', arguments);
 
             // create new graphics layer and add to map
-            this.connect(this.map, 'onLoad', lang.hitch(this, function(){
+            this.connect(this.map, 'onLoad', lang.hitch(this, function () {
                 this.graphicsLayer = new GraphicsLayer();
                 this.map.addLayer(this.graphicsLayer);
 
@@ -145,13 +148,13 @@ define([
                 new Color([255,255,0]), 1.5), null);
         },
 
-        _wireEvents: function() {
+        _wireEvents: function () {
             console.log('app/GeoSearch:_wireEvents', arguments);
 
             var that = this;
 
             this.connect(this.textBox, 'onKeyUp', this._onTextBoxKeyUp);
-            this.connect(this.textBox, 'onBlur', function(args){
+            this.connect(this.textBox, 'onBlur', function (args) {
                 console.log('onBlur', args);
                 // don't hide table if the cursor is over it
                 if (has('touch')) {
@@ -160,16 +163,16 @@ define([
                         that.toggleTable(false);
                     }, 1000);
                 } else {
-                    if (!this.isOverTable){
+                    if (!this.isOverTable) {
                         // hide table
                         this.toggleTable(false);
                     }
                 }
             });
-            this.connect(this.textBox, 'onFocus', function(){
+            this.connect(this.textBox, 'onFocus', function () {
                 this.startSearchTimer();
             });
-            this.connect(this.matchesTable, 'onmouseenter', lang.hitch(this, function(){
+            this.connect(this.matchesTable, 'onmouseenter', lang.hitch(this, function () {
                 // set switch
                 this.isOverTable = true;
 
@@ -179,7 +182,7 @@ define([
                 // reset current selection
                 this.currentIndex = 0;
             }));
-            this.connect(this.matchesTable, 'onmouseleave', lang.hitch(this, function(){
+            this.connect(this.matchesTable, 'onmouseleave', lang.hitch(this, function () {
                 // set switch
                 this.isOverTable = false;
 
@@ -188,11 +191,11 @@ define([
             }));
         },
 
-        _onTextBoxKeyUp: function(event) {
+        _onTextBoxKeyUp: function (event) {
             console.log('app/GeoSearch:_onTextBoxKeyUp', arguments);
 
             // zoom if enter was pressed
-            if (event.keyCode === keys.ENTER){
+            if (event.keyCode === keys.ENTER) {
                 this.setMatch(this.matchesTable.rows[this.currentIndex]);
             } else if (event.keyCode === keys.DOWN_ARROW) {
                 this.moveSelection(1);
@@ -203,19 +206,19 @@ define([
             }
         },
 
-        startSearchTimer: function(){
+        startSearchTimer: function () {
             // set timer so that it doesn't fire repeatedly during typing
             clearTimeout(this.timer);
-            this.timer = setTimeout(lang.hitch(this, function(){
+            this.timer = setTimeout(lang.hitch(this, function () {
                 this.search(this.textBox.textbox.value);
             }), 500);
         },
 
-        moveSelection: function(increment){
+        moveSelection: function (increment) {
             console.log('app/GeoSearch:moveSelection', arguments);
 
             // exit if there are no matches in table
-            if (this.matchesTable.rows.length === 0){
+            if (this.matchesTable.rows.length === 0) {
                 this.startSearchTimer();
                 return;
             }
@@ -227,9 +230,9 @@ define([
             this.currentIndex = this.currentIndex + increment;
 
             // prevent out of bounds index
-            if (this.currentIndex < 0){
+            if (this.currentIndex < 0) {
                 this.currentIndex = 0;
-            } else if (this.currentIndex > this.matchesTable.rows.length -1){
+            } else if (this.currentIndex > this.matchesTable.rows.length - 1) {
                 this.currentIndex = this.matchesTable.rows.length - 1;
             }
 
@@ -237,7 +240,7 @@ define([
             domClass.add(this.matchesTable.rows[this.currentIndex].cells[0], 'selected-cell');
         },
 
-        _onQueryTaskError: function(error) {
+        _onQueryTaskError: function (error) {
             console.log('app/GeoSearch:_onQueryTaskError', arguments);
 
             // swallow errors from cancels
@@ -246,7 +249,7 @@ define([
             }
         },
 
-        search: function(searchString) {
+        search: function (searchString) {
             console.log('app/GeoSearch:search', arguments);
 
             // clear table
@@ -260,19 +263,19 @@ define([
             }
 
             // update query where clause
-            this.query.where = AGRC.app.makeQueryDirty('UPPER(' + this.searchField + ') LIKE UPPER(\'' +
+            this.query.where = config.app.makeQueryDirty('UPPER(' + this.searchField + ') LIKE UPPER(\'' +
                 searchString + '%\')');
 
             // execute query / canceling any previous query
             if (this.deferred) {
                 this.deferred.cancel();
             }
-            this.deferred = this.queryTask.execute(this.query, lang.hitch(this, function(featureSet){
+            this.deferred = this.queryTask.execute(this.query, lang.hitch(this, function (featureSet) {
                 this.processResults(featureSet.features);
             }));
         },
 
-        processResults: function(features){
+        processResults: function (features) {
             console.log('app/GeoSearch:processResults', arguments);
 
             try {
@@ -296,11 +299,11 @@ define([
             }
         },
 
-        populateTable: function(features){
+        populateTable: function (features) {
             console.log('app/GeoSearch:populateTable', arguments);
 
             // loop through all features
-            array.forEach(features, function(feat, i){
+            array.forEach(features, function (feat, i) {
                  // insert new empty row
                 var row = this.matchesTable.insertRow(i);
 
@@ -332,7 +335,7 @@ define([
             this.textBox.displayMessage('Click on a result to zoom to it.');
         },
 
-        _onRowClick: function(event){
+        _onRowClick: function (event) {
             console.log('app/GeoSearch:_onRowClick', arguments);
             if (this.timer) {
                 clearTimeout(this.timer);
@@ -342,7 +345,7 @@ define([
             this.setMatch(event.currentTarget);
         },
 
-        setMatch: function(row){
+        setMatch: function (row) {
             console.log('app/GeoSearch:setMatch', arguments);
 
             // clear prompt message
@@ -364,8 +367,8 @@ define([
 
             // switch to return geometry and build where clause
             this.query.returnGeometry = true;
-            this.query.where = AGRC.app.makeQueryDirty('OBJECTID = ' + oid);
-            this.queryTask.execute(this.query, lang.hitch(this, function(featureSet){
+            this.query.where = config.app.makeQueryDirty('OBJECTID = ' + oid);
+            this.queryTask.execute(this.query, lang.hitch(this, function (featureSet) {
                 this.zoom(featureSet.features[0]);
 
                 // set return geometry back to false
@@ -373,7 +376,7 @@ define([
             }));
         },
 
-        zoom: function(graphic){
+        zoom: function (graphic) {
             console.log('app/GeoSearch:zoom', arguments);
 
             // set switch to prevent graphic from being cleared
@@ -387,7 +390,7 @@ define([
             this.graphicsLayer.add(graphic);
         },
 
-        deleteAllTableRows: function(table){
+        deleteAllTableRows: function (table) {
             console.log('app/GeoSearch:deleteAllTableRows', arguments);
 
             // delete all rows in table
@@ -402,14 +405,14 @@ define([
             this.currentIndex = 0;
         },
 
-        toggleTable: function(show){
+        toggleTable: function (show) {
             console.log('app/GeoSearch:toggleTable', arguments);
 
             var displayValue = (show) ? 'table' : 'none';
             domStyle.set(this.matchesTable, 'display', displayValue);
         },
 
-        sortArray: function(array){
+        sortArray: function (array) {
             console.log('app/GeoSearch:sortArray', arguments);
 
             // custom sort function

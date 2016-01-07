@@ -1,24 +1,27 @@
-
 define([
+    'app/config',
+
     'dijit/Destroyable',
 
-    'dojo/_base/array',
-    'dojo/_base/declare',
-    'dojo/_base/lang',
     'dojo/hash',
     'dojo/router',
     'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang',
 
     'esri/geometry/Point'
 ], function (
+    config,
+
     Destroyable,
 
-    array,
-    declare,
-    lang,
     hash,
     router,
     topic,
+    array,
+    declare,
+    lang,
 
     Point
 ) {
@@ -51,16 +54,16 @@ define([
             var that = this;
 
             this.own(
-                topic.subscribe(AGRC.topics.Router.onDefQueryUpdate, function (params) {
+                topic.subscribe(config.topics.Router.onDefQueryUpdate, function (params) {
                     that.onDefQueryUpdate(params);
                 }),
-                router.register(AGRC.hashIdentifier + ':routeHash', function (evt) {
+                router.register(config.hashIdentifier + ':routeHash', function (evt) {
                     that.onRouteHashChange(that.queryToObject(evt.params.routeHash));
                 }),
-                topic.subscribe(AGRC.topics.MapDataFilter.onResetFilter, function () {
+                topic.subscribe(config.topics.MapDataFilter.onResetFilter, function () {
                     that.onResetFilters();
                 }),
-                topic.subscribe(AGRC.topics.App.onMapExtentChange,
+                topic.subscribe(config.topics.App.onMapExtentChange,
                     lang.hitch(this, 'onMapExtentChange'))
             );
         },
@@ -89,7 +92,7 @@ define([
             //      updates the url with the currentRoute
             console.log('app/Router::updateHash', arguments);
 
-            var newHash = AGRC.hashIdentifier + this.objectToQuery(this.currentRoute);
+            var newHash = config.hashIdentifier + this.objectToQuery(this.currentRoute);
 
             if (hash() !== newHash) {
                 router.go(newHash);
@@ -132,8 +135,8 @@ define([
             }
 
             var zoom = function () {
-                AGRC.map.setScale(newRoute.extent.scale);
-                AGRC.map.centerAt(new Point({
+                config.map.setScale(newRoute.extent.scale);
+                config.map.centerAt(new Point({
                     x: newRoute.extent.x,
                     y: newRoute.extent.y,
                     spatialReference: {wkid: 26912}
@@ -144,19 +147,19 @@ define([
                     this.updateProviders(newRoute.providers);
                 }
                 if (hasParameterChanged('transTypes')) {
-                    AGRC.mapDataFilter.selectTransTypes((newRoute.transTypes) ? newRoute.transTypes : null);
+                    config.mapDataFilter.selectTransTypes((newRoute.transTypes) ? newRoute.transTypes : null);
                 }
                 if (hasParameterChanged('minDownSpeed')) {
-                    AGRC.mapDataFilter.setSlider('down', newRoute.minDownSpeed);
+                    config.mapDataFilter.setSlider('down', newRoute.minDownSpeed);
                 }
                 if (hasParameterChanged('minUpSpeed')) {
-                    AGRC.mapDataFilter.setSlider('up', newRoute.minUpSpeed);
+                    config.mapDataFilter.setSlider('up', newRoute.minUpSpeed);
                 }
                 if (hasParameterChanged('extent') && newRoute.extent) {
-                    if (AGRC.map.loaded) {
+                    if (config.map.loaded) {
                         zoom();
                     } else {
-                        AGRC.map.on('load', function () {
+                        config.map.on('load', function () {
                             zoom();
                         });
                     }
@@ -171,8 +174,8 @@ define([
             // providers: String[] | String (queryToObject can't handle single arrays)
             console.log('app/Router::updateProviders', arguments);
 
-            if (!AGRC.listPicker) {
-                AGRC.mapDataFilter.launchListPicker();
+            if (!config.listPicker) {
+                config.mapDataFilter.launchListPicker();
             }
 
             // convert to array if it's a single string value
@@ -180,7 +183,7 @@ define([
                 providers = [providers];
             }
 
-            AGRC.listPicker.selectProviders(providers);
+            config.listPicker.selectProviders(providers);
         },
         onResetFilters: function () {
             // summary:
@@ -230,7 +233,7 @@ define([
                     } else if (prop === 'extent') {
                         props.push(prop + '=' + [value.x, value.y, value.scale].join('|'));
                     } else if (prop.match(/.+Speed/) && value && value !== -1) {
-                        props.push(prop + '=' + AGRC.speedValues[value - 1]);
+                        props.push(prop + '=' + config.speedValues[value - 1]);
                     } else {
                         props.push(prop + '=' + encodeURIComponent(obj[prop]));
                     }
@@ -270,7 +273,7 @@ define([
                         returnObj[propName] = [propValue];
                     }
                 } else if (propName.match(/.+Speed/)) {
-                    returnObj[propName] = array.indexOf(AGRC.speedValues, propValue) + 1;
+                    returnObj[propName] = array.indexOf(config.speedValues, propValue) + 1;
                 } else {
                     returnObj[propName] = propValue;
                 }

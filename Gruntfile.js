@@ -143,6 +143,14 @@ module.exports = function (grunt) {
                 basePath: './src'
             }
         },
+        eslint: {
+            options: {
+                configFile: '.eslintrc'
+            },
+            main: {
+                src: jsFiles
+            }
+        },
         esri_slurp: {
             options: {
                 version: '3.11'
@@ -189,15 +197,6 @@ module.exports = function (grunt) {
                     ],
                     host: 'http://localhost:8000'
                 }
-            }
-        },
-        jshint: {
-            main: {
-                // must use src for newer to work
-                src: jshintFiles
-            },
-            options: {
-                jshintrc: '.jshintrc'
             }
         },
         pkg: grunt.file.readJSON('package.json'),
@@ -261,9 +260,9 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
-            jshint: {
+            eslint: {
                 files: jshintFiles,
-                tasks: ['jshint:main', 'jasmine:main:build']
+                tasks: ['eslint:main', 'jasmine:main:build']
             }
         }
     });
@@ -272,7 +271,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'if-missing:esri_slurp:dev',
         'jasmine:main:build',
-        'jshint:main',
+        'eslint:main',
         'connect',
         'watch'
     ]);
@@ -285,13 +284,14 @@ module.exports = function (grunt) {
 
     grunt.registerTask('travis', [
         'if-missing:esri_slurp:travis',
-        'jshint',
+        'eslint:main',
         'sauce',
         'build-prod'
     ]);
 
     // PROD
     grunt.registerTask('build-prod', [
+        'eslint:main',
         'newer:imagemin:dynamic',
         'clean:build',
         'dojo:prod',
@@ -307,6 +307,7 @@ module.exports = function (grunt) {
 
     // STAGE
     grunt.registerTask('build-stage', [
+        'eslint:main',
         'newer:imagemin:dynamic',
         'clean:build',
         'dojo:stage',

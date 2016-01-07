@@ -1,31 +1,33 @@
 require([
+    'app/config',
     'app/ListPicker',
 
-    'dojo/_base/array',
-    'dojo/_base/window',
     'dojo/dom-construct',
-    'dojo/hash'
+    'dojo/hash',
+    'dojo/_base/array',
+    'dojo/_base/window'
 ],
 
 function (
+    config,
     ListPicker,
 
-    array,
-    win,
     domConstruct,
-    hash
+    hash,
+    array,
+    win
 ) {
     describe('app/ListPicker', function () {
         var testWidget;
         var providers;
         beforeEach(function () {
-            AGRC.mapDataFilter = {
+            config.mapDataFilter = {
                 showResetDialog: true
             };
             jasmine.addMatchers({
                 toHaveProviders: function () {
                     return {
-                        compare: function(actual, expected) {
+                        compare: function (actual, expected) {
                             var result = {
                                 pass: array.every(expected, function (prov) {
                                     return array.some(actual.domNode.children, function (option) {
@@ -95,11 +97,11 @@ function (
                 expect(testWidget.selectedList).not.toHaveProviders(testProviders);
             });
             it('doesn\'t reset showResetDialog to true if it\'s already false', function () {
-                AGRC.mapDataFilter.showResetDialog = false;
+                config.mapDataFilter.showResetDialog = false;
 
                 testWidget.selectProviders(['blah']);
 
-                expect(AGRC.mapDataFilter.showResetDialog).toEqual(false);
+                expect(config.mapDataFilter.showResetDialog).toEqual(false);
             });
         });
     });
