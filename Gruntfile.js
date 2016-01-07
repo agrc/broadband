@@ -122,7 +122,12 @@ module.exports = function (grunt) {
         },
         copy: {
             main: {
-                files: [{expand: true, cwd: 'src/', src: ['*.html'], dest: 'dist/'}]
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['*.html', 'secrets.json'],
+                    dest: 'dist/'
+                }]
             }
         },
         dojo: {

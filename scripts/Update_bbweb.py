@@ -140,6 +140,7 @@ try:
             logger.logGPMsg()
 
         logger.logMsg('importing new feature classes')
+        arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(3857)
         for f in fcs:
             if f[2] != "BB_Service_CensusBlocks_Append":
                 arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + f[0], pathToFGD, f[2], f[1])

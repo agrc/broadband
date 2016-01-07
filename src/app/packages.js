@@ -5,6 +5,7 @@
             'app',
             'dijit',
             'dgrid',
+            'dgrid0.3',
             'dojo',
             'dojox',
             'esri',
@@ -38,6 +39,11 @@
                 location: 'stubmodule/src',
                 main: 'stub-module'
             }
-        ]
+        ],
+        map: {
+            esri: {
+                dgrid: 'dgrid0.3'
+            }
+        }
     });
 }());
