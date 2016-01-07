@@ -5,7 +5,6 @@
 		<div data-dojo-attach-point='displayHelp'>
 			<div style='display: none;'>
 				Areas where broadband is available are shown in a semi-transparent blue color by default. User can control the transparency level for this map layer to see more of the background layer or to emphasize the service areas.
-				<p>The Map Background control allows users to select from several different background maps including aerial photography, terrain and topo maps, demographic maps, and more. Users can also control the transparency level of the map background to provide more or less emphasis for this contextual information.</p>
 			</div>
 		</div>
 
@@ -32,41 +31,5 @@
 			<span class='left-label slider-label'>Transparent</span>
 			<span class='right-label slider-label'>Opaque</span>
 		</div>
-		<div style="clear: both;"></div>
-
-		<!-- BASEMAPS LAYER -->
-		<input data-dojo-attach-point='basemapsCheckBox'
-			data-dojo-attach-event='onClick: _onBasemapsCheckboxClick'
-			data-dojo-type='dijit/form/CheckBox'
-			id='basemaps-checkbox'
-			checked disabled>
-		<label for='basemaps-checkbox' class='basemap-label'>Map Background:</label>
-		<select data-dojo-attach-point='comboBox'
-			data-dojo-type='dijit/form/Select'
-			class='combobox'>
-			<option value='Hybrid'>Hybrid</option>
-			<option value='Terrain'>Terrain</option>
-			<option value='Streets'>Streets</option>
-			<option value='Imagery'>Imagery</option>
-			<option value='Topo'>Topo</option>
-		</select>
-		<br>
-		<div data-dojo-attach-point='basemapsLegend'
-			class='legend basemaps-legend'></div>
-		<div class='slider-container'>
-			<div data-dojo-attach-point='basemapsSlider'
-				data-dojo-attach-event='onChange: _onBasemapsSliderChange'
-				data-dojo-type='dijit/form/HorizontalSlider'
-				minimum='0' maximum='1'
-				intermediateChanges='true'
-				discreteValues='50'
-				showButtons='false'
-				class='slider'>
-			</div>
-			<span class='left-label slider-label'>Transparent</span>
-			<span class='right-label slider-label'>Opaque</span>
-			<div style="clear: both;"></div>
-		</div>
-
 	</div>
 </div>

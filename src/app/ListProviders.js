@@ -112,7 +112,7 @@ function (
 
             // create new symbol
             this._markerSymbol = new PictureMarkerSymbol(
-                'http://168.180.161.9/broadband/app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
+                config.appBaseUrl + 'app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
 
             // create new find address widget
             new FindAddress({
@@ -259,7 +259,7 @@ function (
             this.query.geometry = mapPoint;
 
             // set def query to match map data filters
-            this.query.where = config.app.makeQueryDirty(this.defQuery);
+            this.query.where = config.app.makeQueryDirty(this.defQuery || '1 = 1');
 
             // fire off query tasks
             if (this.RoadDeferred) {

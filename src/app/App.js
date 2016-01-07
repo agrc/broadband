@@ -11,22 +11,22 @@ define([
     'app/PrintDialog',
     'app/Router',
 
+    'dijit/registry',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/registry',
 
-    'dojo/_base/array',
-    'dojo/_base/declare',
-    'dojo/_base/event',
-    'dojo/_base/fx',
-    'dojo/_base/lang',
     'dojo/dom',
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/on',
     'dojo/text!app/templates/App.html',
     'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/event',
+    'dojo/_base/fx',
+    'dojo/_base/lang',
 
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
@@ -49,22 +49,22 @@ define([
     PrintDialog,
     Router,
 
+    registry,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
-    registry,
 
-    array,
-    declare,
-    dojoEvent,
-    fx,
-    lang,
     dom,
     domConstruct,
     domStyle,
     on,
     template,
     topic,
+    array,
+    declare,
+    dojoEvent,
+    fx,
+    lang,
 
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
@@ -288,17 +288,12 @@ define([
                 id: 'coverageCached'
             });
             config.currentLayer = config.bbLayerCached;
-            // config.bbBasemaps = new ArcGISDynamicMapServiceLayer(config.basemapsURL, {
-            //     id: 'basemaps',
-            //     visible: false
-            // });
 
             // create new map display options widget
             var params = {
                 map: config.map,
                 bbLayer: config.bbLayer,
                 bbLayerCached: config.bbLayerCached
-                // basemapsLayer: config.bbBasemaps
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));
 
@@ -306,8 +301,6 @@ define([
             config.map.addLoaderToLayer(config.bbLayer);
             config.map.addLayer(config.bbLayerCached);
             config.map.addLoaderToLayer(config.bbLayerCached);
-            // config.map.addLayer(config.bbBasemaps);
-            // config.map.addLoaderToLayer(config.bbBasemaps);
 
             this.own(this.connect(config.map, 'onClick', function () {
                 if (that.size === 'small') {
