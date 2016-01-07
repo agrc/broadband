@@ -26,15 +26,15 @@ function (
     return declare([ChangeRequest, _WidgetsInTemplateMixin, _DialogMixin], {
         // summary
         // overrides ChangeRequest with a few things like a dialog and non-bootstrap layout
-            
+
         templateString: template,
         widgetsInTemplate: true,
-        
+
         onDrawStart: function () {
             // summary:
             //      overriden to hide the dialog
             console.log('app/Feedback:onDrawStart', arguments);
-        
+
             this.hide();
 
             this.inherited(arguments);
@@ -43,7 +43,7 @@ function (
             // summary:
             //      description
             console.log('app/Feedback:onDrawEnd', arguments);
-        
+
             this.show();
 
             this.inherited(arguments);

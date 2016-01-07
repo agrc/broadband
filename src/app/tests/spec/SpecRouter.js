@@ -1,15 +1,15 @@
 require([
+    'app/config',
     'app/Router',
 
-    'dojo/_base/lang',
     'dojo/router',
     'dojo/topic'
 ],
 
 function (
+    config,
     Router,
 
-    lang,
     dojoRouter,
     topic
 ) {
@@ -23,20 +23,20 @@ function (
             selectProvidersSpy = jasmine.createSpy('selectProviders');
             launchListPickerSpy = jasmine.createSpy('launchListPicker')
                 .and.callFake(function () {
-                    AGRC.listPicker = {selectProviders: function () {}};
+                    config.listPicker = {selectProviders: function () {}};
                 });
             selectTransTypesSpy = jasmine.createSpy();
             setSliderSpy = jasmine.createSpy('setSlider');
-            AGRC.listPicker = {
+            config.listPicker = {
                 selectProviders: selectProvidersSpy
             };
-            AGRC.mapDataFilter = {
+            config.mapDataFilter = {
                 launchListPicker: launchListPickerSpy,
                 selectTransTypes: selectTransTypesSpy,
                 setSlider: setSliderSpy
             };
-            AGRC.map = jasmine.createSpyObj('map', ['setScale', 'centerAt']);
-            AGRC.map.loaded = true;
+            config.map = jasmine.createSpyObj('map', ['setScale', 'centerAt']);
+            config.map.loaded = true;
             testObject = new Router();
         });
         afterEach(function () {
@@ -55,14 +55,14 @@ function (
                     providers: []
                 };
 
-                topic.publish(AGRC.topics.Router.onDefQueryUpdate, value);
+                topic.publish(config.topics.Router.onDefQueryUpdate, value);
 
                 expect(testObject.onDefQueryUpdate).toHaveBeenCalledWith(value);
             });
             it('wires the route hash event', function () {
                 spyOn(testObject, 'onRouteHashChange');
 
-                dojoRouter.go(AGRC.hashIdentifier + 'hello=bar&hello2=bar2');
+                dojoRouter.go(config.hashIdentifier + 'hello=bar&hello2=bar2');
 
                 expect(testObject.onRouteHashChange).toHaveBeenCalledWith({
                     hello: 'bar',
@@ -72,7 +72,7 @@ function (
             it('wires the _onResetFilters event', function () {
                 spyOn(testObject, 'onResetFilters');
 
-                topic.publish(AGRC.topics.MapDataFilter.onResetFilter);
+                topic.publish(config.topics.MapDataFilter.onResetFilter);
 
                 expect(testObject.onResetFilters).toHaveBeenCalled();
             });
@@ -80,7 +80,7 @@ function (
                 spyOn(testObject, 'onMapExtentChange');
                 var value = 'blah';
 
-                topic.publish(AGRC.topics.App.onMapExtentChange, value);
+                topic.publish(config.topics.App.onMapExtentChange, value);
 
                 expect(testObject.onMapExtentChange).toHaveBeenCalledWith(value);
             });
@@ -211,8 +211,8 @@ function (
                     providers: ['halle', 'asdf']
                 };
 
-                expect(AGRC.map.setScale).toHaveBeenCalledWith(testHash.extent.scale);
-                expect(AGRC.map.centerAt).toHaveBeenCalledWith(
+                expect(config.map.setScale).toHaveBeenCalledWith(testHash.extent.scale);
+                expect(config.map.centerAt).toHaveBeenCalledWith(
                     jasmine.objectContaining({
                         x: testHash.extent.x,
                         y: testHash.extent.y
@@ -222,7 +222,7 @@ function (
                 testObject.onRouteHashChange(testHash2);
                 testObject.onRouteHashChange(testHash2);
 
-                expect(AGRC.map.centerAt.calls.count()).toBe(1);
+                expect(config.map.centerAt.calls.count()).toBe(1);
             });
         });
         describe('updateProviders', function () {
@@ -233,7 +233,7 @@ function (
                 expect(selectProvidersSpy).toHaveBeenCalledWith(provs);
             });
             it('inits the list picker if needed', function () {
-                delete AGRC.listPicker;
+                delete config.listPicker;
 
                 testObject.updateProviders(provs);
 
@@ -269,7 +269,7 @@ function (
             });
         });
         describe('onMapExtentChange', function () {
-            var center = {x: 1.5, y:2.3 };
+            var center = {x: 1.5, y: 2.3 };
             it('updates the currentRoute object', function () {
                 var expected = {
                     x: 2,

@@ -3,7 +3,7 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang'
-], function(
+], function (
     Dialog,
 
     declare,
@@ -27,7 +27,7 @@ define([
             // summary:
             //      create the dialog
             console.log('app/_DialogMixin:postMixInProperties', arguments);
-        
+
             this.dialog = new Dialog({
                 'class': this.baseClass + '-dialog',
                 title: this.title
@@ -39,22 +39,22 @@ define([
             // summary:
             //      description
             console.log('app/_DialogMixin:postCreate', arguments);
-        
+
             // set up dialog
             this.dialog.closeButtonNode.onClick = lang.hitch(this, 'hide');
             this.placeAt(this.dialog.containerNode); // set('content', this.domNode) doesn't work
 
             this.inherited(arguments);
         },
-        show: function(){
+        show: function () {
             console.log('app/_DialogMixin:show', arguments);
-            
+
             this.dialog.show();
         },
-        hide: function(){
+        hide: function () {
             console.log('app/_DialogMixin:hide', arguments);
 
-            this.dialog.hide();         
+            this.dialog.hide();
         }
     });
 });

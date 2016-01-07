@@ -1,5 +1,4 @@
-/*global profile:true*/
-profile = {
+var profile = { // eslint-disable-line no-unused-vars
     resourceTags: {
         test: function () {
             return false;

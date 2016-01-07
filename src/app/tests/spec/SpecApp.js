@@ -1,11 +1,13 @@
 require([
     'app/App',
+    'app/config',
 
     'dojo/dom-construct',
     'dojo/on',
     'dojo/topic'
 ], function (
     App,
+    config,
 
     domConstruct,
     on,
@@ -20,7 +22,7 @@ require([
             testWidget.destroy();
             domConstruct.destroy(testWidget.domNode);
             testWidget = null;
-            window.AGRC.app = null;
+            config.app = null;
         });
 
         it('creates a valid object', function () {
@@ -42,16 +44,18 @@ require([
         describe('onExtentChange', function () {
             it('fires the extentChange topic', function () {
                 var spy = jasmine.createSpy('onExtentChangeSpy');
-                topic.subscribe(AGRC.topics.App.onMapExtentChange, spy);
+                topic.subscribe(config.topics.App.onMapExtentChange, spy);
                 var scale = 'blah';
-                AGRC.map = {
+                config.map = {
                     getScale: jasmine.createSpy('getScale').and.returnValue(scale)
                 };
                 var center = 'blah2';
 
                 testWidget.onExtentChange({
                     extent: {
-                        getCenter: function () { return center; }
+                        getCenter: function () {
+                            return center;
+                        }
                     }
                 });
 

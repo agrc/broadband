@@ -7,4 +7,4 @@
     ], function (parser) {
         parser.parse();
     });
-})();
+}());

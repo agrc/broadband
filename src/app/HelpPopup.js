@@ -22,7 +22,7 @@ function (
     template
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-        // summary: 
+        // summary:
         // consists of a small icon that displays help content when clicked
         // it uses the contents of the original div to populate the dialog
         // use top, bottom, right, left to position
@@ -36,39 +36,39 @@ function (
         //          Line 2
         //      </div>
         // </div>
-        
+
         widgetsInTemplate: true,
         templateString: template,
-        
+
         // properties passed in via the constructor
 
         // the title of the dialog
         title: '',
-        
-        postMixInProperties: function(){
+
+        postMixInProperties: function () {
             console.log('app/HelpPopup:postMixInProperties', arguments);
-            
+
             // get dialog content from inner html of div
             this.content = this.srcNodeRef.firstChild.nextSibling.innerHTML;
         },
-        
-        postCreate: function(){
+
+        postCreate: function () {
             console.log('app/HelpPopup:postCreate', arguments);
-            
+
             // set dialog content & title
             this.dialog.set('content', this.content);
             this.dialog.set('title', this.title);
-            
+
             this._wireEvents();
         },
-        
-        _wireEvents: function(){
+
+        _wireEvents: function () {
             console.log('app/HelpPopup:_wireEvents', arguments);
-            
+
             this.connect(this.image, 'onclick', this._onImageClick);
         },
-        
-        _onImageClick: function(){
+
+        _onImageClick: function () {
             console.log('app/HelpPopup:_onImageClick', arguments);
 
             this.dialog.show();
@@ -77,7 +77,7 @@ function (
             // summary:
             //      need to manually destroy the dialog
             console.log('app/HelpPopup:destroyRecursive', arguments);
-        
+
             this.dialog.destroyRecursive();
 
             this.inherited(arguments);

@@ -1,22 +1,23 @@
 define([
+    'app/config',
     'app/HelpPopup',
     'app/ListPicker',
 
+    'dijit/registry',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/registry',
 
-    'dojo/_base/array',
-    'dojo/_base/declare',
-    'dojo/_base/event',
-    'dojo/_base/lang',
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/has',
     'dojo/query',
     'dojo/text!app/templates/MapDataFilter.html',
     'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/event',
+    'dojo/_base/lang',
 
     'dijit/Dialog',
     'dijit/form/Button',
@@ -31,24 +32,25 @@ define([
 ],
 
 function (
+    config,
     HelpPopup,
     ListPicker,
 
+    registry,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
-    registry,
 
-    array,
-    declare,
-    dojoEvent,
-    lang,
     domConstruct,
     domStyle,
     has,
     query,
     template,
-    topic
+    topic,
+    array,
+    declare,
+    dojoEvent,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -78,7 +80,7 @@ function (
         bizOnlyProviderIds: null,
 
 
-        postCreate: function(){
+        postCreate: function () {
             console.log('app/MapDataFilter:postCreate', arguments);
 
             var that = this;
@@ -86,10 +88,10 @@ function (
             this.wireControlEvents();
 
             // listen for mapLayerLoaded event
-            this.subscribe('AGRC.ProvidersObtained', '_setProvidersList');
+            this.subscribe(config.topics.App.providersObtained, '_setProvidersList');
 
             // IE hack
-            if (has('ie') <= 8){
+            if (has('ie') <= 8) {
                 domStyle.set(this.downloadSlider.domNode, 'width', '240px');
             }
 
@@ -103,11 +105,11 @@ function (
             this.dialogs.push(this.resetDialog);
 
             // show sat dialog onclick in provider results
-            topic.subscribe('broadband.ListProviders.onSatLinkClick', function(){
+            topic.subscribe('broadband.ListProviders.onSatLinkClick', function () {
                 that.satelliteDialog.show();
             });
         },
-        wireControlEvents: function(){
+        wireControlEvents: function () {
             console.log('app/MapDataFilter:wireControlEvents', arguments);
 
             var dij;
@@ -149,18 +151,18 @@ function (
             wireSubCheckBoxes(this.cbxWireBased.id);
             wireSubCheckBoxes(this.cbxWireless.id);
         },
-        _setProvidersList: function(providersObject){
+        _setProvidersList: function (providersObject) {
             console.log('app/MapDataFilter:_setProvidersList', arguments);
 
             this.bizOnlyProviderIds = [];
 
             // create new array and populate from object
-            for (var i in providersObject){
+            for (var i in providersObject) {
                 if (providersObject.hasOwnProperty(i)) {
                     var prov = providersObject[i];
         //          // filter out Qwest
         //          if (providersObject[i].name != 'Qwest') {
-                        this.providersList.push([prov.name, i]);
+                    this.providersList.push([prov.name, i]);
         //          }
                     if (prov.bizOnly === 'Y') {
                         this.bizOnlyProviderIds.push(i);
@@ -173,14 +175,14 @@ function (
                 this.btnSelectProviders.set('disabled', false);
             }
         },
-        _setTimer: function(){
+        _setTimer: function () {
             console.log('app/MapDataFilter:_setTimer', arguments);
 
             // use a timer to make sure that this function doesn't fire a lot when changing range sliders
             clearTimeout(this.updateTimer);
             this.updateTimer = setTimeout(lang.hitch(this, this.updateDefQuery), 500);
         },
-        updateDefQuery: function(){
+        updateDefQuery: function () {
             console.log('app/MapDataFilter:updateDefQuery', arguments);
 
             var that = this;
@@ -195,13 +197,13 @@ function (
 
             // Download slider
             // get start and end values for slice function on array
-            var downQueryArray = AGRC.speedValues.slice(0, this.downloadSlider.value);
-            var queryTxt = AGRC.fieldNames.MAXADDOWN + ' IN (\'' + downQueryArray.join('\',\'') + '\')';
+            var downQueryArray = config.speedValues.slice(0, this.downloadSlider.value);
+            var queryTxt = config.fieldNames.MAXADDOWN + ' IN (\'' + downQueryArray.join('\',\'') + '\')';
             defQueryProps.minDownSpeed = this.downloadSlider.get('value');
 
             // Upload slider
-            var upQueryArray = AGRC.speedValues.slice(0, this.uploadSlider.value);
-            queryTxt += ' AND ' + AGRC.fieldNames.MAXADUP + ' IN (\'' + upQueryArray.join('\',\'') + '\')';
+            var upQueryArray = config.speedValues.slice(0, this.uploadSlider.value);
+            queryTxt += ' AND ' + config.fieldNames.MAXADUP + ' IN (\'' + upQueryArray.join('\',\'') + '\')';
             defQueryProps.minUpSpeed = this.uploadSlider.get('value');
 
             // check to see if we should show the satellite providers link in results table
@@ -212,27 +214,26 @@ function (
             if (transTypes.length > 0) {
                 if (transTypes.length < 9) {
                     defQueryProps.transTypes = transTypes;
-                    queryTxt += ' AND ' + AGRC.fieldNames.TRANSTECH + ' IN (' + transTypes + ')';
+                    queryTxt += ' AND ' + config.fieldNames.TRANSTECH + ' IN (' + transTypes + ')';
                 }
             } else {
                 defQueryProps.transTypes = -1;
-                queryTxt += ' AND ' + AGRC.fieldNames.TRANSTECH + ' = -1';
+                queryTxt += ' AND ' + config.fieldNames.TRANSTECH + ' = -1';
             }
 
             // Providers
-            if (this.chbxShowOnly.checked){
+            if (this.chbxShowOnly.checked) {
                 domStyle.set(this.providerList, 'color', 'black');
                 if (this.selectedProvidersIDs.length > 0) {
-                    queryTxt += ' AND ' + AGRC.fieldNames.UTProvCode + ' IN (' + this.selectedProvidersIDs + ')';
+                    queryTxt += ' AND ' + config.fieldNames.UTProvCode + ' IN (' + this.selectedProvidersIDs + ')';
                     defQueryProps.providers = array.map(this.selectedProvidersIDs, function (id) {
                         return id.slice(1, id.length - 1);
                     });
                 } else {
-                    queryTxt += ' AND ' + AGRC.fieldNames.UTProvCode + ' = \'-1\'';
+                    queryTxt += ' AND ' + config.fieldNames.UTProvCode + ' = \'-1\'';
                     defQueryProps.providers = -1;
                 }
-            }
-            else {
+            } else {
                 domStyle.set(this.providerList, 'color', 'grey');
             }
 
@@ -246,17 +247,17 @@ function (
                 console.log('def set');
 
                 // change to dynamic coverage layer
-                AGRC.bbLayer.show();
-                AGRC.bbLayerCached.hide();
-                AGRC.currentLayer = AGRC.bbLayer;
+                config.bbLayer.show();
+                config.bbLayerCached.hide();
+                config.currentLayer = config.bbLayer;
             }, 1250);
 
             // enable reset button
             this.resetBtn.set('disabled', false);
 
             // publish new query
-            topic.publish(AGRC.topics.MapDataFilter.onQueryUpdate, queryTxt);
-            topic.publish(AGRC.topics.Router.onDefQueryUpdate, defQueryProps);
+            topic.publish(config.topics.MapDataFilter.onQueryUpdate, queryTxt);
+            topic.publish(config.topics.Router.onDefQueryUpdate, defQueryProps);
         },
         _getTransTypes: function () {
             // summary:
@@ -266,7 +267,7 @@ function (
             var newArray;
             var widget;
 
-            query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node){
+            query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
                 widget = registry.getEnclosingWidget(node);
                 newArray = widget.get('value');
                 ttValues = ttValues.concat(newArray);
@@ -274,34 +275,34 @@ function (
 
             return ttValues;
         },
-        launchListPicker: function(){
+        launchListPicker: function () {
             console.log('app/MapDataFilter:launchListPicker', arguments);
 
             var that = this;
 
             // create list picker if needed
-            if (!AGRC.listPicker){
+            if (!config.listPicker) {
                 // create new list picker
-                AGRC.listPicker = new ListPicker({
+                config.listPicker = new ListPicker({
                     listName: 'Providers',
                     availableListArray: this.providersList
                 });
 
                 // wire event to listen for OK button
-                topic.subscribe(AGRC.topics.listpickerOnOK, function(selectedItems){
+                topic.subscribe(config.topics.listpickerOnOK, function (selectedItems) {
                     that._onListPickerOK(selectedItems);
                 });
             }
 
-            AGRC.listPicker.show();
+            config.listPicker.show();
         },
-        _onListPickerOK: function(selectedItems){
+        _onListPickerOK: function (selectedItems) {
             console.log('app/MapDataFilter:_onListPickerOK', arguments);
 
             this.resetFilters(false);
 
             // display dialog
-            if (this.showResetDialog){
+            if (this.showResetDialog) {
                 this.resetDialog.show();
             }
 
@@ -318,9 +319,8 @@ function (
                 var li = domConstruct.create('li');
                 li.innerHTML = 'No Providers Selected';
                 this.providerList.appendChild(li);
-            }
-            else {
-                array.forEach(selectedItems, function(item){
+            } else {
+                array.forEach(selectedItems, function (item) {
                     // add to id list
                     this.selectedProvidersIDs.push('\'' + item[1] + '\'');
 
@@ -345,10 +345,10 @@ function (
             this.resetBtn.set('disabled', false);
 
             // change to dynamic coverage layer
-            AGRC.bbLayer.show();
-            AGRC.bbLayerCached.hide();
+            config.bbLayer.show();
+            config.bbLayerCached.hide();
         },
-        disableProviderSelector: function(){
+        disableProviderSelector: function () {
             console.log('app/MapDataFilter:disableProviderSelector', arguments);
 
             // this method was built for the provider preview to disable the ability to see other
@@ -376,7 +376,7 @@ function (
 
             this.resetDialog.hide();
         },
-        resetFilters: function(resetProviders){
+        resetFilters: function (resetProviders) {
             console.log('app/MapDataFilter:resetFilters', arguments);
 
             // reset controls
@@ -387,37 +387,37 @@ function (
             query('.sub-trans-list input').forEach(function (node) {
                 registry.getEnclosingWidget(node).set('checked', true);
             });
-            if (resetProviders && this.restricted === false){
+            if (resetProviders && this.restricted === false) {
                 this.chbxShowAll.set('checked', true);
             }
         },
-        _onSatelliteInfoClick: function(event){
+        _onSatelliteInfoClick: function (event) {
             console.log('app/MapDataFilter:_onSatelliteInfoClick', arguments);
 
             this.satelliteDialog.show();
             dojoEvent.stop(event);
         },
-        _onSatelliteOK: function(){
+        _onSatelliteOK: function () {
             console.log('app/MapDataFilter:_onSatelliteOK', arguments);
 
             this.satelliteDialog.hide();
         },
-        _onResetClick: function(){
+        _onResetClick: function () {
             console.log('app/MapDataFilter:_onResetClick', arguments);
 
             this.resetFilters(true);
 
-            topic.publish(AGRC.topics.MapDataFilter.onResetFilter);
+            topic.publish(config.topics.MapDataFilter.onResetFilter);
 
             // disable button
             this.resetBtn.set('disabled', true);
 
             // only switch back to cached layer if zoomed out beyond break point
-            if (AGRC.map.getLevel() < AGRC.breakPointLevel) {
+            if (config.map.getLevel() < config.breakPointLevel) {
                 // switch to cached layer
-                AGRC.bbLayer.hide();
-                AGRC.bbLayerCached.show();
-                AGRC.currentLayer = AGRC.bbLayerCached;
+                config.bbLayer.hide();
+                config.bbLayerCached.show();
+                config.currentLayer = config.bbLayerCached;
             }
         },
         destroyRecursive: function () {
@@ -511,8 +511,8 @@ function (
                 values = chbox.get('value');
                 if (transTypes !== null) {
                     if (array.some(values, function (val) {
-                            return array.indexOf(transTypes, val) !== -1;
-                        })) {
+                        return array.indexOf(transTypes, val) !== -1;
+                    })) {
                         chbox.set('checked', true);
                     } else {
                         chbox.set('checked', false);
