@@ -1,10 +1,12 @@
 /* jshint camelcase: false */
 define([
-    'dojo/has'
+    'dojo/has',
+    'dojo/request/xhr'
 ],
 
 function (
-    has
+    has,
+    xhr
 ) {
     var baseDomain = (has('agrc-build') === 'prod') ? 'http://mapserv.utah.gov' : '';
     var appServerPath = baseDomain + '/ArcGIS/rest/services/';
@@ -97,16 +99,16 @@ function (
         disableFeedback: false
     };
 
-    if (has('agrc-api-key') === 'prod') {
-        // *.utah.gov
-        config.apiKey = 'AGRC-D3CDE591211690';
-    } else if (has('agrc-api-key') === 'stage') {
-        // test.mapserv.utah.gov
-        config.apiKey = 'AGRC-AC122FA9671436';
-    } else {
-        // localhost
-        config.apiKey = 'AGRC-E5B94F99865799';
-    }
+    xhr(require.baseUrl + 'secrets.json', {
+        handleAs: 'json',
+        sync: true
+    }).then(function (secrets) {
+        var build = has('agrc-build') || 'dev';
+        config.apiKey = secrets.apiKeys[build];
+        config.quadWord = secrets.quadWords[build];
+    }, function () {
+        throw 'Error getting secrets!';
+    });
 
     return config;
 });
