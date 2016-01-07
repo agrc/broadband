@@ -89,37 +89,6 @@ define([
                 title: 'Map Display Help',
                 autoPosition: true
             }, this.displayHelp);
-
-            this.buildCAILegend();
-        },
-        buildCAILegend: function () {
-            console.log('app/MapDisplayOptions:buildCAILegend', arguments);
-
-            this.caiLegendImage = domConstruct.create('img', {
-                src: this.typeLegendImagePath,
-                alt: 'CAI Legend'
-            });
-
-            var ttd = new TooltipDialog({
-                content: this.caiLegendImage
-            });
-
-            new DropDownButton({
-                label: 'Legend',
-                dropDown: ttd,
-                disabled: true
-            }, 'drop-down');
-
-            // this stuff is for getting a screen shot for the legend images. Couldn't get this to work otherwise.
-            // this.CAIlegend = new esri.dijit.Legend({
-                    // map: this.map,
-                    // layerInfos: [{
-                        // layer: this.basemapsLayer,
-                        // title: 'Legend'
-                    // }],
-                    // respectCurrentMapScale: false
-                // }, 'cai-legend');
-                // this.CAIlegend.startup();
         },
         addBasemapOptions: function () {
             console.log('app/MapDisplayOptions:addBasemapOptions', arguments);
@@ -220,37 +189,6 @@ define([
             array.forEach(this.currentTheme.layers, function (layer) {
                 layer.setOpacity(value);
             }, this);
-        },
-        _onCAICheckBoxChange: function () {
-            // summary:
-            //        Handles the onChange event for the cai checkbox.
-            //        Toggles the layer visibility and widget disabled.
-            console.log('app/MapDisplayOptions://        ', arguments);
-
-            var value = this.caiCheckbox.get('value');
-
-            this.basemapsLayer.setVisibility(value);
-
-            var widgets = query('[widgetId]', this.radioButtonContainer).map(registry.byNode);
-            array.forEach(widgets, function (w) {
-                w.set('disabled', !value);
-            });
-        },
-        _onCAIRadioChange: function (event) {
-            // summary:
-            //        Handles when the CAI radio buttons change.
-            //        Switches the displayed layer within the map document.
-            console.log('app/MapDisplayOptions://        ', arguments);
-
-            var layers = [];
-            if (event.currentTarget.id === 'type-radio') {
-                layers.push(0);
-                this.caiLegendImage.src = this.typeLegendImagePath;
-            }else {
-                layers.push(1);
-                this.caiLegendImage.src = this.speedLegendImagePath;
-            }
-            this.basemapsLayer.setVisibleLayers(layers);
         }
     });
 });

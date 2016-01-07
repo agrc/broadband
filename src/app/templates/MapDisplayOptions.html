@@ -8,60 +8,41 @@
 				<p>The Map Background control allows users to select from several different background maps including aerial photography, terrain and topo maps, demographic maps, and more. Users can also control the transparency level of the map background to provide more or less emphasis for this contextual information.</p>
 			</div>
 		</div>
-		<!-- ANCHOR INSTITUTIONS -->
-		<!-- <input data-dojo-attach-event='onChange: _onCAICheckBoxChange' 
-			data-dojo-attach-point='caiCheckbox'
-			data-dojo-type='dijit.form.CheckBox'
-			id='cai-checkbox'>
-		<label for='cai-checkbox'>Community Anchor Institutions</label>
-		<br>
-		<div data-dojo-attach-point='radioButtonContainer' class='radio-button-container'>
-			<input data-dojo-type='dijit.form.RadioButton' checked disabled
-				data-dojo-attach-event='onClick: _onCAIRadioChange' 
-				id='type-radio' name='cai-symbology'>
-			<label for='type-radio'>By Type</label>
-			<input data-dojo-type='dijit.form.RadioButton' disabled
-				data-dojo-attach-event='onClick: _onCAIRadioChange' 
-				id='speed-radio' name='cai-symbology'>
-			<label for='speed-radio'>By Speed</label>
-			<div id='drop-down'></div>
-			<div id='cai-legend'></div>
-		</div> -->
-		
+
 		<!-- PROVIDER COVERAGE -->
-		<input data-dojo-attach-event='onClick: _onOverlayCheckBoxClick' 
+		<input data-dojo-attach-event='onClick: _onOverlayCheckBoxClick'
 			data-dojo-attach-point='overlayCheckBox'
-			data-dojo-type='dijit/form/CheckBox' 
-			checked 
+			data-dojo-type='dijit/form/CheckBox'
+			checked
 			id='overlay-checkbox'>
 		<label for='overlay-checkbox'>Broadband Coverage</label>
 		<br>
 		<div data-dojo-attach-point='sliderLegend'
 			class='legend overlay-legend'></div>
-		<div class='slider-container'>			
-			<div data-dojo-attach-point='overlaySlider' 
-				data-dojo-attach-event='onChange: _onOverlaySliderChange' 
-				data-dojo-type='dijit/form/HorizontalSlider' 
-				minimum='0' maximum='1' 
+		<div class='slider-container'>
+			<div data-dojo-attach-point='overlaySlider'
+				data-dojo-attach-event='onChange: _onOverlaySliderChange'
+				data-dojo-type='dijit/form/HorizontalSlider'
+				minimum='0' maximum='1'
 				intermediateChanges='true'
-				discreteValues='50' 
-				showButtons='false' 
+				discreteValues='50'
+				showButtons='false'
 				class='slider'>
 			</div>
 			<span class='left-label slider-label'>Transparent</span>
 			<span class='right-label slider-label'>Opaque</span>
 		</div>
 		<div style="clear: both;"></div>
-		
+
 		<!-- BASEMAPS LAYER -->
-		<input data-dojo-attach-point='basemapsCheckBox' 
-			data-dojo-attach-event='onClick: _onBasemapsCheckboxClick' 
-			data-dojo-type='dijit/form/CheckBox'  
-			id='basemaps-checkbox' 
+		<input data-dojo-attach-point='basemapsCheckBox'
+			data-dojo-attach-event='onClick: _onBasemapsCheckboxClick'
+			data-dojo-type='dijit/form/CheckBox'
+			id='basemaps-checkbox'
 			checked disabled>
 		<label for='basemaps-checkbox' class='basemap-label'>Map Background:</label>
-		<select data-dojo-attach-point='comboBox' 
-			data-dojo-type='dijit/form/Select' 
+		<select data-dojo-attach-point='comboBox'
+			data-dojo-type='dijit/form/Select'
 			class='combobox'>
 			<option value='Hybrid'>Hybrid</option>
 			<option value='Terrain'>Terrain</option>
@@ -73,12 +54,12 @@
 		<div data-dojo-attach-point='basemapsLegend'
 			class='legend basemaps-legend'></div>
 		<div class='slider-container'>
-			<div data-dojo-attach-point='basemapsSlider' 
-				data-dojo-attach-event='onChange: _onBasemapsSliderChange' 
-				data-dojo-type='dijit/form/HorizontalSlider' 
-				minimum='0' maximum='1' 
+			<div data-dojo-attach-point='basemapsSlider'
+				data-dojo-attach-event='onChange: _onBasemapsSliderChange'
+				data-dojo-type='dijit/form/HorizontalSlider'
+				minimum='0' maximum='1'
 				intermediateChanges='true'
-				discreteValues='50' 
+				discreteValues='50'
 				showButtons='false'
 				class='slider'>
 			</div>
@@ -86,6 +67,6 @@
 			<span class='right-label slider-label'>Opaque</span>
 			<div style="clear: both;"></div>
 		</div>
-		
+
 	</div>
 </div>
