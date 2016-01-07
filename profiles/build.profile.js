@@ -31,12 +31,12 @@ var profile = {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
     },
     staticHasFeatures: {
-        'dojo-trace-api' : 0,
-        'dojo-log-api' : 0,
-        'dojo-publish-privates' : 0,
-        'dojo-sync-loader' : 0,
-        'dojo-xhr-factory' : 0,
-        'dojo-test-sniff' : 0
+        'dojo-trace-api': 0,
+        'dojo-log-api': 0,
+        'dojo-publish-privates': 0,
+        'dojo-sync-loader': 0,
+        'dojo-xhr-factory': 0,
+        'dojo-test-sniff': 0
     },
     plugins: {
         'xstyle/css': 'xstyle/build/amd-css'

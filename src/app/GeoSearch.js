@@ -129,18 +129,8 @@ define([
             console.log('app/GeoSearch:_setUpGraphicsLayer', arguments);
 
             // create new graphics layer and add to map
-            this.connect(this.map, 'onLoad', lang.hitch(this, function () {
-                this.graphicsLayer = new GraphicsLayer();
-                this.map.addLayer(this.graphicsLayer);
-
-                // // wire clear graphics event
-                // this.connect(this.map, 'onExtentChange', lang.hitch(this, function(){
-                //     if (this.addingGraphic === false) {
-                //         this.graphicsLayer.clear();
-                //     }
-                //     this.addingGraphic = false;
-                // }));
-            }));
+            this.graphicsLayer = new GraphicsLayer();
+            this.map.addLayer(this.graphicsLayer);
 
             // set up new symbol
             this.symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,

@@ -139,7 +139,7 @@ define([
                 config.map.centerAt(new Point({
                     x: newRoute.extent.x,
                     y: newRoute.extent.y,
-                    spatialReference: {wkid: 26912}
+                    spatialReference: {wkid: 3857}
                 }));
             };
             if (newRoute !== this.currentRoute) {

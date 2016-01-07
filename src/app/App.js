@@ -293,7 +293,7 @@ define([
             new LayerSelector({
                 map: config.map,
                 quadWord: config.quadWord,
-                baseLayers: ['Hybrid', 'Terrain', 'Lite', 'Topo']
+                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo']
             }).startup();
 
             // create layers
@@ -332,9 +332,7 @@ define([
             // set up new geosearch widget
             this.geoSearch = new GeoSearch({map: config.map}, 'geo-search');
 
-            this.own(config.map.on('load', function () {
-                that.own(config.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
-            }));
+            this.own(config.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
 
             // create new map data filters widget
             this.own(config.mapDataFilter = new MapDataFilter({

@@ -117,9 +117,11 @@ function (
             // create new find address widget
             new FindAddress({
                 map: config.map,
+                graphicsLayer: config.map.graphics,
                 title: 'Street Address',
                 symbol: this._markerSymbol,
-                apiKey: config.apiKey
+                apiKey: config.apiKey,
+                wkid: 3857
             }, 'find-address');
 
             this._wireEvents();
@@ -165,7 +167,7 @@ function (
                 topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function (results) {
                     if (results.length) {
                         var returnCoords = results[0].location;
-                        var point = new Point(returnCoords.x, returnCoords.y, config.map.spatialReference);
+                        var point = new Point(returnCoords.x, returnCoords.y, new SpatialReference({wkid: 26912}));
 
                         // search for providers
                         that.searchMapPoint(point, false);
@@ -425,17 +427,23 @@ function (
                 }, this.satMsg, 'before');
             }
 
-            // update utm coords
-            this.utmX.innerHTML = Math.round(this.lastPoint.x);
-            this.utmY.innerHTML = Math.round(this.lastPoint.y);
+            var that = this;
 
-            // project point
-            var wgs = new SpatialReference({wkid: 4326});
-            this.geoService.project([this.lastPoint], wgs, lang.hitch(this, function (pnts) {
+            // update utm coords
+            var utm = new SpatialReference({wkid: 26912});
+            this.geoService.project([this.lastPoint], utm, function (pnts) {
                 var pnt = pnts[0];
-                this.lat.innerHTML = Math.round(pnt.y * 100000) / 100000;
-                this.lng.innerHTML = Math.round(pnt.x * 100000) / 100000;
-            }));
+                that.utmX.innerHTML = Math.round(pnt.x);
+                that.utmY.innerHTML = Math.round(pnt.y);
+            });
+
+            // update wgs coords
+            var wgs = new SpatialReference({wkid: 4326});
+            this.geoService.project([this.lastPoint], wgs, function (pnts) {
+                var pnt = pnts[0];
+                that.lat.innerHTML = Math.round(pnt.y * 100000) / 100000;
+                that.lng.innerHTML = Math.round(pnt.x * 100000) / 100000;
+            });
 
             this.showResults();
         },
