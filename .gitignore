@@ -25,7 +25,9 @@ scripts/requests*
 scripts/secrets.cfg
 scripts/secrets.py
 secrets.json
+src/agrc-jasmine-matchers/
 src/agrc/*
+src/arcgis-js-api/
 src/bootstrap-datepicker/
 src/bootstrap-select/
 src/bootstrap/
@@ -34,6 +36,7 @@ src/dgrid/
 src/dijit/
 src/dojo/
 src/dojox/
+src/dstore/
 src/esri
 src/favico.js/
 src/ijit/
@@ -41,10 +44,12 @@ src/jasmine-favicon-reporter/
 src/jasmine-jsreporter/
 src/jquery/
 src/ladda-bootstrap/
+src/layer-selector/
 src/lodash/
 src/matchers/
 src/mustache/
 src/put-selector/
+src/secrets.json
 src/spin.js/
 src/spinjs/
 src/stubmodule/

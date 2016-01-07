@@ -28,10 +28,13 @@ define([
     'dojo/_base/fx',
     'dojo/_base/lang',
 
+    'esri/geometry/Extent',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/tasks/query',
     'esri/tasks/QueryTask',
+
+    'layer-selector',
 
     'dijit/Dialog',
     'dijit/form/Button',
@@ -66,10 +69,13 @@ define([
     fx,
     lang,
 
+    Extent,
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     Query,
-    QueryTask
+    QueryTask,
+
+    LayerSelector
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         widgetsInTemplate: true,
@@ -272,10 +278,23 @@ define([
             var mapOptions = {
                 showInfoWindowOnClick: false,
                 useDefaultBaseMap: false,
-                includeFullExtentButton: true,
-                sliderStyle: 'large'
+                extent: new Extent({
+                    xmax: -11948476.782453176,
+                    xmin: -12912194.835072424,
+                    ymax: 5189185.517508683,
+                    ymin: 4408916.332773807,
+                    spatialReference: {
+                        wkid: 3857
+                    }
+                })
             };
             config.map = new BaseMap(this.mapDiv, mapOptions);
+
+            new LayerSelector({
+                map: config.map,
+                quadWord: config.quadWord,
+                baseLayers: ['Hybrid', 'Terrain', 'Lite', 'Topo']
+            }).startup();
 
             // create layers
             config.bbLayer = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {

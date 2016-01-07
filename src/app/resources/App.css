@@ -1,6 +1,7 @@
 @import '../../agrc/resources/locate/FindAddress.css';
 @import '../../agrc/resources/locate/FindGeneric.css';
 @import '../../agrc/resources/map/BaseMap.css';
+@import '../../layer-selector/resources/LayerSelector.css';
 @import '../../dijit/themes/claro/claro.css';
 @import '../../esri/css/esri.css';
 @import 'SmallerScreens.css';
@@ -211,6 +212,10 @@ div[data-dojo-attach-point="leftNav"] {
     left: 8px;
     z-index: 100;
     display: none;
+}
+.layer-selector {
+    margin-top: 35px;
+    margin-right: 5px;
 }
 
 /* map text */

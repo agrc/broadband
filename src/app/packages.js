@@ -9,6 +9,7 @@
             'dojox',
             'esri',
             'ijit',
+            'layer-selector',
             'polyfills',
             'put-selector',
             'xstyle',
