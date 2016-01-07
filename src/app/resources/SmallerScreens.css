@@ -10,7 +10,7 @@
         left: auto !important;
     }
     .broadband-app a[data-dojo-attach-point='popoutLink'] {
-        background-image: url('http://168.180.161.9/broadband/app/resources/images/popout.png');
+        background-image: url('images/popout.png');
         width: 67px;
         height: 67px;
         display: inline-block;

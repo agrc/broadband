@@ -6,9 +6,9 @@ define([
 function (
     has
 ) {
-    var appServerPath = (has('agrc-build') === 'prod') ?
-        'http://mapserv.utah.gov/ArcGIS/rest/services/' :
-        '/ArcGIS/rest/services/';
+    var baseDomain = (has('agrc-build') === 'prod') ? 'http://mapserv.utah.gov' : '';
+    var appServerPath = baseDomain + '/ArcGIS/rest/services/';
+    var appBaseUrl = (has('agrc-build') === 'prod') ? baseDomain + '/broadband/' : '';
     var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -20,6 +20,8 @@ function (
         // version.: String
         //      The version number.
         version: '2.4.2',
+
+        appBaseUrl: appBaseUrl,
 
         map: null,
 
