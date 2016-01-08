@@ -12,6 +12,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
+    'dojo/aspect',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/dom-style',
@@ -52,6 +53,7 @@ function (
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
+    aspect,
     domClass,
     domConstruct,
     domStyle,
@@ -127,7 +129,7 @@ function (
                 config.appBaseUrl + 'app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
 
             // create new find address widget
-            new FindAddress({
+            this.findAddress = new FindAddress({
                 map: config.map,
                 graphicsLayer: config.map.graphics,
                 title: 'Street Address',
@@ -135,6 +137,8 @@ function (
                 apiKey: config.apiKey,
                 wkid: 3857
             }, 'find-address');
+            this.findAddress.startup();
+            this.own(this.findAddress);
 
             this._wireEvents();
 
@@ -172,7 +176,7 @@ function (
                 }),
 
                 // search for providers on successful address find
-                topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function (results) {
+                this.findAddress.on('find', function (results) {
                     if (results.length) {
                         var returnCoords = results[0].location;
                         var point = new Point(returnCoords.x, returnCoords.y, new SpatialReference({wkid: 3857}));
@@ -180,6 +184,9 @@ function (
                         // search for providers
                         that.searchMapPoint(point, false);
                     }
+                }),
+                aspect.before(this.findAddress, 'geocodeAddress', function () {
+                    config.map.graphics.clear();
                 }),
 
                 // store query def from map data filters
