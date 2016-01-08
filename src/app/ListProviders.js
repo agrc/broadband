@@ -167,7 +167,7 @@ function (
                 topic.subscribe('agrc.widgets.locate.FindAddress.OnFind', function (results) {
                     if (results.length) {
                         var returnCoords = results[0].location;
-                        var point = new Point(returnCoords.x, returnCoords.y, new SpatialReference({wkid: 26912}));
+                        var point = new Point(returnCoords.x, returnCoords.y, new SpatialReference({wkid: 3857}));
 
                         // search for providers
                         that.searchMapPoint(point, false);
