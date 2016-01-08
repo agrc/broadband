@@ -18,4 +18,5 @@ Test: [test.mapserv.utah.gov/broadband](https://test.mapserv.utah.gov/broadband)
     * Default format: PDF
     * Templates folder: `maps\PrintTemplates`
     * Default template: `Main.mxd`
+    * Synchronous
 1. For production `dist/index.html` needs to be sent to Steven Stalter (sstalter@utah.gov) to be posted at [broadband.utah.gov/map](https://broadband.utah.gov/map). The rest of the app is hosted on [mapserv.utah.gov/broadband](https://mapserv.utah.gov/broadband).
