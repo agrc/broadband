@@ -47,7 +47,11 @@ function (
             URL: 'URL',
             ID_NUM: 'ID_NUM',
             TRANSTECH: 'TRANSTECH',
-            Biz_Only: 'Biz_Only'
+            Biz_Only: 'Biz_Only',
+            telcom: {
+                PROVIDER: 'PROVIDER',
+                WEBLINK: 'WEBLINK'
+            }
         },
         providers: {},
         speedsDomain: {
@@ -96,7 +100,9 @@ function (
 
         // disableFeedback: Boolean
         //      Used to disable feedback being sent during testing
-        disableFeedback: false
+        disableFeedback: false,
+
+        telcomFeatureClassName: 'SGID10.UTILITIES.RuralTelcomBoundaries'
     };
 
     xhr(require.baseUrl + 'secrets.json', {
