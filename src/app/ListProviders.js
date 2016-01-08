@@ -423,7 +423,8 @@ function (
             config.map.graphics.clear();
 
             // create new graphic
-            var g = new Graphic(mapPoint, this._markerSymbol, {}, {});
+            var g = new Graphic(mapPoint, this._markerSymbol);
+
             config.map.graphics.add(g);
         },
 

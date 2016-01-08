@@ -8,9 +8,21 @@ function (
     has,
     xhr
 ) {
-    var baseDomain = (has('agrc-build') === 'prod') ? 'http://mapserv.utah.gov' : '';
-    var appServerPath = baseDomain + '/ArcGIS/rest/services/';
-    var appBaseUrl = (has('agrc-build') === 'prod') ? baseDomain + '/broadband/' : '';
+    var baseDomain = '';
+    var appBaseUrl = '';
+    var appServerPath = '';
+    if (has('agrc-build') === 'prod') {
+        baseDomain = 'https://mapserv.utah.gov';
+        appBaseUrl = baseDomain + '/broadband/';
+        appServerPath = baseDomain + '/ArcGIS/rest/services/';
+    } else if (has('agrc-build') === 'stage') {
+        baseDomain = 'https://test.mapserv.utah.gov';
+        appServerPath = baseDomain + '/ArcGIS/rest/services/';
+    } else if (!window.dojoConfig.isJasmineTest) {
+        // dev
+        // for some reason if this variable is set it breaks jasmine tests
+        appServerPath = 'http://localhost/ArcGIS/rest/services/';
+    }
     var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -32,7 +44,6 @@ function (
         currentLayer: null,
 
         // path to app
-        appServerPath: appServerPath,
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
         redlineUrl: '/chalkdust',

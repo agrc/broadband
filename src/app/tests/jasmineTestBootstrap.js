@@ -1,5 +1,6 @@
 /* global JasmineFaviconReporter, jasmineRequire */
 var dojoConfig = { // eslint-disable-line no-unused-vars
+    isJasmineTest: true,
     baseUrl: '/src/',
     packages: ['dojo', {
         name: 'matchers',
