@@ -126,9 +126,6 @@ function (
             this.connect(this.cbxWireBased, 'onClick', function () {
                 that._onTransCheckBoxChange(that.cbxWireBased);
             });
-            this.connect(this.cbxWireless, 'onClick', function () {
-                that._onTransCheckBoxChange(that.cbxWireless);
-            });
             this.connect(this.btnSelectProviders, 'onClick', this.launchListPicker);
             this.connect(this.chbxShowAll, 'onChange', this.updateDefQuery);
             this.connect(this.chbxShowOnly, 'onClick', this.updateDefQuery);
@@ -136,11 +133,9 @@ function (
             this.connect(this.btnSatelliteOK, 'onClick', this._onSatelliteOK);
             this.connect(this.moreInfoLink, 'onclick', this._onSatelliteInfoClick);
             this.connect(this.resetBtn, 'onClick', this._onResetClick);
-            this.connect(this.cbxResidential, 'onClick', this.updateDefQuery);
-            this.connect(this.cbxBusiness, 'onClick', this.updateDefQuery);
 
             function wireSubCheckBoxes(parentCheckBoxId) {
-                query('label[for=\'' + parentCheckBoxId + '\'] + .sub-trans-list input').forEach(function (node) {
+                query('label[for=\'' + parentCheckBoxId + '\'] + .trans-list input').forEach(function (node) {
                     dij = registry.getEnclosingWidget(node);
                     that.connect(dij, 'onClick', function () {
                         that._onSubCheckBoxChange(that[parentCheckBoxId]);
@@ -149,7 +144,9 @@ function (
             }
 
             wireSubCheckBoxes(this.cbxWireBased.id);
-            wireSubCheckBoxes(this.cbxWireless.id);
+
+            this.connect(this.cbxFixedWireless, 'onClick', this.updateDefQuery);
+            this.connect(this.cbxMobileWireless, 'onClick', this.updateDefQuery);
         },
         _setProvidersList: function (providersObject) {
             console.log('app/MapDataFilter:_setProvidersList', arguments);
@@ -160,10 +157,7 @@ function (
             for (var i in providersObject) {
                 if (providersObject.hasOwnProperty(i)) {
                     var prov = providersObject[i];
-        //          // filter out Qwest
-        //          if (providersObject[i].name != 'Qwest') {
                     this.providersList.push([prov.name, i]);
-        //          }
                     if (prov.bizOnly === 'Y') {
                         this.bizOnlyProviderIds.push(i);
                     }
@@ -267,7 +261,7 @@ function (
             var newArray;
             var widget;
 
-            query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
+            query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
                 widget = registry.getEnclosingWidget(node);
                 newArray = widget.get('value');
                 ttValues = ttValues.concat(newArray);
@@ -383,8 +377,7 @@ function (
             this.downloadSlider.set('value', '9');
             this.uploadSlider.set('value', '10');
             this.cbxWireBased.set('value', 'on');
-            this.cbxWireless.set('value', 'on');
-            query('.sub-trans-list input').forEach(function (node) {
+            query('.trans-list input').forEach(function (node) {
                 registry.getEnclosingWidget(node).set('checked', true);
             });
             if (resetProviders && this.restricted === false) {
@@ -447,7 +440,7 @@ function (
             }
 
             // query for related sub checkboxes
-            boxes = query('label[for=\'' + parentCheckBox.id + '\'] + .sub-trans-list input').forEach(function (node) {
+            boxes = query('label[for=\'' + parentCheckBox.id + '\'] + .trans-list input').forEach(function (node) {
                 dij = registry.getEnclosingWidget(node);
                 value = dij.get('value');
                 if (value === false) {
@@ -478,7 +471,7 @@ function (
             var value = chbox.get('value');
 
             function setSubs(checked) {
-                query('label[for=\'' + chbox.id + '\'] + .sub-trans-list input').forEach(function (node) {
+                query('label[for=\'' + chbox.id + '\'] + .trans-list input').forEach(function (node) {
                     registry.getEnclosingWidget(node).set('checked', checked);
                 });
             }
@@ -503,7 +496,7 @@ function (
             var chbox;
             var values;
 
-            query('.sub-trans-list input').forEach(function (input) {
+            query('.trans-list input').forEach(function (input) {
                 chbox = registry.getEnclosingWidget(input);
                 // need to do this to make sure that we get
                 // the correct return value for value
@@ -521,7 +514,6 @@ function (
             });
 
             this._onSubCheckBoxChange(this.cbxWireBased, false);
-            this._onSubCheckBoxChange(this.cbxWireless, false);
 
             this.updateDefQuery();
         },

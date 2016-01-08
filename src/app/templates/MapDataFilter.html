@@ -73,8 +73,8 @@
 			id="cbxWireBased"
 			data-dojo-type="dojox/form/TriStateCheckBox"
 			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
-		<label for="cbxWireBased">Wire Based (DSL, Cable, Fiber, Other)</label>
-        <div class='sub-trans-list'>
+		<label for="cbxWireBased">Wireline</label>
+        <div class='trans-list sub'>
             <ul>
                 <li>
                     <input data-dojo-attach-point='cbxCable'
@@ -99,12 +99,7 @@
                 </li>
             </ul>
         </div>
-		<input data-dojo-attach-point="cbxWireless"
-			id="cbxWireless"
-			data-dojo-type="dojox/form/TriStateCheckBox"
-			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
-		<label for="cbxWireless">Wireless</label>
-		<div class='sub-trans-list'>
+        <div class='trans-list'>
             <ul>
                 <li>
                     <input data-dojo-attach-point='cbxFixedWireless'
