@@ -1,4 +1,7 @@
 define([
+    'agrc/modules/Formatting',
+    'agrc/modules/WebAPI',
+
     'app/config',
     'app/FindAddress',
     'app/HelpPopup',
@@ -9,6 +12,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/has',
@@ -35,6 +39,9 @@ define([
 ],
 
 function (
+    Formatting,
+    WebAPI,
+
     config,
     FindAddress,
     HelpPopup,
@@ -45,6 +52,7 @@ function (
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
+    domClass,
     domConstruct,
     domStyle,
     has,
@@ -105,6 +113,10 @@ function (
         // the last point that was used in a query. Used to rerun the query after data filters have been changed.
         lastPoint: null,
 
+        // webapi: WebAPI
+        //      used to query for telecom provider
+        webapi: null,
+
         postCreate: function () {
             console.log('app/ListProviders:postCreate', arguments);
 
@@ -148,9 +160,6 @@ function (
             this.geoService = new GeometryService(this.geoServiceURL);
         },
 
-        /**
-         * wires events
-         */
         _wireEvents: function () {
             console.log('app/ListProviders:_wireEvents', arguments);
 
@@ -159,7 +168,6 @@ function (
             this.own(
                 // clear table on search for address fail
                 topic.subscribe('agrc.widgets.locate.FindAddress.OnFindError', function () {
-        //          this.standby.show();
                     that.clearResultsOnClick();
                 }),
 
@@ -211,6 +219,8 @@ function (
          */
         _setUpQueryTasks: function () {
             console.log('app/ListProviders:_setUpQueryTasks', arguments);
+
+            this.webapi = new WebAPI({apiKey: config.apiKey});
 
             // set up query - same query used for all tasks
             this.query = new Query();
@@ -289,6 +299,26 @@ function (
                     }));
                 }));
             }));
+
+            var providerFld = config.fieldNames.telcom.PROVIDER;
+            var weblinkFld = config.fieldNames.telcom.WEBLINK;
+            var that = this;
+            var clearTelCom = function () {
+                that.telcomMsg.innerHTML = '';
+                domClass.add(that.telcomMsgContainer, 'hidden');
+            };
+            this.webapi.search(config.telcomFeatureClassName, [providerFld, weblinkFld], {
+                geometry: 'point:[' + mapPoint.x + ',' + mapPoint.y + ']',
+                spatialReference: config.map.spatialReference.wkid
+            }).then(function processWebAPIResponse(response) {
+                if (response.length > 0 && response[0].attributes[providerFld] !== 'OPEN') {
+                    domClass.remove(that.telcomMsgContainer, 'hidden');
+                    that.telcomMsg.innerHTML = Formatting.titlize(response[0].attributes[providerFld]);
+                    that.telcomMsg.href = response[0].attributes[weblinkFld];
+                } else {
+                    clearTelCom();
+                }
+            }, clearTelCom);
         },
 
         /**
@@ -424,7 +454,7 @@ function (
                 domConstruct.create('div', {
                     'class': 'none-found-msg',
                     'innerHTML': msg
-                }, this.satMsg, 'before');
+                }, this.providerResultsContainer, 'before');
             }
 
             var that = this;
