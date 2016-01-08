@@ -61,9 +61,12 @@
 .mdf-satellite-dialog img {
 	float: left;
 }
-.mapdatafilter .sub-trans-list ul {
+.mapdatafilter .trans-list ul {
     list-style: none;
     margin: 0;
+    padding: 0;
+}
+.mapdatafilter .trans-list.sub ul {
     padding: 0 20px;
 }
 

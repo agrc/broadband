@@ -65,22 +65,6 @@ function (
                 testWidget.cbxCable.onClick();
 
                 expect(testWidget._onSubCheckBoxChange).toHaveBeenCalledWith(testWidget.cbxWireBased);
-
-                testWidget.cbxFixedWireless.onClick();
-
-                expect(testWidget._onSubCheckBoxChange).toHaveBeenCalledWith(testWidget.cbxWireless);
-
-                testWidget.cbxMobileWireless.onClick();
-
-                expect(testWidget._onSubCheckBoxChange).toHaveBeenCalledWith(testWidget.cbxWireless);
-            });
-            it('wires the trans checkboxes', function () {
-                spyOn(testWidget, '_onTransCheckBoxChange');
-                testWidget.wireControlEvents();
-
-                testWidget.cbxWireless.onClick();
-
-                expect(testWidget._onTransCheckBoxChange).toHaveBeenCalled();
             });
         });
         describe('_getTransTypes', function () {
@@ -94,7 +78,7 @@ function (
                 expect(testWidget._getTransTypes()).toEqual([10, 20, 30, 50, 70, 71]);
             });
             it('returns an empty array if none are checked', function () {
-                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
+                query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     registry.getEnclosingWidget(node).set('value', false);
                 });
 
@@ -104,14 +88,14 @@ function (
         describe('resetFilters', function () {
             it('resets the sub checkboxes', function () {
                 var widget;
-                query('.sub-trans-list input').forEach(function (node) {
+                query('.trans-list input').forEach(function (node) {
                     widget = registry.getEnclosingWidget(node);
                     widget.set('value', false);
                 });
 
                 testWidget.resetFilters();
 
-                query('.sub-trans-list input').forEach(function (node) {
+                query('.trans-list input').forEach(function (node) {
                     widget = registry.getEnclosingWidget(node);
                     expect(widget.get('value')).not.toEqual(false);
                 });
@@ -121,13 +105,6 @@ function (
             });
         });
         describe('_onSubCheckBoxChange', function () {
-            it('sets the parentCheckBox to checked if all subs are checked', function () {
-                testWidget.cbxWireless.set('value', false);
-
-                testWidget._onSubCheckBoxChange(testWidget.cbxWireless);
-
-                expect(testWidget.cbxWireless.get('value')).toEqual('on');
-            });
             it('sets the parentCheckBox to mixed if some subs are checked', function () {
                 testWidget.cbxCable.set('value', false);
 
@@ -135,33 +112,10 @@ function (
 
                 expect(testWidget.cbxWireBased.get('value')).toEqual('mixed');
             });
-            it('sets the parentCheckBox to false if no subs are checked', function () {
-                testWidget.cbxFixedWireless.set('value', false);
-                testWidget.cbxMobileWireless.set('value', false);
-
-                testWidget._onSubCheckBoxChange(testWidget.cbxWireless);
-
-                expect(testWidget.cbxWireless.get('value')).toEqual(false);
-            });
-            it('fires updateDefQuery if updateDefQuery is true', function () {
-                spyOn(testWidget, 'updateDefQuery');
-
-                testWidget._onSubCheckBoxChange(testWidget.cbxWireless);
-                testWidget._onSubCheckBoxChange(testWidget.cbxWireless, false);
-
-                expect(testWidget.updateDefQuery.calls.count()).toBe(1);
-            });
         });
         describe('_onTransCheckBoxChange', function () {
             beforeEach(function () {
                 spyOn(testWidget, 'updateDefQuery');
-            });
-            it('forces the checkbox to \'on\' if the new value is \'mixed\'', function () {
-                testWidget.cbxWireless.set('value', 'mixed');
-
-                testWidget.cbxWireless.onClick();
-
-                expect(testWidget.cbxWireless.get('value')).toEqual('on');
             });
             it('sets all subs to checked if new value is checked', function () {
                 testWidget.cbxCable.set('value', false);
@@ -220,7 +174,7 @@ function (
                 var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
                     'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND TRANSTECH ' +
                     '= -1 AND UTProvCode = \'-1\'';
-                query('.sub-trans-list input:checked', 'tech-type-div').forEach(function (node) {
+                query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     dijitRegistry.getEnclosingWidget(node).set('value', false);
                 });
                 testWidget.chbxShowOnly.set('checked', true);
@@ -256,8 +210,8 @@ function (
 
                 testWidget.selectTransTypes(testTypes);
 
-                expect(testWidget._onSubCheckBoxChange.calls.count()).toBe(2);
-                expect(testWidget._onSubCheckBoxChange.calls.argsFor(1)[1]).toEqual(false);
+                expect(testWidget._onSubCheckBoxChange.calls.count()).toBe(1);
+                expect(testWidget._onSubCheckBoxChange.calls.argsFor(0)[1]).toEqual(false);
             });
             it('fires updateDefQuery', function () {
                 spyOn(testWidget, 'updateDefQuery');
