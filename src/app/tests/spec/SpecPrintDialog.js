@@ -35,11 +35,11 @@ require([
                 expect(widget.getCustomTextElements('')).toEqual([]);
             });
             it('returns the correct values', function () {
-                var fullHash = '/route/minDownSpeed=3&minUpSpeed=4&transTypes=40|41|50|70|71|80&' +
+                var fullHash = '/route/minDownSpeed=9&minUpSpeed=8&transTypes=40|41|50|70|71|80&' +
                     'providers=Baja|Beeline&extent=446372|4503183|288895';
                 expect(widget.getCustomTextElements(fullHash)).toEqual([
                     {techs: 'Cable\nFiber\nFixed Wireless\nMobile Wireless'},
-                    {speeds: '768+ Kbps Download\n1.5+ Mbps Upload'},
+                    {speeds: '0.768+ Mbps Download\n1.5+ Mbps Upload'},
                     {providers: 'Baja\nBeeline'}
                 ]);
             });

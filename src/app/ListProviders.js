@@ -336,6 +336,10 @@ function (
         _addResultsToList: function (results) {
             console.log('app/ListProviders:_addResultsToList', arguments);
 
+            var getMbpsDescription = function (speed) {
+                return Formatting.round(speed, 3) + '+ Mbps';
+            };
+
             // append new providers, if any, to list
             array.forEach(results.features, function (g) {
                 try {
@@ -346,24 +350,30 @@ function (
                         console.warn('No matching provider found for ' +
                             atts[config.fieldNames.UTProvCode] + ' in the providers table');
                     } else {
-                        var maxupCode = parseInt(atts[config.fieldNames.MAXADUP], 10);
-                        var maxupDesc = config.speedsDomain[maxupCode];
-                        if (maxupDesc === undefined) {
+                        var maxup = atts[config.fieldNames.MAXADUP];
+                        var maxupDesc;
+                        if (maxup === undefined) {
                             maxupDesc = 'unavailable';
+                        } else {
+                            maxupDesc = getMbpsDescription(maxup);
                         }
-                        var maxdownCode = parseInt(atts[config.fieldNames.MAXADDOWN], 10);
-                        var maxdownDesc = config.speedsDomain[maxdownCode];
-                        if (maxdownDesc === undefined) {
+
+                        var maxdown = atts[config.fieldNames.MAXADDOWN];
+                        var maxdownDesc;
+                        if (maxdown === undefined) {
                             maxdownDesc = 'unavailable';
+                        } else {
+                            maxdownDesc = getMbpsDescription(maxdown);
                         }
+
                         var transtypeCode = atts[config.fieldNames.TRANSTECH];
-                        var perspectivItem = {
+                        var perspectiveItem = {
                             'id': atts[config.fieldNames.UTProvCode],
                             'name': providerObj.name,
                             'url': providerObj.url,
-                            'maxup': maxupCode,
+                            'maxup': maxup,
                             'maxupDesc': maxupDesc,
-                            'maxdown': maxdownCode,
+                            'maxdown': maxdown,
                             'maxdownDesc': maxdownDesc,
                             'transTypes': [config.typesDomain[transtypeCode]]
                         };
@@ -371,27 +381,27 @@ function (
                         // check for duplicate in existing list
                         var alreadyThere = false;
                         array.forEach(this.list, function (existingItem) {
-                            if (existingItem.id === perspectivItem.id) { // matching id
+                            if (existingItem.id === perspectiveItem.id) { // matching id
                                 // check for higher speeds
-                                if (existingItem.maxdown < perspectivItem.maxdown) {
+                                if (existingItem.maxdown < perspectiveItem.maxdown) {
                                     // there is an existing item with the a lower download speed.
                                     // update the existingItem's speeds
-                                    existingItem.maxdown = perspectivItem.maxdown;
-                                    existingItem.maxdownDesc = config.speedsDomain[perspectivItem.maxdown];
-                                    existingItem.maxup = perspectivItem.maxup;
-                                    existingItem.maxupDesc = config.speedsDomain[perspectivItem.maxup];
+                                    existingItem.maxdown = perspectiveItem.maxdown;
+                                    existingItem.maxdownDesc = getMbpsDescription(existingItem.maxdown);
+                                    existingItem.maxup = perspectiveItem.maxup;
+                                    existingItem.maxupDesc = getMbpsDescription(existingItem.maxdown);
                                 }
 
                                 // add trans type if different from existing
-                                if (array.indexOf(existingItem.transTypes, perspectivItem.transTypes[0]) === -1) {
-                                    existingItem.transTypes.push(perspectivItem.transTypes[0]);
+                                if (array.indexOf(existingItem.transTypes, perspectiveItem.transTypes[0]) === -1) {
+                                    existingItem.transTypes.push(perspectiveItem.transTypes[0]);
                                 }
 
                                 alreadyThere = true;
                             }
                         }, this);
                         if (!alreadyThere) {
-                            this.list.push(perspectivItem);
+                            this.list.push(perspectiveItem);
                         }
                     }
                 } catch (e) {

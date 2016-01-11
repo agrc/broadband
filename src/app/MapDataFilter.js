@@ -191,13 +191,11 @@ function (
 
             // Download slider
             // get start and end values for slice function on array
-            var downQueryArray = config.speedValues.slice(0, this.downloadSlider.value);
-            var queryTxt = config.fieldNames.MAXADDOWN + ' IN (\'' + downQueryArray.join('\',\'') + '\')';
+            var queryTxt = config.fieldNames.MAXADDOWN + ' >= ' + config.speedsDomain[this.downloadSlider.value];
             defQueryProps.minDownSpeed = this.downloadSlider.get('value');
 
             // Upload slider
-            var upQueryArray = config.speedValues.slice(0, this.uploadSlider.value);
-            queryTxt += ' AND ' + config.fieldNames.MAXADUP + ' IN (\'' + upQueryArray.join('\',\'') + '\')';
+            queryTxt += ' AND ' + config.fieldNames.MAXADUP + ' >= ' + config.speedsDomain[this.uploadSlider.value];
             defQueryProps.minUpSpeed = this.uploadSlider.get('value');
 
             // check to see if we should show the satellite providers link in results table

@@ -18,7 +18,7 @@ function (
     } else if (has('agrc-build') === 'stage') {
         baseDomain = 'https://test.mapserv.utah.gov';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
-    } else if (!window.dojoConfig.isJasmineTest) {
+    } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTest) {
         // dev
         // for some reason if this variable is set it breaks jasmine tests
         appServerPath = 'http://localhost/ArcGIS/rest/services/';
@@ -66,19 +66,17 @@ function (
         },
         providers: {},
         speedsDomain: {
-            '2': '256 - 768 Kbps',
-            '3': '768 Kbps - 1.5 Mbps',
-            '4': '1.5 - 3 Mbps',
-            '5': '3 - 6 Mbps',
-            '6': '6 - 10 Mbps',
-            '7': '10 - 25 Mbps',
-            '8': '25 - 50 Mbps',
-            '9': '50 - 100 Mbps',
-            '10': '100 - 1000 Mbps',
-            '11': 'greater than 1000 Mbps'
+            '10': 0.256,
+            '9': 0.768,
+            '8': 1.5,
+            '7': 3,
+            '6': 6,
+            '5': 10,
+            '4': 25,
+            '3': 50,
+            '2': 100,
+            '1': 1000
         },
-        // TODO: refactor MapDataFilter.js to use speedsDomain and get rid of this property
-        speedValues: ['11','10','9','8','7','6','5','4','3','2'],
         typesDomain: {
             '10': 'DSL',
             '20': 'DSL',

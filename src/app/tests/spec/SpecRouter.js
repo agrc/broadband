@@ -342,12 +342,12 @@ function (
                 };
                 query = 'transTypes=1';
             });
-            it('converts speed types to their domain values', function () {
+            it('stores speed values', function () {
                 obj = {
-                    minDownSpeed: 8,
-                    minUpSpeed: 10
+                    minDownSpeed: '8',
+                    minUpSpeed: '10'
                 };
-                query = 'minDownSpeed=4&minUpSpeed=2';
+                query = 'minDownSpeed=8&minUpSpeed=10';
             });
         });
     });

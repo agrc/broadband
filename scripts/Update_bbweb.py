@@ -2,6 +2,7 @@ import arcpy
 from agrc import logging, messaging, ags
 from settings import *
 
+
 # create new tools object
 logger = logging.Logger()
 emailer = messaging.Emailer('stdavis@utah.gov', not sendEmails)
@@ -10,31 +11,21 @@ emailer = messaging.Emailer('stdavis@utah.gov', not sendEmails)
 pathToSDE = r".\UBBMAP.sde"
 pathToFGD = r".\Broadband.gdb"
 
-fltr = "Provider_Type = 1 AND NOT (UTProvCode IN ('Strata'))"
-fltr_wireless = "TRANSTECH <> 60"
-fcs = [
-       ['UBBMAP.UBBADMIN.BB_Service_Buffered_Road', fltr, 'BB_Service_Buffered_RoadSegment'],
-       ['UBBMAP.UBBADMIN.BB_Service_CensusBlock', fltr, 'BB_Service_CensusBlocks'],
-       ['UBBMAP.UBBADMIN.BB_Service_Wireless', fltr_wireless, 'BB_Service_Wireless'],
-       ['UBBMAP.UBBADMIN.BB_SpecialCoverage_Polygons_new', "1 = 1", 'BB_Service_CensusBlocks_Append']
-       ]
+fltr = "TRANSTECH <> 60"
+fc = 'UBBMAP.UBBADMIN.BB_Service_test'
 coverageFieldName = "UTProvCode"
 providerTableName = "UBBMAP.UBBADMIN.BB_Providers_Table"
 providerTableFieldName = "Code"
-coverageProviders = [] # list to hold all providers in coverage data
-tableProviders = [] # list of all providers in providers table
-nonNullFields = [
-                 '"' + coverageFieldName + '" IS NULL OR "' + coverageFieldName + '" = \'\'',
-                 '"MAXADUP" IS NULL OR "MAXADUP" = \'\'',
-                 '"MAXADDOWN" IS NULL OR "MAXADDOWN" = \'\'',
-                 '"TRANSTECH" IS NULL OR "TRANSTECH" = 0'
-                 ]
+coverageProviders = []  # list to hold all providers in coverage data
+tableProviders = []  # list of all providers in providers table
+nonNullFields = ['"' + coverageFieldName + '" IS NULL OR "' + coverageFieldName + '" = \'\'',
+                 '"MAXADUP" IS NULL OR "MAXADUP" = 0',
+                 '"MAXADDOWN" IS NULL OR "MAXADDOWN" = 0',
+                 '"TRANSTECH" IS NULL OR "TRANSTECH" = 0']
 errors = []
-mapServices = [
-              'Broadband/ProviderCoverage',
+mapServices = ['Broadband/ProviderCoverage',
               'Broadband/ProviderCoverageCached',
-              'BBEcon/MapService'
-               ]
+              'BBEcon/MapService']
 scales = [
     1.8489297737236E7,
     9244648.868618,
@@ -51,45 +42,40 @@ try:
     logger.logMsg('setting workspace to sde database')
     arcpy.env.workspace = pathToSDE
 
-    # loop through coverage feature classes
-    logger.logMsg('Looping through polygon feature classes')
-    for fc in fcs:
-        logger.logMsg(fc[0])
+    logger.logMsg("checking non-null fields")
 
-        logger.logMsg("checking non-null fields")
+    # create layer for selecting
+    logger.logMsg('creating layer')
+    layerName = fc + 'Layer'
+    arcpy.MakeFeatureLayer_management(fc, layerName, fltr);
+    logger.logGPMsg()
 
-        # create layer for selecting
-        logger.logMsg('creating layer')
-        layerName = fc[0] + 'Layer'
-        arcpy.MakeFeatureLayer_management(fc[0], layerName, fc[1]);
+    # loop through fields
+    for query in nonNullFields:
+        logger.logMsg('query: ' + query)
+        arcpy.SelectLayerByAttribute_management(layerName, 'NEW_SELECTION', query)
+        logger.logGPMsg()
+        cnt = arcpy.GetCount_management(layerName)
         logger.logGPMsg()
 
-        # loop through fields
-        for query in nonNullFields:
-            logger.logMsg('query: ' + query)
-            arcpy.SelectLayerByAttribute_management(layerName, 'NEW_SELECTION', query)
-            logger.logGPMsg()
-            cnt = arcpy.GetCount_management(layerName)
-            logger.logGPMsg()
+        if int(str(cnt)) > 0:
+            errors.append('ERROR: null or empty values found in ' + fc + ':' + query)
 
-            if int(str(cnt)) > 0:
-                errors.append('ERROR: null or empty values found in ' + fc[0] + ':' + query)
+    # get search cursor
+    logger.logMsg("building list of providers in coverage feature class")
+    cur = arcpy.SearchCursor(fc, fltr, "", coverageFieldName)
+    row = cur.next()
+    while row:
+        code = row.getValue(coverageFieldName)
 
-        # get search cursor
-        logger.logMsg("building list of providers in coverage feature class")
-        cur = arcpy.SearchCursor(fc[0], fc[1], "", coverageFieldName)
+        # add to list of providers
+        if not [code, fc] in coverageProviders:
+            coverageProviders.append([code, fc])
+
         row = cur.next()
-        while row:
-            code = row.getValue(coverageFieldName)
+    del cur
 
-            # add to list of providers
-            if not [code, fc[0]] in coverageProviders:
-                coverageProviders.append([code, fc[0]])
-
-            row = cur.next()
-        del cur
-
-        logger.logMsg("Finished with " + fc[0])
+    logger.logMsg("Finished with " + fc)
 
     # get cursor for provider table
     logger.logMsg("building list of providers in providers table")
@@ -141,25 +127,7 @@ try:
 
         logger.logMsg('importing new feature classes')
         arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(3857)
-        for f in fcs:
-            if f[2] != "BB_Service_CensusBlocks_Append":
-                arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + f[0], pathToFGD, f[2], f[1])
-                logger.logMsg(f[0].split('.')[2] + ' copied successfully.')
-            else:
-                arcpy.Append_management(pathToSDE + '\\' + f[0], pathToFGD + '\\' + fcs[1][2], "NO_TEST")
-                logger.logMsg(f[0].split('.')[2] + ' appended successfully.')
-
-        # check to make sure that all features from special coverage polys got appended into census blocks
-        sdeSpecialCoverageCount = int(arcpy.GetCount_management(pathToSDE + '\\' + fcs[3][0]).getOutput(0))
-        logger.logMsg('sde special coverage: {}'.format(sdeSpecialCoverageCount))
-        sdeCBLyr = arcpy.MakeFeatureLayer_management(pathToSDE + '\\' + fcs[1][0], 'sdeCBLyr', fcs[1][1])
-        sdeCensusBlocksCount = int(arcpy.GetCount_management(sdeCBLyr).getOutput(0))
-        logger.logMsg('sde census blocks: {}'.format(sdeCensusBlocksCount))
-        fgdCensusBlocksCount = int(arcpy.GetCount_management(pathToFGD + '\\' + fcs[1][2]).getOutput(0))
-        logger.logMsg('fgd census blocks: {}'.format(fgdCensusBlocksCount))
-        sdeFeatures = sdeSpecialCoverageCount + sdeCensusBlocksCount
-        if sdeFeatures != fgdCensusBlocksCount:
-            raise Exception("Not all special coverage features were appended to census blocks successfully! sdeFeatures: {}, fgdFeatures: {}".format(sdeFeatures, fgdCensusBlocksCount))
+        arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + fc, pathToFGD, fc.split('.')[2], fltr)
 
         # provider table
         arcpy.Delete_management(pathToFGD + '\\' + providerTableName.split('.')[2])
