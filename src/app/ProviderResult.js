@@ -1,28 +1,32 @@
 define([
+    'app/config',
+
+    'dijit/Tooltip',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
-    'dijit/Tooltip',
 
-    'dojo/_base/declare',
     'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/text!app/templates/ProviderResult.html',
+    'dojo/_base/declare',
 
     'dojox/charting/Chart2D',
     'dojox/charting/Theme',
 
     'xstyle/css!app/resources/ProviderResult.css'
 ], function (
+    config,
+
+    Tooltip,
     _TemplatedMixin,
     _WidgetBase,
     _WidgetsInTemplateMixin,
-    Tooltip,
 
-    declare,
     domClass,
     domConstruct,
     template,
+    declare,
 
     Chart2D,
     Theme
@@ -47,23 +51,23 @@ define([
         maxupDesc: '', // description from domain
         transTypes: [], // list of transmission types
 
-    //  /**
-    //   * Usually used to pass in parameters
-    //   * @param {Object} options
-    //   */
-    //  constructor: function(options){
-    //      // mixin options
-    //      dojo.safeMixin(this, options);
-    //  },
-
-        /**
-         * Fires after all nodes are ready to use
-         */
         postCreate: function () {
             // assign even row
             if ((this.index + 1) % 2 === 0) {
                 domClass.add(this.domNode, 'even-row');
             }
+
+            var normalize = function (value) {
+                var endTier;
+                for (var tier = 1; value < config.speedsDomain[tier + '']; tier++) {
+                    endTier = tier;
+                }
+
+                return 9 - endTier;
+            };
+
+            this.maxup = normalize(this.maxup);
+            this.maxdown = normalize(this.maxdown);
 
             this.buildTooltip();
 
@@ -97,14 +101,11 @@ define([
                     b: 0
                 }
             }).addPlot('default', {
-                type: 'ClusteredBars',
-                minBarSize: 7,
-                maxBarSize: 7,
-                gap: 5
+                type: 'ClusteredBars'
             }).addAxis('x', {
                 type: 'Invisible',
-                min: 1,
-                max: 12,
+                min: 0,
+                max: 9,
                 majorLabels: false,
                 minorTicks: false,
                 minorLabels: false,
