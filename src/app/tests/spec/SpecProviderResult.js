@@ -10,7 +10,9 @@ require([
     describe('app/ProviderResult', function () {
         var testWidget;
         beforeEach(function () {
-            testWidget = new ProviderResult({}, domConstruct.create('div', {}, document.body));
+            testWidget = new ProviderResult({
+                lastVerified: '1/20/80'
+            }, domConstruct.create('div', {}, document.body));
             testWidget.startup();
         });
         it('creates a valid object', function () {
@@ -20,7 +22,8 @@ require([
             it('normalizes speed values', function () {
                 var testWidget2 = new ProviderResult({
                     maxup: 0.8,
-                    maxdown: 25
+                    maxdown: 25,
+                    lastVerified: '1/20/80'
                 });
                 testWidget2.startup();
 

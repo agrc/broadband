@@ -57,8 +57,9 @@ function (
             ID: 'Code',
             URL: 'URL',
             ID_NUM: 'ID_NUM',
-            TRANSTECH: 'TRANSTECH',
+            TRANSTECH: 'TransTech',
             Biz_Only: 'Biz_Only',
+            LastVerified: 'LastVerified',
             telcom: {
                 PROVIDER: 'PROVIDER',
                 WEBLINK: 'WEBLINK'
