@@ -1,9 +1,6 @@
 @import '../../dojox/form/resources/RangeSlider.css';
 @import '../../dojox/form/resources/TriStateCheckBox.css';
 
-.mapdatafilter {
-
-}
 .mapdatafilter .slider {
     margin: 2px 0 0 0;
 }
@@ -40,6 +37,28 @@
 .mapdatafilter .providers-div,
 .mapdatafilter #tech-type-div {
     margin-top: 10px;
+}
+
+/* legends */
+.mapdatafilter .legend-checkbox,
+.mapdatafilter .legend-label {
+    float: left;
+}
+.mapdatafilter .legend {
+    width: 30px;
+    height: 12px;
+    float: left;
+    margin-left: 5px;
+    margin-top: 2px;
+}
+.mapdatafilter .legend.wireline {
+    background-color: #005CE6;
+}
+.mapdatafilter .legend.fixed-wireless {
+    background-color: #00CFE5;
+}
+.mapdatafilter .legend.mobile-wireless {
+    background-color: #0095E6;
 }
 
 /* dialog styling cannot be within

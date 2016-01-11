@@ -103,6 +103,9 @@ function (
             App: {
                 onMapExtentChange: 'broadband.App.onMapExtentChange',
                 providersObtained: 'broadband.App.providersObtained'
+            },
+            MapDisplayOptions: {
+                updateLegendOpacity: 'broadband.MapDisplayOptions.updateLegendOpacity'
             }
         },
         hashIdentifier: '/route/',

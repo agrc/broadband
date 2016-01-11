@@ -71,9 +71,13 @@
 		</div>
 		<input data-dojo-attach-point="cbxWireBased"
 			id="cbxWireBased"
+            class='legend-checkbox'
 			data-dojo-type="dojox/form/TriStateCheckBox"
 			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
-		<label for="cbxWireBased">Wireline</label>
+		<label for="cbxWireBased" class='legend-label'>Wireline </label>
+        <div class='legend wireline'></div>
+        <div class="clear-fix"></div>
+
         <div class='trans-list sub'>
             <ul>
                 <li>
@@ -104,19 +108,25 @@
                 <li>
                     <input data-dojo-attach-point='cbxFixedWireless'
                         id='cbxFixedWireless'
+                        class='legend-checkbox'
                         data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [70, 71]'>
-                    <label for="cbxFixedWireless">Fixed Wireless</label>
+                    <label for="cbxFixedWireless" class='legend-label'>Fixed Wireless </label>
+                    <div class="legend fixed-wireless"></div>
+                    <div class="clear-fix"></div>
                 </li>
                 <li>
                     <input data-dojo-attach-point='cbxMobileWireless'
                         id='cbxMobileWireless'
+                        class='legend-checkbox'
                         data-dojo-type='dijit/form/CheckBox'
                         data-dojo-props='checked: true, value: [80]'>
-                    <label for="cbxMobileWireless">Mobile Wireless</label>
+                    <label for="cbxMobileWireless" class='legend-label'>Mobile Wireless </label>
+                    <div class="legend mobile-wireless"></div>
                 </li>
             </ul>
         </div>
+        <div class="clear-fix"></div>
 		Satellite (<a data-dojo-attach-point='moreInfoLink' href=''>more info</a>)
 	</div>
 	<div class='providers-div help-container'>
