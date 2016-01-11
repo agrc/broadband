@@ -308,3 +308,6 @@ span:focus {
     display: none;
     visibility: hidden;
 }
+.clear-fix {
+    clear: both;
+}

@@ -15,6 +15,7 @@ define([
     'dojo/has',
     'dojo/query',
     'dojo/text!app/templates/MapDisplayOptions.html',
+    'dojo/topic',
     'dojo/_base/array',
     'dojo/_base/declare',
 
@@ -40,6 +41,7 @@ define([
     has,
     query,
     template,
+    topic,
     array,
     declare
 ) {
@@ -81,7 +83,7 @@ define([
             console.log('app/MapDisplayOptions:_updateLegendOpacity', arguments);
 
             // set legend block opacities
-            domStyle.set(this.sliderLegend, 'opacity', this.bbLayer.opacity);
+            topic.publish(config.topics.MapDisplayOptions.updateLegendOpacity, this.bbLayer.opacity);
         },
         _onOverlayCheckBoxClick: function () {
             console.log('app/MapDisplayOptions:_onOverlayCheckBoxClick', arguments);

@@ -3,7 +3,7 @@
 	position: relative;
 }
 .map-display-options .slider-container {
-	margin-top: 3px;
+	margin-top: 10px;
 	height: 30px;
 	float: none;
 }
@@ -18,26 +18,6 @@
 	font-size: 9px;
 	color: gray;
 }
-.map-display-options .legend {
-    height: 19px;
-    width: 70px;
-	float: left;
-	margin-left: 22px;
-	margin-top: 3px;
-}
-.map-display-options .overlay-legend {
-	background-color: #005CE6;
-}
-.map-display-options .fieldset{
-
-}
-.map-display-options .gray{
-	background-color: gray !important;
-}
 .map-display-options .combobox{
 	margin-left: 5px;
-}
-.map-display-options .radio-button-container {
-	margin-left: 20px;
-	margin-bottom: 8px;
 }

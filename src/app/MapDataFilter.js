@@ -105,9 +105,14 @@ function (
             this.dialogs.push(this.resetDialog);
 
             // show sat dialog onclick in provider results
-            topic.subscribe('broadband.ListProviders.onSatLinkClick', function () {
-                that.satelliteDialog.show();
-            });
+            this.own(
+                topic.subscribe('broadband.ListProviders.onSatLinkClick', function () {
+                    that.satelliteDialog.show();
+                }),
+                topic.subscribe(config.topics.MapDisplayOptions.updateLegendOpacity, function (newOpacity) {
+                    query('.legend', that.domNode).style('opacity', newOpacity);
+                })
+            );
         },
         wireControlEvents: function () {
             console.log('app/MapDataFilter:wireControlEvents', arguments);
@@ -135,7 +140,7 @@ function (
             this.connect(this.resetBtn, 'onClick', this._onResetClick);
 
             function wireSubCheckBoxes(parentCheckBoxId) {
-                query('label[for=\'' + parentCheckBoxId + '\'] + .trans-list input').forEach(function (node) {
+                query('.trans-list.sub input').forEach(function (node) {
                     dij = registry.getEnclosingWidget(node);
                     that.connect(dij, 'onClick', function () {
                         that._onSubCheckBoxChange(that[parentCheckBoxId]);
@@ -438,7 +443,7 @@ function (
             }
 
             // query for related sub checkboxes
-            boxes = query('label[for=\'' + parentCheckBox.id + '\'] + .trans-list input').forEach(function (node) {
+            boxes = query('.trans-list.sub input').forEach(function (node) {
                 dij = registry.getEnclosingWidget(node);
                 value = dij.get('value');
                 if (value === false) {
@@ -469,7 +474,7 @@ function (
             var value = chbox.get('value');
 
             function setSubs(checked) {
-                query('label[for=\'' + chbox.id + '\'] + .trans-list input').forEach(function (node) {
+                query('.trans-list.sub input').forEach(function (node) {
                     registry.getEnclosingWidget(node).set('checked', checked);
                 });
             }
