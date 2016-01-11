@@ -237,7 +237,9 @@ function (
                 config.fieldNames.UTProvCode,
                 config.fieldNames.MAXADDOWN,
                 config.fieldNames.MAXADUP,
-                config.fieldNames.TRANSTECH];
+                config.fieldNames.TRANSTECH,
+                config.fieldNames.LastVerified
+            ];
 
             // create new query task for each layer
             // tried identify task, but performance was horribly slow (40 seconds to get a return from server)
@@ -368,14 +370,15 @@ function (
 
                         var transtypeCode = atts[config.fieldNames.TRANSTECH];
                         var perspectiveItem = {
-                            'id': atts[config.fieldNames.UTProvCode],
-                            'name': providerObj.name,
-                            'url': providerObj.url,
-                            'maxup': maxup,
-                            'maxupDesc': maxupDesc,
-                            'maxdown': maxdown,
-                            'maxdownDesc': maxdownDesc,
-                            'transTypes': [config.typesDomain[transtypeCode]]
+                            id: atts[config.fieldNames.UTProvCode],
+                            name: providerObj.name,
+                            url: providerObj.url,
+                            maxup: maxup,
+                            maxupDesc: maxupDesc,
+                            maxdown: maxdown,
+                            maxdownDesc: maxdownDesc,
+                            transTypes: [config.typesDomain[transtypeCode]],
+                            lastVerified: new Date(atts[config.fieldNames.LastVerified]).toLocaleDateString()
                         };
 
                         // check for duplicate in existing list

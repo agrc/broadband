@@ -172,7 +172,7 @@ function (
                     providers: -1
                 };
                 var defQueryExpected = 'MAXADDOWN >= ' + config.speedsDomain['9'] + ' ' +
-                    'AND MAXADUP >= ' + config.speedsDomain['10'] + ' AND TRANSTECH ' +
+                    'AND MAXADUP >= ' + config.speedsDomain['10'] + ' AND TransTech ' +
                     '= -1 AND UTProvCode = \'-1\'';
                 query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     dijitRegistry.getEnclosingWidget(node).set('value', false);
