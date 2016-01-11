@@ -384,12 +384,12 @@ function (
                             if (existingItem.id === perspectiveItem.id) { // matching id
                                 // check for higher speeds
                                 if (existingItem.maxdown < perspectiveItem.maxdown) {
-                                    // there is an existing item with the a lower download speed.
-                                    // update the existingItem's speeds
                                     existingItem.maxdown = perspectiveItem.maxdown;
-                                    existingItem.maxdownDesc = getMbpsDescription(existingItem.maxdown);
+                                    existingItem.maxdownDesc = getMbpsDescription(perspectiveItem.maxdown);
+                                }
+                                if (existingItem.maxup < perspectiveItem.maxup) {
                                     existingItem.maxup = perspectiveItem.maxup;
-                                    existingItem.maxupDesc = getMbpsDescription(existingItem.maxdown);
+                                    existingItem.maxupDesc = getMbpsDescription(perspectiveItem.maxdown);
                                 }
 
                                 // add trans type if different from existing
