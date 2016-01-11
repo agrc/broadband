@@ -171,8 +171,8 @@ function (
                     transTypes: -1,
                     providers: -1
                 };
-                var defQueryExpected = 'MAXADDOWN IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\') ' +
-                    'AND MAXADUP IN (\'11\',\'10\',\'9\',\'8\',\'7\',\'6\',\'5\',\'4\',\'3\',\'2\') AND TRANSTECH ' +
+                var defQueryExpected = 'MAXADDOWN >= ' + config.speedsDomain['9'] + ' ' +
+                    'AND MAXADUP >= ' + config.speedsDomain['10'] + ' AND TRANSTECH ' +
                     '= -1 AND UTProvCode = \'-1\'';
                 query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
                     dijitRegistry.getEnclosingWidget(node).set('value', false);

@@ -232,8 +232,6 @@ define([
                         props.push(prop + '=' + arrayValues.join('|'));
                     } else if (prop === 'extent') {
                         props.push(prop + '=' + [value.x, value.y, value.scale].join('|'));
-                    } else if (prop.match(/.+Speed/) && value && value !== -1) {
-                        props.push(prop + '=' + config.speedValues[value - 1]);
                     } else {
                         props.push(prop + '=' + encodeURIComponent(obj[prop]));
                     }
@@ -272,8 +270,6 @@ define([
                     } else {
                         returnObj[propName] = [propValue];
                     }
-                } else if (propName.match(/.+Speed/)) {
-                    returnObj[propName] = array.indexOf(config.speedValues, propValue) + 1;
                 } else {
                     returnObj[propName] = propValue;
                 }

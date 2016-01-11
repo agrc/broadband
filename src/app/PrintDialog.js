@@ -179,14 +179,6 @@ define([
 
             var obj = [];
 
-            var getSpeed = function (key) {
-                var value = config.speedsDomain[config.speedValues[parseInt(key, 10) - 1]];
-                // extract highest speed
-                var matches = /(^\S+).+?([KM]bps)/.exec(value);
-                // add "+"
-                return matches[1] + '+ ' + matches[2];
-            };
-
             if (routeObj.transTypes) {
                 var techs = [];
                 array.forEach(routeObj.transTypes, function (tt) {
@@ -198,8 +190,8 @@ define([
                 obj.push({techs: techs.join('\n')});
             }
             if (routeObj.minDownSpeed) {
-                var down = getSpeed(routeObj.minDownSpeed) + ' Download';
-                var up = getSpeed(routeObj.minUpSpeed) + ' Upload';
+                var down = config.speedsDomain[routeObj.minDownSpeed] + '+ Mbps Download';
+                var up = config.speedsDomain[routeObj.minUpSpeed] + '+ Mbps Upload';
 
                 obj.push({speeds: down + '\n' + up});
             }
