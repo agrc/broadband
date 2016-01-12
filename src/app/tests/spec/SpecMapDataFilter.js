@@ -78,9 +78,10 @@ function (
                 expect(testWidget._getTransTypes()).toEqual([10, 20, 30, 50, 70, 71]);
             });
             it('returns an empty array if none are checked', function () {
-                query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
-                    registry.getEnclosingWidget(node).set('value', false);
-                });
+                [testWidget.cbxCable, testWidget.cbxDSL, testWidget.cbxFiber, testWidget.cbxFixedWireless, testWidget.cbxMobileWireless]
+                    .forEach(function (widget) {
+                        widget.set('value', false);
+                    });
 
                 expect(testWidget._getTransTypes()).toEqual([]);
             });
@@ -174,9 +175,10 @@ function (
                 var defQueryExpected = 'MAXADDOWN >= ' + config.speedsDomain['9'] + ' ' +
                     'AND MAXADUP >= ' + config.speedsDomain['10'] + ' AND TransTech ' +
                     '= -1 AND UTProvCode = \'-1\'';
-                query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
-                    dijitRegistry.getEnclosingWidget(node).set('value', false);
-                });
+                [testWidget.cbxCable, testWidget.cbxDSL, testWidget.cbxFiber, testWidget.cbxFixedWireless, testWidget.cbxMobileWireless]
+                    .forEach(function (widget) {
+                        widget.set('value', false);
+                    });
                 testWidget.chbxShowOnly.set('checked', true);
 
                 testWidget.updateDefQuery();
@@ -252,6 +254,36 @@ function (
                 testWidget.setSlider('up', 5);
 
                 expect(testWidget.updateDefQuery).toHaveBeenCalled();
+            });
+        });
+        describe('bumpElements', function () {
+            it('1 => 2', function () {
+                testWidget.bumpElements(testWidget.draggable1, testWidget.dropTarget3);
+
+                expect(testWidget.draggable2.dataset.slot).toBe('1');
+                expect(testWidget.draggable1.dataset.slot).toBe('2');
+                expect(testWidget.draggable3.dataset.slot).toBe('3');
+            });
+            it('1 => 3', function () {
+                testWidget.bumpElements(testWidget.draggable1, testWidget.dropTarget4);
+
+                expect(testWidget.draggable2.dataset.slot).toBe('1');
+                expect(testWidget.draggable3.dataset.slot).toBe('2');
+                expect(testWidget.draggable1.dataset.slot).toBe('3');
+            });
+            it('3 => 1', function () {
+                testWidget.bumpElements(testWidget.draggable3, testWidget.dropTarget1);
+
+                expect(testWidget.draggable3.dataset.slot).toBe('1');
+                expect(testWidget.draggable1.dataset.slot).toBe('2');
+                expect(testWidget.draggable2.dataset.slot).toBe('3');
+            });
+            it('2 => 1', function () {
+                testWidget.bumpElements(testWidget.draggable2, testWidget.dropTarget1);
+
+                expect(testWidget.draggable2.dataset.slot).toBe('1');
+                expect(testWidget.draggable1.dataset.slot).toBe('2');
+                expect(testWidget.draggable3.dataset.slot).toBe('3');
             });
         });
     });

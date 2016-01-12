@@ -62,70 +62,92 @@
     </div>
 	<div id="tech-type-div" class='help-container'>
 		<h3>Technology Type</h3>
-		<div data-dojo-attach-point='typeHelp'>
-			<div style='display: none;'>
-				The checkboxes control the map display of broadband service areas by type of technology.
-				<p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
-				<p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p>
-			</div>
-		</div>
-		<input data-dojo-attach-point="cbxWireBased"
-			id="cbxWireBased"
-            class='legend-checkbox'
-			data-dojo-type="dojox/form/TriStateCheckBox"
-			data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
-		<label for="cbxWireBased" class='legend-label'>Wireline </label>
-        <div class='legend wireline'></div>
-        <div class="clear-fix"></div>
+	    <div data-dojo-attach-point='typeHelp'>
+	        <div style='display: none;'>
+	            The checkboxes control the map display of broadband service areas by type of technology.
+	            <p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
+	            <p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p>
+	        </div>
+	    </div>
+        <div data-dojo-attach-point='dropTarget1'
+            class='drop-target'
+            data-drop-position='after'
+            data-target-slot='1'></div>
+        <div draggable="true" data-slot='1' data-dojo-attach-point='draggable1'>
+            <div> <!-- this extra nesting is required to make cbxWireBased and it's label
+                show up in the drag shadow -->
+    		    <input data-dojo-attach-point="cbxWireBased"
+    		        id="cbxWireBased"
+	                class='legend-checkbox'
+    		        data-dojo-type="dojox/form/TriStateCheckBox"
+    		        data-dojo-props='states: ["on", false, "mixed"], value: "on", checked: true'>
+    		    <label for="cbxWireBased" class='legend-label'>Wireline </label>
+    		            <div class='legend wireline'></div>
+                <div class="clear-fix"></div>
 
-        <div class='trans-list sub'>
-            <ul>
-                <li>
-                    <input data-dojo-attach-point='cbxCable'
-                        id='cbxCable'
-                        data-dojo-type='dijit/form/CheckBox'
-                        data-dojo-props='checked: true, value: [40,41]'>
-                    <label for="cbxCable">Cable</label>
-                </li>
-                <li>
-                    <input data-dojo-attach-point='cbxDSL'
-                        id='cbxDSL'
-                        data-dojo-type='dijit/form/CheckBox'
-                        data-dojo-props='checked: true, value: [10, 20, 30]'>
-                    <label for="cbxDSL">DSL</label>
-                </li>
-                <li>
-                    <input data-dojo-attach-point='cbxFiber'
-                        id='cbxFiber'
-                        data-dojo-type='dijit/form/CheckBox'
-                        data-dojo-props='checked: true, value: [50]'>
-                    <label for="cbxFiber">Fiber</label>
-                </li>
-            </ul>
+                <div class='trans-list sub'>
+                    <ul>
+                        <li>
+                            <input data-dojo-attach-point='cbxCable'
+                                id='cbxCable'
+                                data-dojo-type='dijit/form/CheckBox'
+                                data-dojo-props='checked: true, value: [40,41]'>
+                            <label for="cbxCable">Cable</label>
+                        </li>
+                        <li>
+                            <input data-dojo-attach-point='cbxDSL'
+                                id='cbxDSL'
+                                data-dojo-type='dijit/form/CheckBox'
+                                data-dojo-props='checked: true, value: [10, 20, 30]'>
+                            <label for="cbxDSL">DSL</label>
+                        </li>
+                        <li>
+                            <input data-dojo-attach-point='cbxFiber'
+                                id='cbxFiber'
+                                data-dojo-type='dijit/form/CheckBox'
+                                data-dojo-props='checked: true, value: [50]'>
+                            <label for="cbxFiber">Fiber</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class='trans-list'>
-            <ul>
-                <li>
-                    <input data-dojo-attach-point='cbxFixedWireless'
-                        id='cbxFixedWireless'
-                        class='legend-checkbox'
-                        data-dojo-type='dijit/form/CheckBox'
-                        data-dojo-props='checked: true, value: [70, 71]'>
-                    <label for="cbxFixedWireless" class='legend-label'>Fixed Wireless </label>
-                    <div class="legend fixed-wireless"></div>
-                    <div class="clear-fix"></div>
-                </li>
-                <li>
-                    <input data-dojo-attach-point='cbxMobileWireless'
-                        id='cbxMobileWireless'
-                        class='legend-checkbox'
-                        data-dojo-type='dijit/form/CheckBox'
-                        data-dojo-props='checked: true, value: [80]'>
-                    <label for="cbxMobileWireless" class='legend-label'>Mobile Wireless </label>
-                    <div class="legend mobile-wireless"></div>
-                </li>
-            </ul>
+        <div data-dojo-attach-point='dropTarget2'
+            class='drop-target'
+            data-drop-position='after'
+            data-target-slot='2'></div>
+        <div draggable="true" data-slot='2' data-dojo-attach-point='draggable2'>
+            <div>
+                <input data-dojo-attach-point='cbxFixedWireless'
+                    id='cbxFixedWireless'
+                    class='legend-checkbox'
+                    data-dojo-type='dijit/form/CheckBox'
+                    data-dojo-props='checked: true, value: [70, 71]'>
+                <label for="cbxFixedWireless" class='legend-label'>Fixed Wireless </label>
+                <div class="legend fixed-wireless"></div>
+                <div class="clear-fix"></div>
+            </div>
         </div>
+        <div data-dojo-attach-point='dropTarget3'
+            class='drop-target'
+            data-drop-position='before'
+            data-target-slot='3'></div>
+        <div draggable="true" data-slot='3' data-dojo-attach-point='draggable3'>
+            <div>
+                <input data-dojo-attach-point='cbxMobileWireless'
+                    id='cbxMobileWireless'
+                    class='legend-checkbox'
+                    data-dojo-type='dijit/form/CheckBox'
+                    data-dojo-props='checked: true, value: [80]'>
+                <label for="cbxMobileWireless" class='legend-label'>Mobile Wireless </label>
+                <div class="legend mobile-wireless"></div>
+                <div class="clear-fix"></div>
+            </div>
+        </div>
+        <div data-dojo-attach-point='dropTarget4'
+            class='drop-target'
+            data-drop-position='before'
+            data-target-slot='4'></div>
         <div class="clear-fix"></div>
 		Satellite (<a data-dojo-attach-point='moreInfoLink' href=''>more info</a>)
 	</div>

@@ -39,6 +39,17 @@
     margin-top: 10px;
 }
 
+/* drag and drop */
+.mapdatafilter .drop-target.active{
+    height: 5px;
+    border: dashed 1px lightGray;
+    margin: 1px;
+}
+.mapdatafilter .drop-target.over {
+    border: solid 1px gray;
+    height: 15px;
+}
+
 /* legends */
 .mapdatafilter .legend-checkbox,
 .mapdatafilter .legend-label {
