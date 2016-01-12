@@ -44,7 +44,9 @@ function (
                     };
                 }
             });
-            testWidget = new MapDataFilter({}, domConstruct.create('div', {}, win.body()));
+            testWidget = new MapDataFilter({
+                layer: {on: function () {}}
+            }, domConstruct.create('div', {}, win.body()));
         });
         afterEach(function () {
             testWidget.destroyRecursive(false);
