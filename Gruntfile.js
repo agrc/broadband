@@ -15,10 +15,6 @@ var browsers = [{
     platform: windows,
     version: '11'
 }, {
-    browserName: 'internet explorer',
-    platform: 'Windows 8',
-    version: '10'
-}, {
     browserName: 'microsoftedge',
     platform: 'Windows 10'
 }];
