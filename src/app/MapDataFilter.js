@@ -8,6 +8,7 @@ define([
     'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
+    'dojo/dom-class',
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/has',
@@ -29,9 +30,7 @@ define([
     'dojo/_base/sniff',
     'dojox/form/TriStateCheckBox',
     'xstyle/css!app/resources/MapDataFilter.css'
-],
-
-function (
+], function (
     config,
     HelpPopup,
     ListPicker,
@@ -41,6 +40,7 @@ function (
     _WidgetBase,
     _WidgetsInTemplateMixin,
 
+    domClass,
     domConstruct,
     domStyle,
     has,
@@ -113,6 +113,116 @@ function (
                     query('.legend', that.domNode).style('opacity', newOpacity);
                 })
             );
+
+            this.initDragAndDrop();
+        },
+        initDragAndDrop: function () {
+            // summary:
+            //      sets up the drag and drop to reorder layers functionality
+            console.log('app.MapDataFilter:initDragAndDrop', arguments);
+
+            var draggables = query('div[draggable="true"]', this.domNode);
+            var dropTargets = query('.drop-target', this.domNode);
+
+            var draggingElement;
+
+            var targetsAvailableToSlots = {
+                '1': [3, 4],
+                '2': [1, 4],
+                '3': [1, 2]
+            };
+
+            var that = this;
+            var activateDropTargets = function (draggedElement) {
+                targetsAvailableToSlots[draggedElement.dataset.slot]
+                    .forEach(function toggle(i) {
+                        domClass.add(that['dropTarget' + i], 'active');
+                    });
+            };
+            var onDragEnd = function () {
+                console.log('onDragEnd');
+                dropTargets.removeClass('active');
+                dropTargets.removeClass('over');
+                draggingElement = null;
+            };
+            this.own(
+                draggables.on('dragstart', function onDragStart(evt) {
+                    console.log('dragstart');
+                    evt.dataTransfer.effectAllowed = 'move';
+                    setTimeout(lang.partial(activateDropTargets, this), 0);
+                    draggingElement = this;
+                }),
+                draggables.on('dragend', onDragEnd),
+                dropTargets.on('dragover', function onDragOver(evt) {
+                    console.log('dragover');
+                    evt.preventDefault();
+                    evt.stopPropagation();
+
+                    evt.dataTransfer.dropEffect = 'move';
+
+                    return false;
+                }),
+                dropTargets.on('dragenter', function onDragEnter() {
+                    console.log('dragenter');
+                    domClass.add(this, 'over');
+                }),
+                dropTargets.on('dragleave', function onDragLeave() {
+                    console.log('dragleave');
+                    domClass.remove(this, 'over');
+                }),
+                dropTargets.on('drop', function onDrop(evt) {
+                    console.log('drop');
+                    evt.preventDefault();
+                    evt.stopPropagation();
+
+                    that.bumpElements(draggingElement, this);
+
+                    onDragEnd();
+                })
+            );
+        },
+        bumpElements: function (droppedElement, dropTarget) {
+            // summary:
+            //      moves droppedElement to newSlot and adjusted the other draggable elements accordingly
+            // droppedElement: Node
+            // dropTarget: Node
+            console.log('app.MapDataFilter:bumpElements', arguments);
+
+            // move dropped element to new slot
+            domConstruct.place(droppedElement, dropTarget, dropTarget.dataset.dropPosition);
+            var targetSlot = parseInt(dropTarget.dataset.targetSlot);
+            var newSlotNum = (dropTarget.dataset.dropPosition === 'before') ? targetSlot - 1 : targetSlot;
+            var oldSlotNum = droppedElement.dataset.slot;
+
+            var that = this;
+            var bump = function (fromSlotNum, toSlotNum) {
+                var bumpElement = query('[draggable="true"][data-slot="' + fromSlotNum + '"]', that.domNode)[0];
+                domConstruct.place(bumpElement, that['dropTarget' + toSlotNum], 'after');
+                bumpElement.dataset.slot = toSlotNum;
+            };
+            var bumpIndex = function (index, spaces) {
+                if (index > spaces) {
+                    return index - spaces;
+                } else {
+                    return index - spaces + 3;
+                }
+            };
+            var diff = newSlotNum - oldSlotNum;
+            if (Math.abs(diff) === 2) {
+                // moving more than two slots
+                if (diff > 0) {
+                    bump(bumpIndex(newSlotNum, 1), bumpIndex(newSlotNum, 2));
+                } else {
+                    bump(bumpIndex(newSlotNum, -1), bumpIndex(newSlotNum, -2));
+                }
+            }
+            if (diff > 0) {
+                bump(newSlotNum, bumpIndex(newSlotNum, 1));
+            } else {
+                bump(newSlotNum, bumpIndex(newSlotNum, -1));
+            }
+
+            droppedElement.dataset.slot = newSlotNum;
         },
         wireControlEvents: function () {
             console.log('app/MapDataFilter:wireControlEvents', arguments);
@@ -262,13 +372,14 @@ function (
             console.log('app/MapDataFilter:_getTransTypes', arguments);
             var ttValues = [];
             var newArray;
-            var widget;
 
-            query('.trans-list input:checked', 'tech-type-div').forEach(function (node) {
-                widget = registry.getEnclosingWidget(node);
-                newArray = widget.get('value');
-                ttValues = ttValues.concat(newArray);
-            });
+            [this.cbxCable, this.cbxDSL, this.cbxFiber, this.cbxFixedWireless, this.cbxMobileWireless]
+                .forEach(function (widget) {
+                    if (widget.get('checked')) {
+                        newArray = widget.get('value');
+                        ttValues = ttValues.concat(newArray);
+                    }
+                });
 
             return ttValues;
         },
@@ -496,25 +607,23 @@ function (
             // transTypes: Number[]
             console.log('app/MapDataFilter:selectTransTypes', arguments);
 
-            var chbox;
             var values;
-
-            query('.trans-list input').forEach(function (input) {
-                chbox = registry.getEnclosingWidget(input);
-                // need to do this to make sure that we get
-                // the correct return value for value
-                chbox.set('checked', true);
-                values = chbox.get('value');
-                if (transTypes !== null) {
-                    if (array.some(values, function (val) {
-                        return array.indexOf(transTypes, val) !== -1;
-                    })) {
-                        chbox.set('checked', true);
-                    } else {
-                        chbox.set('checked', false);
+            [this.cbxCable, this.cbxDSL, this.cbxFiber, this.cbxFixedWireless, this.cbxMobileWireless]
+                .forEach(function (chbox) {
+                    // need to do this to make sure that we get
+                    // the correct return value for value
+                    chbox.set('checked', true);
+                    values = chbox.get('value');
+                    if (transTypes !== null) {
+                        if (array.some(values, function (val) {
+                            return array.indexOf(transTypes, val) !== -1;
+                        })) {
+                            chbox.set('checked', true);
+                        } else {
+                            chbox.set('checked', false);
+                        }
                     }
-                }
-            });
+                });
 
             this._onSubCheckBoxChange(this.cbxWireBased, false);
 
