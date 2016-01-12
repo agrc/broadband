@@ -121,6 +121,26 @@ define([
             //      sets up the drag and drop to reorder layers functionality
             console.log('app.MapDataFilter:initDragAndDrop', arguments);
 
+            var that = this;
+
+            var layerInfosByIndex = {};
+            this.layer.on('load', function () {
+                var layerInfos = that.layer.createDynamicLayerInfosFromLayerInfos();
+                layerInfos.forEach(function (info) {
+                    layerInfosByIndex[info.id] = info;
+                });
+                that.layer.setDynamicLayerInfos(layerInfos);
+            });
+
+            var reorderLayerInfos = function () {
+                console.log('reorderLayerInfos');
+                var newInfos = [1, 2, 3].map(function (i) {
+                    var layerIndex = query('[data-slot="' + i + '"]', that.domNode)[0].dataset.layerIndex;
+                    return layerInfosByIndex[layerIndex];
+                });
+                that.layer.setDynamicLayerInfos(newInfos);
+                that.changeToDynamicLayer();
+            };
             var draggables = query('div[draggable="true"]', this.domNode);
             var dropTargets = query('.drop-target', this.domNode);
 
@@ -132,7 +152,6 @@ define([
                 '3': [1, 2]
             };
 
-            var that = this;
             var activateDropTargets = function (draggedElement) {
                 targetsAvailableToSlots[draggedElement.dataset.slot]
                     .forEach(function toggle(i) {
@@ -145,10 +164,13 @@ define([
                 dropTargets.removeClass('over');
                 draggingElement = null;
             };
+
             this.own(
                 draggables.on('dragstart', function onDragStart(evt) {
                     console.log('dragstart');
                     evt.dataTransfer.effectAllowed = 'move';
+
+                    // this needs to be in a setTimeout because of this: http://stackoverflow.com/questions/14203734/dragend-dragenter-and-dragleave-firing-off-immediately-when-i-drag
                     setTimeout(lang.partial(activateDropTargets, this), 0);
                     draggingElement = this;
                 }),
@@ -178,6 +200,8 @@ define([
                     that.bumpElements(draggingElement, this);
 
                     onDragEnd();
+
+                    reorderLayerInfos();
                 })
             );
         },
@@ -353,10 +377,7 @@ define([
                 that.layer.setLayerDefinitions(layerDefs);
                 console.log('def set');
 
-                // change to dynamic coverage layer
-                config.bbLayer.show();
-                config.bbLayerCached.hide();
-                config.currentLayer = config.bbLayer;
+                that.changeToDynamicLayer();
             }, 1250);
 
             // enable reset button
@@ -365,6 +386,16 @@ define([
             // publish new query
             topic.publish(config.topics.MapDataFilter.onQueryUpdate, queryTxt);
             topic.publish(config.topics.Router.onDefQueryUpdate, defQueryProps);
+        },
+        changeToDynamicLayer: function () {
+            // summary:
+            //      switches to the dynamic map service layer
+            console.log('app.MapDataFilter:changeToDynamicLayer', arguments);
+
+            // change to dynamic coverage layer
+            config.bbLayer.show();
+            config.bbLayerCached.hide();
+            config.currentLayer = config.bbLayer;
         },
         _getTransTypes: function () {
             // summary:

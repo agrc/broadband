@@ -66,6 +66,7 @@
 	        <div style='display: none;'>
 	            The checkboxes control the map display of broadband service areas by type of technology.
 	            <p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
+                <p>Drag and drop the three main checkboxes to reorder the way the layers are drawn on the map.</p>
 	            <p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p>
 	        </div>
 	    </div>
@@ -73,7 +74,7 @@
             class='drop-target'
             data-drop-position='after'
             data-target-slot='1'></div>
-        <div draggable="true" data-slot='1' data-dojo-attach-point='draggable1'>
+        <div draggable="true" data-slot='1' data-layer-index='0' data-dojo-attach-point='draggable1'>
             <div> <!-- this extra nesting is required to make cbxWireBased and it's label
                 show up in the drag shadow -->
     		    <input data-dojo-attach-point="cbxWireBased"
@@ -116,7 +117,7 @@
             class='drop-target'
             data-drop-position='after'
             data-target-slot='2'></div>
-        <div draggable="true" data-slot='2' data-dojo-attach-point='draggable2'>
+        <div draggable="true" data-slot='2' data-layer-index='1' data-dojo-attach-point='draggable2'>
             <div>
                 <input data-dojo-attach-point='cbxFixedWireless'
                     id='cbxFixedWireless'
@@ -132,7 +133,7 @@
             class='drop-target'
             data-drop-position='before'
             data-target-slot='3'></div>
-        <div draggable="true" data-slot='3' data-dojo-attach-point='draggable3'>
+        <div draggable="true" data-slot='3' data-layer-index='2' data-dojo-attach-point='draggable3'>
             <div>
                 <input data-dojo-attach-point='cbxMobileWireless'
                     id='cbxMobileWireless'
