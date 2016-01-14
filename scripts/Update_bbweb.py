@@ -12,7 +12,7 @@ pathToSDE = r".\UBBMAP.sde"
 pathToFGD = r".\Broadband.gdb"
 
 fltr = "TRANSTECH <> 60"
-fc = 'UBBMAP.UBBADMIN.BB_Service_test'
+fc = 'UBBMAP.UBBADMIN.BB_Service'
 coverageFieldName = "UTProvCode"
 providerTableName = "UBBMAP.UBBADMIN.BB_Providers_Table"
 providerTableFieldName = "Code"
@@ -41,6 +41,7 @@ scales = [
 try:
     logger.logMsg('setting workspace to sde database')
     arcpy.env.workspace = pathToSDE
+    arcpy.env.geographicTransformations = 'WGS_1984_(ITRF00)_To_NAD_1983'
 
     logger.logMsg("checking non-null fields")
 

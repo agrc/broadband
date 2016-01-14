@@ -63,13 +63,13 @@
     margin-top: 2px;
 }
 .mapdatafilter .legend.wireline {
-    background-color: #005CE6;
+    background-color: #D94800;
 }
 .mapdatafilter .legend.fixed-wireless {
-    background-color: #00CFE5;
+    background-color: #354E6E;
 }
 .mapdatafilter .legend.mobile-wireless {
-    background-color: #0095E6;
+    background-color: #63941C;
 }
 
 /* dialog styling cannot be within
