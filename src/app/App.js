@@ -253,8 +253,8 @@ define([
                 config.fieldNames.URL,
                 config.fieldNames.Biz_Only
             ];
-            query.where = this.makeQueryDirty('1 = 1');
-            var qTask = new QueryTask(config.broadbandMapURL + '/4');
+            query.where = '1 = 1';
+            var qTask = new QueryTask(config.broadbandMapURL + '/' + config.layerIndices.providersTable);
             qTask.execute(query, function (results) {
                 array.forEach(results.features, function (g) {
                     config.providers[g.attributes[config.fieldNames.ID]] = {
@@ -330,7 +330,10 @@ define([
             }));
 
             // set up new geosearch widget
-            this.geoSearch = new GeoSearch({map: config.map}, 'geo-search');
+            this.geoSearch = new GeoSearch({
+                map: config.map,
+                searchLayerIndex: config.layerIndices.zoomLocations
+            }, 'geo-search');
 
             this.own(config.map.on('extent-change', lang.hitch(that, 'onExtentChange')));
 
@@ -410,7 +413,7 @@ define([
             var query = new Query();
             query.returnGeometry = false;
             query.outFields = [config.fieldNames.ID, config.fieldNames.NAME];
-            query.where = this.makeQueryDirty(config.fieldNames.ID_NUM + ' = \'' + id + '\'');
+            query.where = config.fieldNames.ID_NUM + ' = \'' + id + '\'';
 
             var qTask = new QueryTask(config.broadbandMapURL + '/3');
             qTask.execute(query, function (featureSet) {
@@ -459,23 +462,6 @@ define([
                 return '';
             } else {
                 return results[1];
-            }
-        },
-        makeQueryDirty: function (query) {
-            // summary:
-            //      appends a parameter to the text of the query to help with this problem
-            //      http://forums.arcgis.com/threads/73456-new-problem-REST-query-10.1-
-            //      every-other-request-fails-(400-unable-to-complete-oper)
-            //      Can be removed after Server 10.1 SP2
-            // query: String
-            console.log('app/App:makeQueryDirty', arguments);
-
-            if (query !== '') {
-                var dirty = new Date().getTime();
-
-                return query + ' AND ' + dirty + ' = ' + dirty;
-            } else {
-                return query;
             }
         },
         destroyRecursive: function () {
