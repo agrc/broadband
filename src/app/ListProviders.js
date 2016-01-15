@@ -169,9 +169,9 @@ function (
                 }),
 
                 // search for providers on successful address find
-                this.findAddress.on('find', function (results) {
-                    if (results.length) {
-                        var returnCoords = results[0].location;
+                this.findAddress.on('find', function (result) {
+                    if (result.location) {
+                        var returnCoords = result.location;
                         var point = new Point(returnCoords.x, returnCoords.y, new SpatialReference({wkid: 3857}));
 
                         // search for providers
