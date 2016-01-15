@@ -49,6 +49,12 @@ function (
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
 
+        layerIndices: {
+            zoomLocations: 3,
+            coverageQueryLayer: 4,
+            providersTable: 5
+        },
+
         fieldNames: {
             UTProvCode: 'UTProvCode',
             MAXADUP: 'MAXADUP',
@@ -90,7 +96,6 @@ function (
             '71': 'Fixed Wireless',
             '80': 'Mobile Wireless'
         },
-        layersDrawing: 0, // keeps track of layers that have draw - see addLoadingToLayer
         breakPointLevel: 9, // the level at which the dynamic coverage service turns on and the cached service turns off
         topics: {
             Router: {
@@ -99,7 +104,8 @@ function (
             listpickerOnOK: 'broadband.listpickerOnOK',
             MapDataFilter: {
                 onResetFilter: 'broadband.MapDataFilter.onResetFilter',
-                onQueryUpdate: 'broadband.MapDataFilter.onQueryUpdate'
+                onQueryUpdate: 'broadband.MapDataFilter.onQueryUpdate',
+                updateSatLinkVisibility: 'broadband.MapDataFilter.updateSatLinkVisibility'
             },
             App: {
                 onMapExtentChange: 'broadband.App.onMapExtentChange',
@@ -107,6 +113,9 @@ function (
             },
             MapDisplayOptions: {
                 updateLegendOpacity: 'broadband.MapDisplayOptions.updateLegendOpacity'
+            },
+            ListProviders: {
+                onSatLinkClick: 'broadband.ListProviders.onSatLinkClick'
             }
         },
         hashIdentifier: '/route/',

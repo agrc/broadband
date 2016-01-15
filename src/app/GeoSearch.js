@@ -61,7 +61,7 @@ define([
         templateString: template,
 
         // the index of the layer within the map service to be searched
-        searchLayerIndex: 3,
+        searchLayerIndex: null,
 
         // field name that is to be searched
         searchField: 'Name',
@@ -253,8 +253,8 @@ define([
             }
 
             // update query where clause
-            this.query.where = config.app.makeQueryDirty('UPPER(' + this.searchField + ') LIKE UPPER(\'' +
-                searchString + '%\')');
+            this.query.where = 'UPPER(' + this.searchField + ') LIKE UPPER(\'' +
+                searchString + '%\')';
 
             // execute query / canceling any previous query
             if (this.deferred) {
@@ -357,7 +357,7 @@ define([
 
             // switch to return geometry and build where clause
             this.query.returnGeometry = true;
-            this.query.where = config.app.makeQueryDirty('OBJECTID = ' + oid);
+            this.query.where = 'OBJECTID = ' + oid;
             this.queryTask.execute(this.query, lang.hitch(this, function (featureSet) {
                 this.zoom(featureSet.features[0]);
 

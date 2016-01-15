@@ -106,7 +106,7 @@ define([
 
             // show sat dialog onclick in provider results
             this.own(
-                topic.subscribe('broadband.ListProviders.onSatLinkClick', function () {
+                topic.subscribe(config.topics.ListProviders.onSatLinkClick, function () {
                     that.satelliteDialog.show();
                 }),
                 topic.subscribe(config.topics.MapDisplayOptions.updateLegendOpacity, function (newOpacity) {
@@ -339,7 +339,7 @@ define([
 
             // check to see if we should show the satellite providers link in results table
             var showSatLink = (this.downloadSlider.value >= 5 && this.uploadSlider.value >= 7);
-            topic.publish('broadband.MapDataFilter.UpdateSatLinkVisibility', showSatLink);
+            topic.publish(config.topics.MapDataFilter.updateSatLinkVisibility, showSatLink);
 
             transTypes = this._getTransTypes();
             if (transTypes.length > 0) {

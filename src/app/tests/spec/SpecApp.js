@@ -62,15 +62,5 @@ require([
                 expect(spy).toHaveBeenCalledWith(center, scale);
             });
         });
-        describe('makeQueryDirty', function () {
-            it('appends the string with the javascript time', function () {
-                var result = testWidget.makeQueryDirty('test');
-
-                expect(result.length).toEqual(38);
-            });
-            it('doesn\'t append if the string is empty', function () {
-                expect(testWidget.makeQueryDirty('').length).toBe(0);
-            });
-        });
     });
 });

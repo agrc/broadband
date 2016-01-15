@@ -20,7 +20,6 @@ define([
     'dojo/query',
     'dojo/text!app/templates/ListProviders.html',
     'dojo/topic',
-    'dojo/_base/array',
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/window',
@@ -61,7 +60,6 @@ function (
     query,
     template,
     topic,
-    array,
     declare,
     lang,
     win,
@@ -91,15 +89,10 @@ function (
         // query used in query tasks
         query: null,
 
-        // deferreds to enable canceling pending requests
-        RoadDeferred: null,
-        CensusDeferred: null,
-        WirelessDeferred: null,
+        // deferred to enable canceling pending requests
+        deferred: null,
 
-        // query tasks for each layer
-        qTaskRoadSegs: null,
-        qTaskCensus: null,
-        qTaskWireless: null,
+        qTask: null,
 
         // marker symbol
         _markerSymbol: null,
@@ -205,7 +198,7 @@ function (
                 this.connect(this.btnClear, 'onClick', this.clearResultsOnClick),
                 this.connect(this.satMsg, 'onclick', function (evt) {
                     evt.preventDefault();
-                    topic.publish('broadband.ListProviders.onSatLinkClick');
+                    topic.publish(config.topics.ListProviders.onSatLinkClick);
                 }),
 
                 // listen for reset filters button
@@ -214,7 +207,7 @@ function (
                 }),
 
                 // listen for event to update the sat link visibility in the results list
-                topic.subscribe('broadband.MapDataFilter.UpdateSatLinkVisibility', function (show) {
+                topic.subscribe(config.topics.MapDataFilter.updateSatLinkVisibility, function (show) {
                     var displayValue = (show) ? 'block' : 'none';
                     domStyle.set(that.satMsg, 'display', displayValue);
                 })
@@ -232,7 +225,7 @@ function (
             // set up query - same query used for all tasks
             this.query = new Query();
             this.query.returnGeometry = false;
-            this.query.where = config.app.makeQueryDirty('1 = 1'); // get all values
+            this.query.where = '1 = 1'; // get all values
             this.query.outFields = [
                 config.fieldNames.UTProvCode,
                 config.fieldNames.MAXADDOWN,
@@ -241,19 +234,16 @@ function (
                 config.fieldNames.LastVerified
             ];
 
-            // create new query task for each layer
-            // tried identify task, but performance was horribly slow (40 seconds to get a return from server)
-            this.qTaskRoadSegs = new QueryTask(config.broadbandMapURL + '/0');
-            this.qTaskCensus = new QueryTask(config.broadbandMapURL + '/1');
-            this.qTaskWireless = new QueryTask(config.broadbandMapURL + '/2');
+            this.qTask = new QueryTask(config.broadbandMapURL + '/' + config.layerIndices.coverageQueryLayer);
 
             // wire events
-            this.connect(config.map, 'onClick', function (event) {
-                this.searchMapPoint(event.mapPoint, true);
-            });
-            this.connect(this.qTaskRoadSegs, 'onError', this._onQTaskError);
-            this.connect(this.qTaskCensus, 'onError', this._onQTaskError);
-            this.connect(this.qTaskWireless, 'onError', this._onQTaskError);
+            var that = this;
+            this.own(
+                config.map.on('click', function (event) {
+                    that.searchMapPoint(event.mapPoint, true);
+                }),
+                this.qTask.on('error', lang.hitch(this, '_onQTaskError'))
+            );
         },
 
         /**
@@ -280,38 +270,21 @@ function (
             this.query.geometry = mapPoint;
 
             // set def query to match map data filters
-            this.query.where = config.app.makeQueryDirty(this.defQuery || '1 = 1');
+            this.query.where = this.defQuery || '1 = 1';
 
-            // fire off query tasks
-            if (this.RoadDeferred) {
-                this.RoadDeferred.cancel();
+            if (this.deferred) {
+                this.deferred.cancel();
             }
-            this.RoadDeferred = this.qTaskRoadSegs.execute(this.query, lang.hitch(this, function (results) {
-                this._addResultsToList(results);
+            var that = this;
+            this.deferred = this.qTask.execute(this.query, function (results) {
+                that._processResults(results);
 
-                // fire second query task - these are chained to prevent stepping on each other
-                if (this.CensusDeferred) {
-                    this.CensusDeferred.cancel();
-                }
-                this.CensusDeferred = this.qTaskCensus.execute(this.query, lang.hitch(this, function (results) {
-                    this._addResultsToList(results);
-
-                    // fire third query task
-                    if (this.WirelessDeferred) {
-                        this.WirelessDeferred.cancel();
-                    }
-                    this.WirelessDeferred = this.qTaskWireless.execute(this.query, lang.hitch(this, function (results) {
-                        this._addResultsToList(results);
-
-                        this._populateResultsList(this.list);
-                        this.standby.hide();
-                    }));
-                }));
-            }));
+                that._populateResultsList(that.list);
+                that.standby.hide();
+            });
 
             var providerFld = config.fieldNames.telcom.PROVIDER;
             var weblinkFld = config.fieldNames.telcom.WEBLINK;
-            var that = this;
             var clearTelCom = function () {
                 that.telcomMsg.innerHTML = '';
                 domClass.add(that.telcomMsgContainer, 'hidden');
@@ -335,15 +308,15 @@ function (
          * adds results to master list
          * @param {Object} results
          */
-        _addResultsToList: function (results) {
-            console.log('app/ListProviders:_addResultsToList', arguments);
+        _processResults: function (results) {
+            console.log('app/ListProviders:_processResults', arguments);
 
             var getMbpsDescription = function (speed) {
                 return Formatting.round(speed, 3) + '+ Mbps';
             };
 
             // append new providers, if any, to list
-            array.forEach(results.features, function (g) {
+            results.features.forEach(function (g) {
                 try {
                     var atts = g.attributes;
                     var providerObj = config.providers[atts[config.fieldNames.UTProvCode]];
@@ -381,36 +354,46 @@ function (
                             lastVerified: new Date(atts[config.fieldNames.LastVerified]).toLocaleDateString()
                         };
 
-                        // check for duplicate in existing list
-                        var alreadyThere = false;
-                        array.forEach(this.list, function (existingItem) {
-                            if (existingItem.id === perspectiveItem.id) { // matching id
-                                // check for higher speeds
-                                if (existingItem.maxdown < perspectiveItem.maxdown) {
-                                    existingItem.maxdown = perspectiveItem.maxdown;
-                                    existingItem.maxdownDesc = getMbpsDescription(perspectiveItem.maxdown);
-                                }
-                                if (existingItem.maxup < perspectiveItem.maxup) {
-                                    existingItem.maxup = perspectiveItem.maxup;
-                                    existingItem.maxupDesc = getMbpsDescription(perspectiveItem.maxdown);
-                                }
-
-                                // add trans type if different from existing
-                                if (array.indexOf(existingItem.transTypes, perspectiveItem.transTypes[0]) === -1) {
-                                    existingItem.transTypes.push(perspectiveItem.transTypes[0]);
-                                }
-
-                                alreadyThere = true;
-                            }
-                        }, this);
-                        if (!alreadyThere) {
-                            this.list.push(perspectiveItem);
-                        }
+                        this.addPerspectiveItemToList(perspectiveItem);
                     }
                 } catch (e) {
                     console.error('problem adding provider result', g);
                 }
             }, this);
+        },
+
+        addPerspectiveItemToList: function (perspectiveItem) {
+            // summary:
+            //      checks to see if item should be added then adds it to master list
+            // perspectiveItem: Object
+            console.log('app.ListProviders:addPerspectiveItemToList', arguments);
+
+            // check for duplicate in existing list
+            var alreadyThere = false;
+            this.list.some(function (existingItem) {
+                if (existingItem.id === perspectiveItem.id) { // matching id
+                    // check for higher speeds
+                    if (existingItem.maxdown < perspectiveItem.maxdown) {
+                        existingItem.maxdown = perspectiveItem.maxdown;
+                        existingItem.maxdownDesc = perspectiveItem.maxdownDesc;
+                    }
+                    if (existingItem.maxup < perspectiveItem.maxup) {
+                        existingItem.maxup = perspectiveItem.maxup;
+                        existingItem.maxupDesc = perspectiveItem.maxupDesc;
+                    }
+
+                    // add trans type if different from existing
+                    if (existingItem.transTypes.indexOf(perspectiveItem.transTypes[0]) === -1) {
+                        existingItem.transTypes.push(perspectiveItem.transTypes[0]);
+                    }
+
+                    alreadyThere = true;
+                    return true;
+                }
+            }, this);
+            if (!alreadyThere) {
+                this.list.push(perspectiveItem);
+            }
         },
 
         /**
@@ -451,20 +434,12 @@ function (
 
             this.clearTable();
 
-            // check to see if any providers where found
-
+            // check to see if any providers were found
             if (list.length > 0) {
-                // sort data by download speed
-                list.sort(function (a, b) {
-                    if (a.maxdown < b.maxdown) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
+                list = this.sortProviders(list);
 
                 // add to results table
-                array.forEach(list, function (item, i) {
+                list.forEach(function (item, i) {
                     this._createResult(item, i);
                 }, this);
             } else {
@@ -497,6 +472,30 @@ function (
             });
 
             this.showResults();
+        },
+
+        sortProviders: function (list) {
+            // summary:
+            //      sorts by download then upload
+            // list: Object[]
+            console.log('app.ListProviders:sortProviders', arguments);
+
+            var sort = function (c, d) {
+                if (c < d) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            };
+            list.sort(function (a, b) {
+                if (a.maxdown === b.maxdown) {
+                    return sort(a.maxup, b.maxup);
+                } else {
+                    return sort(a.maxdown, b.maxdown);
+                }
+            });
+
+            return list;
         },
 
         _createResult: function (item, i) {
