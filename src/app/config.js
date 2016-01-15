@@ -12,11 +12,11 @@ function (
     var appBaseUrl = '';
     var appServerPath = '';
     if (has('agrc-build') === 'prod') {
-        baseDomain = 'https://mapserv.utah.gov';
+        baseDomain = 'http://mapserv.utah.gov';
         appBaseUrl = baseDomain + '/broadband/';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
     } else if (has('agrc-build') === 'stage') {
-        baseDomain = 'https://test.mapserv.utah.gov';
+        baseDomain = 'http://test.mapserv.utah.gov';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
     } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTest) {
         // dev
