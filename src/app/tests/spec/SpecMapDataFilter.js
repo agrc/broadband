@@ -288,5 +288,14 @@ function (
                 expect(testWidget.draggable3.dataset.slot).toBe('3');
             });
         });
+        describe('_onListPickerOK', function () {
+            it('selects the show only checkbox', function () {
+                testWidget.chbxShowOnly.set('checked', false);
+
+                testWidget._onListPickerOK([['blah']]);
+
+                expect(testWidget.chbxShowOnly.get('checked')).toBe(true);
+            });
+        });
     });
 });

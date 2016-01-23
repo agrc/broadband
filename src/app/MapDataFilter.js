@@ -469,12 +469,6 @@ define([
                     this.providerList.appendChild(li);
                 }, this);
 
-                var that = this;
-                var bizOnly = this.selectedProvidersIDs.some(function (id) {
-                    return (that.bizOnlyProviderIds.indexOf(id.slice(1, -1)) !== -1);
-                });
-                this.cbxBusiness.set('checked', bizOnly);
-
                 this.chbxShowOnly.set('checked', true);
             }
 
