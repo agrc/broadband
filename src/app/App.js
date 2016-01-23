@@ -250,8 +250,7 @@ define([
             query.outFields = [
                 config.fieldNames.NAME,
                 config.fieldNames.ID,
-                config.fieldNames.URL,
-                config.fieldNames.Biz_Only
+                config.fieldNames.URL
             ];
             query.where = '1 = 1';
             var qTask = new QueryTask(config.broadbandMapURL + '/' + config.layerIndices.providersTable);
@@ -259,8 +258,7 @@ define([
                 array.forEach(results.features, function (g) {
                     config.providers[g.attributes[config.fieldNames.ID]] = {
                         name: g.attributes[config.fieldNames.NAME],
-                        url: g.attributes[config.fieldNames.URL],
-                        bizOnly: g.attributes[config.fieldNames.Biz_Only]
+                        url: g.attributes[config.fieldNames.URL]
                     };
                 });
 

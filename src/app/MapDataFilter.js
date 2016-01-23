@@ -75,10 +75,6 @@ define([
         //      see updateDefQuery
         setLayerDefTimeout: null,
 
-        // bizOnlyProviderIds: String[]
-        //      List of providers that are biz only
-        bizOnlyProviderIds: null,
-
 
         postCreate: function () {
             console.log('app/MapDataFilter:postCreate', arguments);
@@ -290,16 +286,11 @@ define([
         _setProvidersList: function (providersObject) {
             console.log('app/MapDataFilter:_setProvidersList', arguments);
 
-            this.bizOnlyProviderIds = [];
-
             // create new array and populate from object
             for (var i in providersObject) {
                 if (providersObject.hasOwnProperty(i)) {
                     var prov = providersObject[i];
                     this.providersList.push([prov.name, i]);
-                    if (prov.bizOnly === 'Y') {
-                        this.bizOnlyProviderIds.push(i);
-                    }
                 }
             }
 
