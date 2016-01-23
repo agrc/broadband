@@ -64,7 +64,6 @@ function (
             URL: 'URL',
             ID_NUM: 'ID_NUM',
             TRANSTECH: 'TransTech',
-            Biz_Only: 'Biz_Only',
             LastVerified: 'LastVerified',
             telcom: {
                 PROVIDER: 'PROVIDER',
