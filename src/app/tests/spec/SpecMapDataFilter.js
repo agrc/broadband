@@ -290,6 +290,8 @@ function (
         });
         describe('_onListPickerOK', function () {
             it('selects the show only checkbox', function () {
+                config.bbLayer = {show: function () {}};
+                config.bbLayerCached = {hide: function () {}};
                 testWidget.chbxShowOnly.set('checked', false);
 
                 testWidget._onListPickerOK([['blah']]);
