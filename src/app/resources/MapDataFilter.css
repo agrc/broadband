@@ -38,6 +38,10 @@
 .mapdatafilter #tech-type-div {
     margin-top: 10px;
 }
+.mapdatafilter .dijitCheckBox,
+.mapdatafilter .dojoxTriStateCheckBox {
+    margin-bottom: 1px;
+}
 
 /* drag and drop */
 .mapdatafilter .drop-target.active{
@@ -59,7 +63,7 @@
     width: 30px;
     height: 12px;
     float: left;
-    margin-left: 5px;
+    margin-right: 5px;
     margin-top: 2px;
 }
 .mapdatafilter .legend.wireline {
@@ -97,7 +101,7 @@
     padding: 0;
 }
 .mapdatafilter .trans-list.sub ul {
-    padding: 0 20px;
+    padding: 0 54px;
 }
 
 /* dojo hacks */
