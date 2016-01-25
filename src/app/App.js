@@ -291,7 +291,11 @@ define([
             new LayerSelector({
                 map: config.map,
                 quadWord: config.quadWord,
-                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo']
+                baseLayers: [{
+                    id: 'Lite',
+                    Factory: ArcGISTiledMapServiceLayer,
+                    url: 'http://172.16.17.56/arcgis/rest/services/BaseMaps_WGS/Lite/MapServer'
+                }, 'Hybrid', 'Terrain', 'Topo']
             }).startup();
 
             // create layers
