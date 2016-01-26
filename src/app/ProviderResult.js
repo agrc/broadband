@@ -58,12 +58,12 @@ define([
             }
 
             var normalize = function (value) {
-                var endTier;
-                for (var tier = 1; value < config.speedsDomain[tier + '']; tier++) {
-                    endTier = tier;
+                var endTier = 1;
+                while (value < config.speedsDomain[endTier + '']) {
+                    endTier++;
                 }
 
-                return 9 - endTier;
+                return 11 - endTier;
             };
 
             this.maxup = normalize(this.maxup);
@@ -104,8 +104,8 @@ define([
                 type: 'ClusteredBars'
             }).addAxis('x', {
                 type: 'Invisible',
-                min: 0,
-                max: 9,
+                min: 1,
+                max: 10,
                 majorLabels: false,
                 minorTicks: false,
                 minorLabels: false,
