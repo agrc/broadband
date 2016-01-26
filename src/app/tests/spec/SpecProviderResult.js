@@ -27,8 +27,19 @@ require([
                 });
                 testWidget2.startup();
 
-                expect(testWidget2.maxup).toBe(1);
-                expect(testWidget2.maxdown).toBe(6);
+                expect(testWidget2.maxup).toBe(2);
+                expect(testWidget2.maxdown).toBe(7);
+            });
+            it('normalizes speed values', function () {
+                var testWidget2 = new ProviderResult({
+                    maxup: 1000,
+                    maxdown: 0.256,
+                    lastVerified: '1/20/80'
+                });
+                testWidget2.startup();
+
+                expect(testWidget2.maxup).toBe(10);
+                expect(testWidget2.maxdown).toBe(1);
             });
         });
     });
