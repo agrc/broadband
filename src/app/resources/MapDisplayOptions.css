@@ -21,3 +21,13 @@
 .map-display-options .combobox{
 	margin-left: 5px;
 }
+.map-display-options .legend {
+    height: 12px;
+    width: 30px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 2px;
+}
+.map-display-options .pop-legend {
+	background-color: #5E2A2A;
+}

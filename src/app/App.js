@@ -309,12 +309,18 @@ define([
                 id: 'coverageCached'
             });
             config.currentLayer = config.bbLayerCached;
+            config.popLayer = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
+                opacity: 0.5,
+                visible: false
+            });
+            config.popLayer.setVisibleLayers([config.layerIndices.populatedAreas]);
 
             // create new map display options widget
             var params = {
                 map: config.map,
                 bbLayer: config.bbLayer,
-                bbLayerCached: config.bbLayerCached
+                bbLayerCached: config.bbLayerCached,
+                popLayer: config.popLayer
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));
 
@@ -322,6 +328,8 @@ define([
             config.map.addLoaderToLayer(config.bbLayer);
             config.map.addLayer(config.bbLayerCached);
             config.map.addLoaderToLayer(config.bbLayerCached);
+            config.map.addLayer(config.popLayer);
+            config.map.addLoaderToLayer(config.popLayer);
 
             this.own(this.connect(config.map, 'onClick', function () {
                 if (that.size === 'small') {
