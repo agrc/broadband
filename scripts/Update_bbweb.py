@@ -128,7 +128,10 @@ try:
 
         logger.logMsg('importing new feature classes')
         arcpy.env.outputCoordinateSystem = arcpy.SpatialReference(3857)
-        arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + fc, pathToFGD, fc.split('.')[2], fltr)
+        fgdbFCName = fc.split('.')[2]
+        arcpy.FeatureClassToFeatureClass_conversion(pathToSDE + '\\' + fc, pathToFGD, fgdbFCName + '_temp', fltr)
+        arcpy.Dissolve_management(fgdbFCName + '_temp', fgdbFCName, ['UTProvCode', 'TransTech', 'MAXADDOWN', 'MAXADUP', 'LastVerified'], multi_part='SINGLE_PART')
+        arcpy.Delete_management(fgdbFCName + '_temp')
 
         # provider table
         arcpy.Delete_management(pathToFGD + '\\' + providerTableName.split('.')[2])
