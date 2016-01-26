@@ -56,8 +56,7 @@ define([
         map: null,
         bbLayer: null, // broadband overlay layer
         bbLayerCached: null, // cached broadband overlay layer
-        typeLegendImagePath: config.appBaseUrl + 'app/resources/images/type_legend.png',
-        speedLegendImagePath: config.appBaseUrl + 'app/resources/images/speed_legend.png',
+        popLayer: null, // populated areas layer
 
         postCreate: function () {
             console.log('app/MapDisplayOptions:postCreate', arguments);
@@ -66,6 +65,7 @@ define([
 
             // init slider values
             this.overlaySlider.set('value', this.bbLayer.opacity);
+            this.popSlider.set('value', this.popLayer.opacity);
 
             this._updateLegendOpacity();
 
@@ -84,19 +84,21 @@ define([
 
             // set legend block opacities
             topic.publish(config.topics.MapDisplayOptions.updateLegendOpacity, this.bbLayer.opacity);
+
+            domStyle.set(this.popLegend, 'opacity', this.popLayer.opacity);
         },
         _onOverlayCheckBoxClick: function () {
             console.log('app/MapDisplayOptions:_onOverlayCheckBoxClick', arguments);
 
             var isChecked = this.overlayCheckBox.get('value');
 
-            // toggle layers
             var layer = config.app.getCurrentCoverageLayer();
             layer.setVisibility(isChecked);
+        },
+        _onPopCheckBoxClick: function () {
+            console.log('app/MapDisplayOptions:_onPopCheckBoxClick', arguments);
 
-            this.overlaySlider.set('disabled', false);
-
-            domClass.toggle(this.sliderLegend, 'gray');
+            this.popLayer.setVisibility(this.popCheckBox.get('value'));
         },
         _onOverlaySliderChange: function (newValue) {
             console.log('app/MapDisplayOptions:_onOverlaySliderChange', arguments);
@@ -107,11 +109,13 @@ define([
 
             this._updateLegendOpacity();
         },
-        _adjustLayerOpacity: function (value) {
+        _onPopSliderChange: function (newValue) {
+            console.log('app/MapDisplayOptions:_onPopSliderChange', arguments);
+
             // adjust layer opacity
-            array.forEach(this.currentTheme.layers, function (layer) {
-                layer.setOpacity(value);
-            }, this);
+            this.popLayer.setOpacity(newValue);
+
+            this._updateLegendOpacity();
         }
     });
 });

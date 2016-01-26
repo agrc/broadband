@@ -52,7 +52,8 @@ function (
         layerIndices: {
             zoomLocations: 3,
             coverageQueryLayer: 4,
-            providersTable: 5
+            providersTable: 6,
+            populatedAreas: 5
         },
 
         fieldNames: {
