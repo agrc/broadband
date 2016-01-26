@@ -190,8 +190,8 @@ define([
                 obj.push({techs: techs.join('\n')});
             }
             if (routeObj.minDownSpeed) {
-                var down = config.speedsDomain[routeObj.minDownSpeed] + '+ Mbps Download';
-                var up = config.speedsDomain[routeObj.minUpSpeed] + '+ Mbps Upload';
+                var down = config.speedsDomain[routeObj.minDownSpeed] + ' Mbps Download';
+                var up = config.speedsDomain[routeObj.minUpSpeed] + ' Mbps Upload';
 
                 obj.push({speeds: down + '\n' + up});
             }

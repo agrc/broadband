@@ -312,7 +312,7 @@ function (
             console.log('app/ListProviders:_processResults', arguments);
 
             var getMbpsDescription = function (speed) {
-                return Formatting.round(speed, 3) + '+ Mbps';
+                return Formatting.round(speed, 3) + ' Mbps';
             };
 
             // append new providers, if any, to list
