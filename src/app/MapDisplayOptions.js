@@ -72,7 +72,7 @@ define([
             }
 
             new HelpPopup({
-                title: 'Map Display Help',
+                title: 'Other Layers Help',
                 autoPosition: true
             }, this.displayHelp);
         },

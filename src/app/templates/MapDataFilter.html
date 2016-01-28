@@ -1,6 +1,6 @@
 <div class="mapdatafilter">
     <div class='help-container'>
-    	<h2 class='first-header'>Data Filters</h2>
+    	<h2 class='first-header'>Map Filters</h2>
     	<button data-dojo-attach-point='resetBtn' class='reset-button'
     		data-dojo-type='dijit/form/Button' disabled>Reset Filters</button>
         <h3>Maximum Advertised Speeds</h3>
@@ -64,10 +64,11 @@
 		<h3>Technology Type</h3>
 	    <div data-dojo-attach-point='typeHelp'>
 	        <div style='display: none;'>
-	            The checkboxes control the map display of broadband service areas by type of technology.
-	            <p>Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
-                <p>Drag and drop the three main checkboxes to reorder the way the layers are drawn on the map.</p>
-	            <p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map.</p>
+                <p>The checkboxes control the map display of broadband service areas by type of technology. Uncheck a box and the map will redraw showing only broadband service areas that meet the checked technology type.</p>
+
+                <p>For the three main technology types -- wireline, fixed wireless, and mobile -- users can use the slider to adjust the transparency separately for each type. Dragging the color swatches up or down will change the draw order.</p>
+
+                <p>Remember that the technology type filter works together with other filters to control the broadband service area shown on the map and the results returned for an address or map click location.</p>
 	        </div>
 	    </div>
         <div data-dojo-attach-point='dropTarget1'
