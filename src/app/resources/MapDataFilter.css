@@ -70,10 +70,10 @@
     background-color: #D94800;
 }
 .mapdatafilter .legend.fixed-wireless {
-    background-color: #354E6E;
+    background-color: #63941C;
 }
 .mapdatafilter .legend.mobile-wireless {
-    background-color: #63941C;
+    background-color: #354E6E;
 }
 
 /* dialog styling cannot be within
