@@ -4,7 +4,24 @@
     display: none;
 }
 
+@media only screen and (min-width: 1025px) and (max-width: 1150px) {
+    .broadband-app .title {
+        font-size: 24px;
+        margin-left: -176px;
+        margin-top: 20px;
+    }
+}
+@media only screen and (max-width: 880px) {
+    .broadband-app .logo {
+        display: none;
+        visibility: hidden;
+    }
+}
 @media only screen and (max-width: 1024px) {
+    .broadband-app .title {
+        position: static;
+        float: right;
+    }
     .broadband-app .map .spinner {
         right: 80px;
         left: auto !important;
