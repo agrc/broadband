@@ -11,6 +11,7 @@ require([
             layers = [{
                 doSomething: jasmine.createSpy('doSomething'),
                 setVisibility: jasmine.createSpy('setVisibility'),
+                setOpacity: jasmine.createSpy('setOpacity'),
                 id: 'a'
             }, {
                 doSomething: jasmine.createSpy('doSomething'),
@@ -63,6 +64,13 @@ require([
                 expect(spy.calls.count()).toBe(2);
                 expect(spy.calls.argsFor(0)).toEqual([layers[2], 2]);
                 expect(spy.calls.argsFor(1)).toEqual([layers[0], 4]);
+            });
+        });
+        describe('setLayerOpacity', function () {
+            it('calls setOpacity on the specific layer', function () {
+                groupLayer.setLayerOpacity('a', 0.5);
+
+                expect(layers[0].setOpacity).toHaveBeenCalledWith(0.5);
             });
         });
     });

@@ -119,9 +119,6 @@ function (
                 onMapExtentChange: 'broadband.App.onMapExtentChange',
                 providersObtained: 'broadband.App.providersObtained'
             },
-            MapDisplayOptions: {
-                updateLegendOpacity: 'broadband.MapDisplayOptions.updateLegendOpacity'
-            },
             ListProviders: {
                 onSatLinkClick: 'broadband.ListProviders.onSatLinkClick'
             }

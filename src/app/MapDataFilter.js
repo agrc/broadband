@@ -3,6 +3,7 @@ define([
     'app/HelpPopup',
     'app/ListPicker',
 
+    'dijit/form/HorizontalSlider',
     'dijit/registry',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -35,6 +36,7 @@ define([
     HelpPopup,
     ListPicker,
 
+    HorizontalSlider,
     registry,
     _TemplatedMixin,
     _WidgetBase,
@@ -103,11 +105,14 @@ define([
             this.own(
                 topic.subscribe(config.topics.ListProviders.onSatLinkClick, function () {
                     that.satelliteDialog.show();
-                }),
-                topic.subscribe(config.topics.MapDisplayOptions.updateLegendOpacity, function (newOpacity) {
-                    query('.legend', that.domNode).style('opacity', newOpacity);
                 })
             );
+            [this.wirelineSlider, this.fixedSlider, this.mobileSlider].forEach(function (slider) {
+                that.own(slider.on('change', function (newValue) {
+                    that.onOverlaySliderChange(slider, newValue);
+                }));
+                slider.set('value', config.defaultOpacity);
+            });
 
             this.initDragAndDrop();
         },
@@ -645,6 +650,20 @@ define([
             slider.set('value', value);
 
             this.updateDefQuery();
+        },
+        onOverlaySliderChange: function (slider, newValue) {
+            // summary:
+            //      updates the corresponding overlay layer opacity
+            // slider: HorizontalSlider
+            // newValue: Number
+            console.log('app/MapDataFilter:onOverlaySliderChange', arguments);
+
+            var layerName = slider.get('layerName');
+
+            config.bbLayer.setLayerOpacity(layerName, newValue);
+            config.bbLayerCached.setLayerOpacity(layerName + 'Cached', newValue);
+
+            this[layerName + 'Legend'].style('opacity', newValue);
         }
     });
 });

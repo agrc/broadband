@@ -77,6 +77,15 @@ define([
                 }
             });
             return returnLayer;
+        },
+        setLayerOpacity: function (layerName, opacity) {
+            // summary:
+            //      sets the opacity for a specific layer
+            // layerName: String
+            // opacity: Number
+            console.log('app.GroupLayer:setLayerOpacity', arguments);
+
+            this.getLayerByName(layerName).setOpacity(opacity);
         }
     });
 });

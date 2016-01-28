@@ -8,28 +8,6 @@
 			</div>
 		</div>
 
-		<!-- PROVIDER COVERAGE -->
-		<input data-dojo-attach-event='onClick: _onOverlayCheckBoxClick'
-			data-dojo-attach-point='overlayCheckBox'
-			data-dojo-type='dijit/form/CheckBox'
-			checked
-			id='overlay-checkbox'>
-		<label for='overlay-checkbox'>Broadband Coverage</label>
-		<br>
-		<div class='slider-container'>
-			<div data-dojo-attach-point='overlaySlider'
-				data-dojo-attach-event='onChange: _onOverlaySliderChange'
-				data-dojo-type='dijit/form/HorizontalSlider'
-				minimum='0' maximum='1'
-				intermediateChanges='true'
-				discreteValues='50'
-				showButtons='false'
-				class='slider'>
-			</div>
-			<span class='left-label slider-label'>Transparent</span>
-			<span class='right-label slider-label'>Opaque</span>
-		</div>
-
 		<!-- POPULATED AREAS -->
 		<div data-dojo-attach-point='popLegend'
 		class='legend pop-legend'></div>

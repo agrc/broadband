@@ -54,8 +54,6 @@ define([
 
         // properties passed in via params
         map: null,
-        bbLayer: null, // broadband overlay layer
-        bbLayerCached: null, // cached broadband overlay layer
         popLayer: null, // populated areas layer
 
         postCreate: function () {
@@ -64,7 +62,6 @@ define([
             this.inherited(arguments);
 
             // init slider values
-            this.overlaySlider.set('value', this.bbLayer.layers[0].opacity);
             this.popSlider.set('value', this.popLayer.opacity);
 
             this._updateLegendOpacity();
@@ -82,32 +79,12 @@ define([
         _updateLegendOpacity: function () {
             console.log('app/MapDisplayOptions:_updateLegendOpacity', arguments);
 
-            // set legend block opacities
-            topic.publish(config.topics.MapDisplayOptions.updateLegendOpacity, this.bbLayer.layers[0].opacity);
-
             domStyle.set(this.popLegend, 'opacity', this.popLayer.opacity);
-        },
-        _onOverlayCheckBoxClick: function () {
-            console.log('app/MapDisplayOptions:_onOverlayCheckBoxClick', arguments);
-
-            var isChecked = this.overlayCheckBox.get('value');
-
-            var layer = config.app.getCurrentCoverageLayer();
-            layer.setVisibility(isChecked);
         },
         _onPopCheckBoxClick: function () {
             console.log('app/MapDisplayOptions:_onPopCheckBoxClick', arguments);
 
             this.popLayer.setVisibility(this.popCheckBox.get('value'));
-        },
-        _onOverlaySliderChange: function (newValue) {
-            console.log('app/MapDisplayOptions:_onOverlaySliderChange', arguments);
-
-            // adjust layer opacity
-            this.bbLayer.callLayerMethod('setOpacity', newValue);
-            this.bbLayerCached.callLayerMethod('setOpacity', newValue);
-
-            this._updateLegendOpacity();
         },
         _onPopSliderChange: function (newValue) {
             console.log('app/MapDisplayOptions:_onPopSliderChange', arguments);
