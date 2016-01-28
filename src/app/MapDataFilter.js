@@ -59,7 +59,6 @@ define([
         widgetsInTemplate: true,
         templateString: template,
 
-        layer: null, // set in setup - broadband map service layer
         updateTimer: null, // used to hold a timer in the onchange event of range sliders
         providersList: [], // list of all providers
         selectedProvidersIDs: [], // list of selected providers
@@ -119,22 +118,12 @@ define([
 
             var that = this;
 
-            var layerInfosByIndex = {};
-            this.layer.on('load', function () {
-                var layerInfos = that.layer.createDynamicLayerInfosFromLayerInfos();
-                layerInfos.forEach(function (info) {
-                    layerInfosByIndex[info.id] = info;
+            var reorderLayers = function () {
+                console.log('reorderLayers');
+                var newOrder = [3, 2, 1].map(function (i) {
+                    return query('[data-slot="' + i + '"]', that.domNode)[0].dataset.layerName;
                 });
-                that.layer.setDynamicLayerInfos(layerInfos);
-            });
-
-            var reorderLayerInfos = function () {
-                console.log('reorderLayerInfos');
-                var newInfos = [1, 2, 3].map(function (i) {
-                    var layerIndex = query('[data-slot="' + i + '"]', that.domNode)[0].dataset.layerIndex;
-                    return layerInfosByIndex[layerIndex];
-                });
-                that.layer.setDynamicLayerInfos(newInfos);
+                config.bbLayer.reorderLayers(newOrder);
                 that.changeToDynamicLayer();
             };
             var draggables = query('div[draggable="true"]', this.domNode);
@@ -197,7 +186,7 @@ define([
 
                     onDragEnd();
 
-                    reorderLayerInfos();
+                    reorderLayers();
                 })
             );
         },
@@ -361,11 +350,10 @@ define([
 
             // update query definitions for first 3 layers
             var layerDefs = [queryTxt, queryTxt, queryTxt];
-            console.info(layerDefs[1]);
 
             // trying to prevent tons of calls to the server
             this.setLayerDefTimeout = window.setTimeout(function () {
-                that.layer.setLayerDefinitions(layerDefs);
+                config.bbLayer.callLayerMethod('setLayerDefinitions', layerDefs);
                 console.log('def set');
 
                 that.changeToDynamicLayer();
@@ -384,8 +372,8 @@ define([
             console.log('app.MapDataFilter:changeToDynamicLayer', arguments);
 
             // change to dynamic coverage layer
-            config.bbLayer.show();
-            config.bbLayerCached.hide();
+            config.bbLayer.callLayerMethod('show');
+            config.bbLayerCached.callLayerMethod('hide');
             config.currentLayer = config.bbLayer;
         },
         _getTransTypes: function () {
@@ -469,8 +457,8 @@ define([
             this.resetBtn.set('disabled', false);
 
             // change to dynamic coverage layer
-            config.bbLayer.show();
-            config.bbLayerCached.hide();
+            config.bbLayer.callLayerMethod('show');
+            config.bbLayerCached.callLayerMethod('hide');
         },
         disableProviderSelector: function () {
             console.log('app/MapDataFilter:disableProviderSelector', arguments);
@@ -538,8 +526,8 @@ define([
             // only switch back to cached layer if zoomed out beyond break point
             if (config.map.getLevel() < config.breakPointLevel) {
                 // switch to cached layer
-                config.bbLayer.hide();
-                config.bbLayerCached.show();
+                config.bbLayer.callLayerMethod('hide');
+                config.bbLayerCached.callLayerMethod('show');
                 config.currentLayer = config.bbLayerCached;
             }
         },

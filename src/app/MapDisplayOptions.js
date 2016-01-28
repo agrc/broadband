@@ -64,7 +64,7 @@ define([
             this.inherited(arguments);
 
             // init slider values
-            this.overlaySlider.set('value', this.bbLayer.opacity);
+            this.overlaySlider.set('value', this.bbLayer.layers[0].opacity);
             this.popSlider.set('value', this.popLayer.opacity);
 
             this._updateLegendOpacity();
@@ -83,7 +83,7 @@ define([
             console.log('app/MapDisplayOptions:_updateLegendOpacity', arguments);
 
             // set legend block opacities
-            topic.publish(config.topics.MapDisplayOptions.updateLegendOpacity, this.bbLayer.opacity);
+            topic.publish(config.topics.MapDisplayOptions.updateLegendOpacity, this.bbLayer.layers[0].opacity);
 
             domStyle.set(this.popLegend, 'opacity', this.popLayer.opacity);
         },
@@ -104,8 +104,8 @@ define([
             console.log('app/MapDisplayOptions:_onOverlaySliderChange', arguments);
 
             // adjust layer opacity
-            this.bbLayer.setOpacity(newValue);
-            this.bbLayerCached.setOpacity(newValue);
+            this.bbLayer.callLayerMethod('setOpacity', newValue);
+            this.bbLayerCached.callLayerMethod('setOpacity', newValue);
 
             this._updateLegendOpacity();
         },

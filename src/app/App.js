@@ -4,6 +4,7 @@ define([
     'app/config',
     'app/Feedback',
     'app/GeoSearch',
+    'app/GroupLayer',
     'app/HelpPopup',
     'app/ListProviders',
     'app/MapDataFilter',
@@ -45,6 +46,7 @@ define([
     config,
     Feedback,
     GeoSearch,
+    GroupLayer,
     HelpPopup,
     ListProviders,
     MapDataFilter,
@@ -299,21 +301,31 @@ define([
             }).startup();
 
             // create layers
-            config.bbLayer = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
-                opacity: 0.5,
-                visible: false,
-                id: 'coverage'
-            });
-            config.bbLayerCached = new ArcGISTiledMapServiceLayer(config.broadbandMapCachedURL, {
-                opacity: 0.5,
-                id: 'coverageCached'
-            });
+
+            var layerNames = ['mobile', 'fixed', 'wireline'];
+            config.bbLayer = new GroupLayer(layerNames.map(function buildDynamicLayer(layerName) {
+                var lyr = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
+                    opacity: config.defaultOpacity,
+                    visible: false,
+                    id: layerName
+                });
+                lyr.setVisibleLayers([config.layerIndices[layerName]]);
+                return lyr;
+            }));
+            config.bbLayerCached = new GroupLayer(layerNames.map(function buildCachedLayer(layerName) {
+                return new ArcGISTiledMapServiceLayer(config.broadbandMapCachedURLs[layerName], {
+                    opacity: config.defaultOpacity
+                });
+            }));
             config.currentLayer = config.bbLayerCached;
+
             config.popLayer = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
                 opacity: 0.5,
                 visible: false
             });
             config.popLayer.setVisibleLayers([config.layerIndices.populatedAreas]);
+            config.map.addLayer(config.popLayer);
+            config.map.addLoaderToLayer(config.popLayer);
 
             // create new map display options widget
             var params = {
@@ -324,12 +336,8 @@ define([
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));
 
-            config.map.addLayer(config.popLayer);
-            config.map.addLoaderToLayer(config.popLayer);
-            config.map.addLayer(config.bbLayer);
-            config.map.addLoaderToLayer(config.bbLayer);
-            config.map.addLayer(config.bbLayerCached);
-            config.map.addLoaderToLayer(config.bbLayerCached);
+            config.bbLayer.addToMap(config.map);
+            config.bbLayerCached.addToMap(config.map);
 
             this.own(this.connect(config.map, 'onClick', function () {
                 if (that.size === 'small') {
@@ -388,12 +396,12 @@ define([
                 registry.byId('overlay-checkbox').get('value')) {
                 // turn on dynamic service when zoomed in further than the breakpoint level
                 if (change.lod.level >= config.breakPointLevel) {
-                    config.bbLayer.show();
-                    config.bbLayerCached.hide();
+                    config.bbLayer.callLayerMethod('show');
+                    config.bbLayerCached.callLayerMethod('hide');
                     config.currentLayer = config.bbLayer;
                 } else {
-                    config.bbLayer.hide();
-                    config.bbLayerCached.show();
+                    config.bbLayer.callLayerMethod('hide');
+                    config.bbLayerCached.callLayerMethod('show');
                     config.currentLayer = config.bbLayerCached;
                 }
             }
@@ -409,57 +417,57 @@ define([
 
             return config.currentLayer;
         },
-        filterByProviderIdNum: function () {
-            console.log('app/App:filterByProviderIdNum', arguments);
-
-            // check for provider id_num in URL
-            var id = this.getURLParameter('id_num');
-
-            // disable provider selector
-            var mapFilterWidget = registry.byId('map-data-filter');
-            mapFilterWidget.disableProviderSelector();
-
-            // set up query task
-            var query = new Query();
-            query.returnGeometry = false;
-            query.outFields = [config.fieldNames.ID, config.fieldNames.NAME];
-            query.where = config.fieldNames.ID_NUM + ' = \'' + id + '\'';
-
-            var qTask = new QueryTask(config.broadbandMapURL + '/3');
-            qTask.execute(query, function (featureSet) {
-                // check to make sure that a provider was found
-                if (featureSet.features.length === 1) {
-                    // add provider to map data filter widget
-                    var graphicAtts = featureSet.features[0].attributes;
-                    var provName = graphicAtts[config.fieldNames.NAME];
-                    var provID = graphicAtts[config.fieldNames.ID];
-
-                    // set title
-                    dom.byId('red-text').innerHTML = provID + ' |';
-
-                    // update datafilter
-                    mapFilterWidget._onListPickerOK([[provName,provID]]);
-
-                    // remove cached layer
-                    config.map.removeLayer(config.bbLayerCached);
-
-                    // show dynamic layer and prevent it from being hidden
-                    config.bbLayer.show();
-                    config.bbLayer.hide = function () {
-                        this.show();
-                    };
-
-                } else {
-                    alert('There was no provider found with that id_num');
-                    mapFilterWidget._onListPickerOK([['no provider found','no provider found']]);
-                }
-
-                // show provider map data filter
-            }, function (error) {
-                alert('There was an error with the provider id query');
-                console.error(error.message);
-            });
-        },
+        // filterByProviderIdNum: function () {
+        //     console.log('app/App:filterByProviderIdNum', arguments);
+        //
+        //     // check for provider id_num in URL
+        //     var id = this.getURLParameter('id_num');
+        //
+        //     // disable provider selector
+        //     var mapFilterWidget = registry.byId('map-data-filter');
+        //     mapFilterWidget.disableProviderSelector();
+        //
+        //     // set up query task
+        //     var query = new Query();
+        //     query.returnGeometry = false;
+        //     query.outFields = [config.fieldNames.ID, config.fieldNames.NAME];
+        //     query.where = config.fieldNames.ID_NUM + ' = \'' + id + '\'';
+        //
+        //     var qTask = new QueryTask(config.broadbandMapURL + '/3');
+        //     qTask.execute(query, function (featureSet) {
+        //         // check to make sure that a provider was found
+        //         if (featureSet.features.length === 1) {
+        //             // add provider to map data filter widget
+        //             var graphicAtts = featureSet.features[0].attributes;
+        //             var provName = graphicAtts[config.fieldNames.NAME];
+        //             var provID = graphicAtts[config.fieldNames.ID];
+        //
+        //             // set title
+        //             dom.byId('red-text').innerHTML = provID + ' |';
+        //
+        //             // update datafilter
+        //             mapFilterWidget._onListPickerOK([[provName,provID]]);
+        //
+        //             // remove cached layer
+        //             config.map.removeLayer(config.bbLayerCached);
+        //
+        //             // show dynamic layer and prevent it from being hidden
+        //             config.bbLayer.callLayerMethod('show');
+        //             config.bbLayer.hide = function () {
+        //                 this.show();
+        //             };
+        //
+        //         } else {
+        //             alert('There was no provider found with that id_num');
+        //             mapFilterWidget._onListPickerOK([['no provider found','no provider found']]);
+        //         }
+        //
+        //         // show provider map data filter
+        //     }, function (error) {
+        //         alert('There was an error with the provider id query');
+        //         console.error(error.message);
+        //     });
+        // },
         getURLParameter: function (name) {
             console.log('app/App:getURLParameter', arguments);
 
