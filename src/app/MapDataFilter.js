@@ -663,7 +663,7 @@ define([
             config.bbLayer.setLayerOpacity(layerName, newValue);
             config.bbLayerCached.setLayerOpacity(layerName + 'Cached', newValue);
 
-            this[layerName + 'Legend'].style('opacity', newValue);
+            domStyle.set(this[layerName + 'Legend'], 'opacity', newValue);
         }
     });
 });
