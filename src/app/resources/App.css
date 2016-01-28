@@ -69,11 +69,21 @@ h3 {
 }
 .logo {
     background: url("images/consumer-map-logo.png") no-repeat scroll -22px -4px transparent;
-    width: 415px;
+    width: 366px;
     height: 75px;
     display: block;
     float: left;
-    background-size: 415px 75px;
+    background-size: 366px 75px;
+}
+.title {
+    font-family: "Lato", sans-serif;
+    font-size: 32px;
+    margin-top: 15px;
+    text-shadow: 1px 1px 6px rgba(150, 150, 150, 1);
+    left: 50%;
+    margin-left: -235px;
+    position: absolute;
+    color: #666;
 }
 /* Navigation Menu */
 .nav {
