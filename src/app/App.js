@@ -324,12 +324,12 @@ define([
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));
 
+            config.map.addLayer(config.popLayer);
+            config.map.addLoaderToLayer(config.popLayer);
             config.map.addLayer(config.bbLayer);
             config.map.addLoaderToLayer(config.bbLayer);
             config.map.addLayer(config.bbLayerCached);
             config.map.addLoaderToLayer(config.bbLayerCached);
-            config.map.addLayer(config.popLayer);
-            config.map.addLoaderToLayer(config.popLayer);
 
             this.own(this.connect(config.map, 'onClick', function () {
                 if (that.size === 'small') {
