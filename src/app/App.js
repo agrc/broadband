@@ -314,7 +314,8 @@ define([
             }));
             config.bbLayerCached = new GroupLayer(layerNames.map(function buildCachedLayer(layerName) {
                 return new ArcGISTiledMapServiceLayer(config.broadbandMapCachedURLs[layerName], {
-                    opacity: config.defaultOpacity
+                    opacity: config.defaultOpacity,
+                    id: layerName + 'Cached'
                 });
             }));
             config.currentLayer = config.bbLayerCached;
@@ -330,8 +331,6 @@ define([
             // create new map display options widget
             var params = {
                 map: config.map,
-                bbLayer: config.bbLayer,
-                bbLayerCached: config.bbLayerCached,
                 popLayer: config.popLayer
             };
             this.own(new MapDisplayOptions(params, 'map-display-options'));

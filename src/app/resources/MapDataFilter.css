@@ -42,8 +42,19 @@
 .mapdatafilter .dojoxTriStateCheckBox {
     margin-bottom: 1px;
 }
+.mapdatafilter #tech-type-div .help-popup {
+    top: 1px
+}
+#tech-type-div .slider-container {
+    width: 115px;
+    float: right;
+    margin-top: 2px;
+}
 
 /* drag and drop */
+.mapdatafilter div[data-target-slot='1'] {
+    margin-top: 3px;
+}
 .mapdatafilter .drop-target.active{
     height: 5px;
     border: dashed 1px lightGray;
