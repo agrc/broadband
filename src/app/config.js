@@ -45,15 +45,23 @@ function (
 
         // path to app
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
-        broadbandMapCachedURL: appServerPath + 'Broadband/ProviderCoverageCached/MapServer',
+        broadbandMapCachedURLs: {
+            mobile: appServerPath + 'Broadband/MobileCached/MapServer',
+            fixed: appServerPath + 'Broadband/FixedCached/MapServer',
+            wireline: appServerPath + 'Broadband/WirelineCached/MapServer'
+        },
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
+        defaultOpacity: 0.5,
 
         layerIndices: {
+            wireline: 0,
+            fixed: 1,
+            mobile: 2,
             zoomLocations: 3,
             coverageQueryLayer: 4,
-            providersTable: 6,
-            populatedAreas: 5
+            populatedAreas: 5,
+            providersTable: 6
         },
 
         fieldNames: {
