@@ -293,11 +293,7 @@ define([
             new LayerSelector({
                 map: config.map,
                 quadWord: config.quadWord,
-                baseLayers: [{
-                    id: 'Lite',
-                    Factory: ArcGISTiledMapServiceLayer,
-                    url: 'http://172.16.17.56/arcgis/rest/services/BaseMaps_WGS/Lite/MapServer'
-                }, 'Hybrid', 'Terrain', 'Topo']
+                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo']
             }).startup();
 
             // create layers
@@ -391,8 +387,7 @@ define([
 
             // only check if there was a level change & filters have not been touched
             if (change.levelChange &&
-                config.mapDataFilter.resetBtn.get('disabled') &&
-                registry.byId('overlay-checkbox').get('value')) {
+                config.mapDataFilter.resetBtn.get('disabled')) {
                 // turn on dynamic service when zoomed in further than the breakpoint level
                 if (change.lod.level >= config.breakPointLevel) {
                     config.bbLayer.callLayerMethod('show');
