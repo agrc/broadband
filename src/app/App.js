@@ -301,7 +301,7 @@ define([
             var layerNames = ['mobile', 'fixed', 'wireline'];
             config.bbLayer = new GroupLayer(layerNames.map(function buildDynamicLayer(layerName) {
                 var lyr = new ArcGISDynamicMapServiceLayer(config.broadbandMapURL, {
-                    opacity: config.defaultOpacity,
+                    opacity: config.defaultOpacities[layerName],
                     visible: false,
                     id: layerName
                 });
@@ -310,7 +310,7 @@ define([
             }));
             config.bbLayerCached = new GroupLayer(layerNames.map(function buildCachedLayer(layerName) {
                 return new ArcGISTiledMapServiceLayer(config.broadbandMapCachedURLs[layerName], {
-                    opacity: config.defaultOpacity,
+                    opacity: config.defaultOpacities[layerName],
                     id: layerName + 'Cached'
                 });
             }));

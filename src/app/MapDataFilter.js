@@ -111,7 +111,8 @@ define([
                 that.own(slider.on('change', function (newValue) {
                     that.onOverlaySliderChange(slider, newValue);
                 }));
-                slider.set('value', config.defaultOpacity);
+                var layerName = slider.get('layerName');
+                slider.set('value', config.defaultOpacities[layerName]);
             });
 
             this.initDragAndDrop();
