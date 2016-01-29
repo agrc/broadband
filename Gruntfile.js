@@ -29,7 +29,8 @@ module.exports = function (grunt) {
         'src/ChangeLog.html'
     ];
     var gruntFile = 'Gruntfile.js';
-    var jshintFiles = [jsFiles, gruntFile];
+    var buildFiles = 'profiles/*.js';
+    var jshintFiles = [jsFiles, gruntFile, buildFiles];
     var bumpFiles = [
         'package.json',
         'bower.json',
