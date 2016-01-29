@@ -1,4 +1,3 @@
-/* jshint camelcase: false */
 define([
     'dojo/has',
     'dojo/request/xhr'
@@ -52,8 +51,11 @@ function (
         },
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
-        defaultOpacity: 0.5,
-
+        defaultOpacities: {
+            wireline: 0.66,
+            fixed: 0.33,
+            mobile: 0.33
+        },
         layerIndices: {
             wireline: 0,
             fixed: 1,
