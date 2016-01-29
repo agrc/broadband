@@ -115,6 +115,9 @@ define([
                 slider.set('value', config.defaultOpacities[layerName]);
             });
 
+            this.downloadSlider.set('value', config.defaultSpeeds.down);
+            this.uploadSlider.set('value', config.defaultSpeeds.up);
+
             this.initDragAndDrop();
         },
         initDragAndDrop: function () {
@@ -360,7 +363,6 @@ define([
             // trying to prevent tons of calls to the server
             this.setLayerDefTimeout = window.setTimeout(function () {
                 config.bbLayer.callLayerMethod('setLayerDefinitions', layerDefs);
-                console.log('def set');
 
                 that.changeToDynamicLayer();
             }, 1250);
@@ -498,8 +500,8 @@ define([
             console.log('app/MapDataFilter:resetFilters', arguments);
 
             // reset controls
-            this.downloadSlider.set('value', '9');
-            this.uploadSlider.set('value', '10');
+            this.downloadSlider.set('value', config.defaultSpeeds.down);
+            this.uploadSlider.set('value', config.defaultSpeeds.up);
             this.cbxWireBased.set('value', 'on');
             query('.trans-list input').forEach(function (node) {
                 registry.getEnclosingWidget(node).set('checked', true);

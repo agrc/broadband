@@ -56,6 +56,10 @@ function (
             fixed: 0.33,
             mobile: 0.33
         },
+        defaultSpeeds: {
+            down: 7,
+            up: 9
+        },
         layerIndices: {
             wireline: 0,
             fixed: 1,
