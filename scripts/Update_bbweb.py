@@ -24,16 +24,24 @@ nonNullFields = ['"' + coverageFieldName + '" IS NULL OR "' + coverageFieldName 
                  '"TRANSTECH" IS NULL OR "TRANSTECH" = 0']
 errors = []
 mapServices = ['Broadband/ProviderCoverage',
-              'Broadband/ProviderCoverageCached',
-              'BBEcon/MapService']
+               'Broadband/WirelineCached',
+               'Broadband/FixedCached',
+               'Broadband/MobileCached',
+               'BBEcon/MapService']
+cachedServices = ['Wireline', 'Fixed', 'Mobile']
 scales = [
-    1.8489297737236E7,
+    591657527.591555,
+    295828763.795777,
+    147914381.897889,
+    73957190.948944,
+    36978595.474472,
+    18489297.737236,
     9244648.868618,
     4622324.434309,
     2311162.217155,
     1155581.108577,
     577790.554289,
-    288895.277114,
+    288895.277144,
     144447.638572,
     72223.819286
 ]
@@ -155,8 +163,9 @@ try:
 
         logger.logMsg('recaching')
 
-        arcpy.ManageMapServerCacheTiles_server(cachedService, scales, 'RECREATE_ALL_TILES', 1)
-        logger.logGPMsg()
+        for cs in cachedServices:
+            arcpy.ManageMapServerCacheTiles_server(cachedServiceBase.format(cs), scales, 'RECREATE_ALL_TILES', 1)
+            logger.logGPMsg()
 
         emailer.sendEmail('Update_bbweb.py has run successfully', "Nice work!")
 
