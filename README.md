@@ -11,8 +11,7 @@ Test: [test.mapserv.utah.gov/broadband](https://test.mapserv.utah.gov/broadband)
 
 ### Deployment
 1. Publish `Broadband/ProviderCoverage` map service.
-    * Capabilities -> Dynamic Workspace -> check "Allow per request modification of layer order and symbology"
-1. Publish `Broadband/ProviderCoverageCached` cached map service.
+1. Publish `Broadband/*Cached` cached map services.
     * PNG32
     * Cache highest 5 levels and set to cache on demand.
 1. Publish `Broadband/ExportWebMap` gp service ([docs](https://server.arcgis.com/en/server/latest/get-started/windows/tutorial-publishing-additional-services-for-printing.htm))
