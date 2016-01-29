@@ -305,7 +305,14 @@ define([
                     visible: false,
                     id: layerName
                 });
-                lyr.setVisibleLayers([config.layerIndices[layerName]]);
+                var i = config.layerIndices[layerName];
+                lyr.setVisibleLayers([i]);
+                var defs = [];
+                defs[i] = config.fieldNames.MAXADDOWN + ' >= '
+                    + config.speedsDomain[config.defaultSpeeds.down]
+                    + ' AND ' + config.fieldNames.MAXADUP + ' >= '
+                    + config.speedsDomain[config.defaultSpeeds.up];
+                lyr.setLayerDefinitions(defs);
                 return lyr;
             }));
             config.bbLayerCached = new GroupLayer(layerNames.map(function buildCachedLayer(layerName) {
@@ -352,11 +359,18 @@ define([
 
             // create new map data filters widget
             this.own(config.mapDataFilter = new MapDataFilter({
-                layer: config.bbLayer
+                layer: config.bbLayer,
+                defaultDownSpeed: config.defaultSpeeds.down,
+                defaultUpSpeed: config.defaultSpeeds.up
             }, 'map-data-filter'));
 
             // create new provider results widget
-            this.own(this.listProviders = new ListProviders({}, 'list-providers'));
+            this.own(this.listProviders = new ListProviders({
+                defQuery: config.fieldNames.MAXADDOWN + ' >= ' +
+                    config.speedsDomain[config.defaultSpeeds.down] +
+                    ' AND ' + config.fieldNames.MAXADUP + ' >= ' +
+                    config.speedsDomain[config.defaultSpeeds.up]
+            }, 'list-providers'));
             this.listProviders.startup();
         },
         onFeedbackLinkClick: function () {

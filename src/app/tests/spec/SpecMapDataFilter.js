@@ -45,7 +45,9 @@ function (
                 }
             });
             testWidget = new MapDataFilter({
-                layer: {on: function () {}}
+                layer: {on: function () {}},
+                defaultDownSpeed: 1,
+                defaultUpSpeed: 2
             }, domConstruct.create('div', {}, win.body()));
         });
         afterEach(function () {
@@ -95,6 +97,8 @@ function (
                     widget = registry.getEnclosingWidget(node);
                     widget.set('value', false);
                 });
+                testWidget.downloadSlider.set('value', 99);
+                testWidget.uploadSlider.set('value', 99);
 
                 testWidget.resetFilters();
 
@@ -105,6 +109,9 @@ function (
 
                 // make sure that this doesn't screw up the values
                 expect(testWidget._getTransTypes()).toEqual([40, 41, 10, 20, 30, 50, 70, 71, 80]);
+
+                expect(testWidget.downloadSlider.get('value')).toBe(config.defaultSpeeds.down);
+                expect(testWidget.uploadSlider.get('value')).toBe(config.defaultSpeeds.up);
             });
         });
         describe('_onSubCheckBoxChange', function () {
@@ -174,8 +181,8 @@ function (
                     transTypes: -1,
                     providers: -1
                 };
-                var defQueryExpected = 'MAXADDOWN >= ' + config.speedsDomain['9'] + ' ' +
-                    'AND MAXADUP >= ' + config.speedsDomain['10'] + ' AND TransTech ' +
+                var defQueryExpected = 'MAXADDOWN >= ' + config.speedsDomain[config.defaultSpeeds.down] + ' ' +
+                    'AND MAXADUP >= ' + config.speedsDomain[config.defaultSpeeds.up] + ' AND TransTech ' +
                     '= -1 AND UTProvCode = \'-1\'';
                 [testWidget.cbxCable, testWidget.cbxDSL, testWidget.cbxFiber, testWidget.cbxFixedWireless, testWidget.cbxMobileWireless]
                     .forEach(function (widget) {
