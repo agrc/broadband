@@ -49,7 +49,7 @@ scales = [
 try:
     logger.logMsg('setting workspace to sde database')
     arcpy.env.workspace = pathToSDE
-    arcpy.env.geographicTransformations = 'WGS_1984_(ITRF00)_To_NAD_1983'
+    arcpy.env.geographicTransformations = 'NAD_1983 to WGS_1984_5'
 
     logger.logMsg("checking non-null fields")
 
