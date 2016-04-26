@@ -1,13 +1,6 @@
 [![Build Status](https://travis-ci.org/agrc/broadband.svg)](https://travis-ci.org/agrc/broadband)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/agrc-broadband.svg)](https://saucelabs.com/u/agrc-broadband)
-Residential Broadband Map
-=========================
-
-Web application showcasing the state of Utah's broadband data.
-
-Production: [broadband.utah.gov/map](https://broadband.utah.gov/map)  
-Test: [test.mapserv.utah.gov/broadband](https://test.mapserv.utah.gov/broadband)  
 
 ### Deployment
 1. Publish `Broadband/ProviderCoverage` map service.
