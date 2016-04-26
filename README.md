@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/agrc/broadband.svg)](https://travis-ci.org/agrc/broadband)
+[![Build Status](https://travis-ci.org/agrc/starch.svg?branch=master)](https://travis-ci.org/agrc/broadband)
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/agrc-broadband.svg)](https://saucelabs.com/u/agrc-broadband)
 
