@@ -1,6 +1,6 @@
 {
   "name": "Broadband",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-bump": "^0.7.0",
