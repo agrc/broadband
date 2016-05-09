@@ -33,7 +33,7 @@ require([
             it('normalizes speed values', function () {
                 var testWidget2 = new ProviderResult({
                     maxup: 1000,
-                    maxdown: 0.256,
+                    maxdown: 0.2,
                     lastVerified: '1/20/80'
                 });
                 testWidget2.startup();
