@@ -1,6 +1,1 @@
-AGS_USER = 'username'
-AGS_PASSWORD = 'password'
-AGS_SERVER = 'ipaddress'
-pathToProdFGD = r'\\172.16.17.53\ArcGISServer\data\Broadband.gdb'
-sendEmails = True
-cachedService = r'C:/Users/agrc-arcgis.UTAH/AppData/Roaming/ESRI/Desktop10.2/ArcCatalog/arcgis on localhost (admin)/Broadband/ProviderCoverageCached.MapServer'
+cachedServiceBase = r'GIS Servers\arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer'
