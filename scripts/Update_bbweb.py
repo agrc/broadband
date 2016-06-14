@@ -9,7 +9,7 @@ class BroadbandPallet(Pallet):
     def __init__(self):
         super(BroadbandPallet, self).__init__()
 
-        destination_workspace = r'C:\ForkliftData\Broadband.gdb'
+        destination_workspace = r'C:\Scheduled\staging\Broadband.gdb'
         source_workspace = join(dirname(__file__), 'UBBMAP.sde')
 
         self.add_crates(['BB_Service', 'BB_Providers_Table'],
