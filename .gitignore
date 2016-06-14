@@ -22,8 +22,7 @@ scripts/nightly/Logs
 scripts/nightly/scratch.gdb
 scripts/nightly/settings/__init__.py
 scripts/requests*
-scripts/secrets.cfg
-scripts/secrets.py
+scripts/settings.py
 secrets.json
 src/agrc-jasmine-matchers/
 src/agrc/*
