@@ -1,6 +1,7 @@
 import arcpy
 from settings import *
 from forklift.models import Pallet
+from forklift.exceptions import ValidationException
 from forklift.core import check_schema
 from os.path import dirname, join
 
@@ -34,8 +35,8 @@ class BroadbandPallet(Pallet):
         if crate.source_name != 'BB_Service':
             return NotImplemented
 
-        if not check_schema(crate.source, crate.destination):
-            return False
+        #: this will raise if it doesn't pass...
+        check_schema(crate.source, crate.destination)
 
         arcpy.env.workspace = crate.source_workspace
         arcpy.env.geographicTransformations = 'NAD_1983_To_WGS_1984_5'
@@ -87,7 +88,7 @@ class BroadbandPallet(Pallet):
         missingProviders = []
         for row in coverageProviders:
             if not row[0] in tableProviders:
-                missingProviders.append(row)
+                missingProviders.append(row[0])
 
         # check for data errors
         if len(errors) > 0:
@@ -100,14 +101,16 @@ class BroadbandPallet(Pallet):
         # check for mis matching providers
         if len(missingProviders) > 0:
             self.log.info('MISSING PROVIDERS THAT ARE IN THE COVERAGE DATA BUT NOT IN THE PROVIDERS TABLE:')
+            errors.append('missing providers in the coverage data: {}'.format(missingProviders))
             for mp in missingProviders:
                 self.log.info(str(mp))
         else:
             self.log.info('NO PROVIDERS FOUND IN THE COVERAGE DATA THAT ARE NOT IN THE PROVIDERS TABLE.')
 
         if len(missingProviders) > 0 or len(errors) > 0:
-            self.log.info('Errors were found during validation: %s', errors)
-            return False
+            validation_message = 'Errors were found during validation: {}'.format(errors)
+            self.log.info(validation_message)
+            raise ValidationException(validation_message)
 
         return True
 
