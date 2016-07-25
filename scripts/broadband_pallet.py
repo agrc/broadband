@@ -1,22 +1,37 @@
 import arcpy
-from settings import *
 from forklift.models import Pallet
 from forklift.exceptions import ValidationException
 from forklift.core import check_schema
-from os.path import dirname, join
+from os.path import join
+
+
+cachedServiceBase = {'Dev': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
+                     'Production': r'arcgis on mapserv (admin)\Broadband\{}Cached.MapServer'}
 
 
 class BroadbandPallet(Pallet):
-    def __init__(self):
-        super(BroadbandPallet, self).__init__()
+    def build(self, configuration):
+        self.configuration = configuration
 
-        destination_workspace = r'C:\Scheduled\staging\Broadband.gdb'
-        source_workspace = join(dirname(__file__), 'UBBMAP.sde')
+        self.arcgis_services = [('Broadband/ExportWebMap', 'GPServer'),
+                                ('Broadband/FixedCached', 'MapServer'),
+                                ('Broadband/MobileCached', 'MapServer'),
+                                ('Broadband/ProviderCoverage', 'MapServer'),
+                                ('Broadband/WirelineCached', 'MapServer')]
 
-        self.add_crates(['BB_Service', 'BB_Providers_Table'],
-                        {'source_workspace': source_workspace, 'destination_workspace': destination_workspace})
+        self.staging = r'C:\Scheduled\staging'
+        self.broadband = join(self.staging, 'broadband.gdb')
+        self.location = join(self.staging, 'location.gdb')
+        self.demographic = join(self.staging, 'demographic.gdb')
+        self.ubbmap = join(self.garage, 'UBBMAP.sde')
+        self.sgid = join(self.garage, 'SGID10.sde')
 
-        self.copy_data = [destination_workspace]
+        self.copy_data = [self.broadband]
+
+        self.add_crate(('UBBMAP.UBBADMIN.BB_Service', self.ubbmap, self.broadband, 'BB_Service'))
+        self.add_crate(('UBBMAP.UBBADMIN.BB_Providers_Table', self.ubbmap, self.broadband, 'BB_Providers_Table'))
+        self.add_crate(('ZoomLocations', self.sgid, self.location))
+        self.add_crate(('PopBlockAreas2010_Approx', self.sgid, self.demographic))
 
     def validate_crate(self, crate):
         fltr = 'TRANSTECH <> 60'
@@ -36,7 +51,7 @@ class BroadbandPallet(Pallet):
             return NotImplemented
 
         #: this will raise if it doesn't pass...
-        check_schema(crate.source, crate.destination)
+        check_schema(crate)
 
         arcpy.env.workspace = crate.source_workspace
         arcpy.env.geographicTransformations = 'NAD_1983_To_WGS_1984_5'
@@ -135,4 +150,6 @@ class BroadbandPallet(Pallet):
 
         self.log.info('recaching')
         for cs in cachedServices:
-            arcpy.ManageMapServerCacheTiles_server(cachedServiceBase.format(cs), scales, 'RECREATE_ALL_TILES', 1)
+            self.log.info(cs)
+            cache_path = join(self.garage, cachedServiceBase[self.configuration].format(cs))
+            arcpy.ManageMapServerCacheTiles_server(cache_path, scales, 'RECREATE_ALL_TILES', 1)
