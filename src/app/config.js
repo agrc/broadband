@@ -32,7 +32,7 @@ function (
 
         // version.: String
         //      The version number.
-        version: '2.7.4',
+        version: '2.7.5',
 
         appBaseUrl: appBaseUrl,
 
