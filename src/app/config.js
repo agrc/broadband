@@ -83,7 +83,8 @@ function (
             telcom: {
                 PROVIDER: 'PROVIDER',
                 WEBLINK: 'WEBLINK'
-            }
+            },
+            Biz_Only: 'Biz_Only'
         },
         providers: {},
         speedsDomain: {

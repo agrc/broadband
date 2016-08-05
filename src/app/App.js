@@ -254,7 +254,7 @@ define([
                 config.fieldNames.ID,
                 config.fieldNames.URL
             ];
-            query.where = '1 = 1';
+            query.where = config.fieldNames.Biz_Only + ' <> \'Y\'';
             var qTask = new QueryTask(config.broadbandMapURL + '/' + config.layerIndices.providersTable);
             qTask.execute(query, function (results) {
                 array.forEach(results.features, function (g) {
