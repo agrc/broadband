@@ -25,10 +25,11 @@ class BroadbandPallet(Pallet):
         self.demographic = join(self.staging, 'demographic.gdb')
         self.ubbmap = join(self.garage, 'UBBMAP.sde')
         self.sgid = join(self.garage, 'SGID10.sde')
+        self.bb_service = 'UBBMAP.UBBADMIN.BB_Service'
 
         self.copy_data = [self.broadband]
 
-        self.add_crate(('UBBMAP.UBBADMIN.BB_Service', self.ubbmap, self.broadband, 'BB_Service'))
+        self.add_crate((self.bb_service, self.ubbmap, self.broadband, 'BB_Service'))
         self.add_crate(('UBBMAP.UBBADMIN.BB_Providers_Table', self.ubbmap, self.broadband, 'BB_Providers_Table'))
         self.add_crate(('ZoomLocations', self.sgid, self.location))
         self.add_crate(('PopBlockAreas2010_Approx', self.sgid, self.demographic))
@@ -153,3 +154,11 @@ class BroadbandPallet(Pallet):
             self.log.info(cs)
             cache_path = join(self.garage, cachedServiceBase[self.configuration].format(cs))
             arcpy.ManageMapServerCacheTiles_server(cache_path, scales, 'RECREATE_ALL_TILES', 1)
+
+        index_names = ['MAXADDOWN', 'MAXADUP', 'TransTech', 'UTProvCode']
+        bb_service = join(self.broadband, self.bb_service.split('.')[-1])
+        indexes = [x.name for x in arcpy.ListIndexes(bb_service)]
+        for field in index_names:
+            if field not in indexes:
+                self.log.info('building index for: ' + field)
+                arcpy.AddIndex_management(bb_service, field, field)
