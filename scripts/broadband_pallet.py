@@ -134,7 +134,7 @@ class BroadbandPallet(Pallet):
 
         return True
 
-    def process(self):
+    def post_copy_process(self):
         cachedServices = ['Wireline', 'Fixed', 'Mobile']
         scales = [
             591657527.591555,
