@@ -6,7 +6,11 @@ from os.path import join
 
 
 cachedServiceBase = {'Dev': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
+                     'Staging': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
                      'Production': r'arcgis on mapserv (admin)\Broadband\{}Cached.MapServer'}
+databaseConnections = {'Dev': 'UBBMAP_LOCAL.sde',
+                       'Staging': 'UBBMAP_STAGE.sde',
+                       'Production': 'UBBMAP.sde'}
 
 
 class BroadbandPallet(Pallet):
@@ -23,7 +27,7 @@ class BroadbandPallet(Pallet):
         self.broadband = join(self.staging, 'broadband.gdb')
         self.location = join(self.staging, 'location.gdb')
         self.demographic = join(self.staging, 'demographic.gdb')
-        self.ubbmap = join(self.garage, 'UBBMAP.sde')
+        self.ubbmap = join(self.garage, databaseConnections[configuration])
         self.sgid = join(self.garage, 'SGID10.sde')
         self.bb_service = 'UBBMAP.UBBADMIN.BB_Service'
 
