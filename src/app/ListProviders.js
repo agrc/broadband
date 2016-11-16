@@ -102,7 +102,7 @@ function (
         noneFoundMsgWithoutSat: 'No providers found at this location',
 
         // geometry service
-        geoServiceURL: 'http://mapserv.utah.gov/ArcGIS/rest/services/Geometry/GeometryServer',
+        geoServiceURL: 'https://mapserv.utah.gov/ArcGIS/rest/services/Geometry/GeometryServer',
         geoService: null,
 
         // the last point that was used in a query. Used to rerun the query after data filters have been changed.
