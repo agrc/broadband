@@ -15,15 +15,15 @@ Template Name: Map_Template
     <link rel='shortcut icon' type='image/png' href='images/favicon.png'>
     
     <!-- CSS FILES -->
-    <link rel="stylesheet" type="text/css" href="http://mapserv.utah.gov/broadband/app/resources/App.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
+    <link rel="stylesheet" type="text/css" href="https://mapserv.utah.gov/broadband/app/resources/App.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
     
 </head>
 <body class="claro">
     <div data-dojo-type="app/App"></div>
     
     <!-- JAVASCRIPT FILES -->
-    <script data-dojo-config='deps: ["app/run"]' src='http://mapserv.utah.gov/broadband/dojo/dojo.js'></script>
+    <script data-dojo-config='deps: ["app/run"]' src='https://mapserv.utah.gov/broadband/dojo/dojo.js'></script>
     
     <!-- GOOGLE ANALYTICS -->
     <script type="text/javascript">

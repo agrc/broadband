@@ -11,7 +11,7 @@ function (
     var appBaseUrl = '';
     var appServerPath = '';
     if (has('agrc-build') === 'prod') {
-        baseDomain = 'http://mapserv.utah.gov';
+        baseDomain = 'https://mapserv.utah.gov';
         appBaseUrl = baseDomain + '/broadband/';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
     } else if (has('agrc-build') === 'stage') {
