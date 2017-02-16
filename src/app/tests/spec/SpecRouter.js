@@ -224,6 +224,22 @@ function (
 
                 expect(config.map.centerAt.calls.count()).toBe(1);
             });
+            it('reprojects old UTM coordinates', function () {
+                testObject.onRouteHashChange({
+                    extent: {
+                        x: 459620,
+                        y: 4627278,
+                        scale: 120000
+                    }
+                });
+
+                expect(config.map.centerAt).toHaveBeenCalledWith(
+                    jasmine.objectContaining({
+                        x: -12410568.089658665,
+                        y: 5130519.954974215
+                    })
+                );
+            });
         });
         describe('updateProviders', function () {
             var provs = ['blah1', 'blah2'];

@@ -10,7 +10,9 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
 
-    'esri/geometry/Point'
+    'esri/geometry/Point',
+
+    'proj4'
 ], function (
     config,
 
@@ -23,7 +25,9 @@ define([
     declare,
     lang,
 
-    Point
+    Point,
+
+    proj4
 ) {
     return declare('app/Router', [Destroyable], {
         // currentRoute: Object
@@ -135,6 +139,14 @@ define([
             }
 
             var zoom = function () {
+                // check for old UTM coords
+                if (newRoute.extent.x > 0) {
+                    var utm = '+proj=utm +zone=12 +ellps=GRS80 +datum=NAD83 +units=m +no_defs';
+                    var coords = proj4(utm, proj4('EPSG:3857'), [newRoute.extent.x, newRoute.extent.y]);
+                    newRoute.extent.x = coords[0];
+                    newRoute.extent.y = coords[1];
+                }
+
                 config.map.setScale(newRoute.extent.scale);
                 config.map.centerAt(new Point({
                     x: newRoute.extent.x,

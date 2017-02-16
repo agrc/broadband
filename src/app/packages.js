@@ -31,6 +31,10 @@
                 location: 'mustache',
                 main: 'mustache'
             }, {
+                name: 'proj4',
+                location: './proj4/dist',
+                main: 'proj4'
+            }, {
                 name: 'spin',
                 location: './spinjs',
                 main: 'spin'
