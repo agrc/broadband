@@ -25,9 +25,7 @@ define([
     declare,
     lang,
 
-    Point,
-
-    proj4
+    Point
 ) {
     return declare('app/Router', [Destroyable], {
         // currentRoute: Object

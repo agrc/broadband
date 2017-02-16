@@ -48,7 +48,6 @@ src/layer-selector/
 src/lodash/
 src/matchers/
 src/mustache/
-src/proj4/
 src/put-selector/
 src/secrets.json
 src/spin.js/

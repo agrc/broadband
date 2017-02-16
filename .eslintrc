@@ -5,7 +5,9 @@
         "amd": true,
         "node": true
     },
-    "globals": {},
+    "globals": {
+        "proj4": true
+    },
     "rules": {
         "no-bitwise": 2,
         "curly": [
