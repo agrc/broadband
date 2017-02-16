@@ -12,9 +12,7 @@ define([
     'dojo/_base/declare',
 
     'dojox/charting/Chart2D',
-    'dojox/charting/Theme',
-
-    'xstyle/css!app/resources/ProviderResult.css'
+    'dojox/charting/Theme'
 ], function (
     config,
 

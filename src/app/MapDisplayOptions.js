@@ -22,8 +22,7 @@ define([
     'dijit/form/CheckBox',
     'dijit/form/HorizontalSlider',
     'dijit/form/Select',
-    'dojo/_base/sniff',
-    'xstyle/css!app/resources/MapDisplayOptions.css'
+    'dojo/_base/sniff'
 ], function (
     config,
     HelpPopup,

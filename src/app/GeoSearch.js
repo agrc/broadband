@@ -23,8 +23,7 @@ define([
     'esri/tasks/query',
     'esri/tasks/QueryTask',
 
-    'dijit/form/ValidationTextBox',
-    'xstyle/css!app/resources/GeoSearch.css'
+    'dijit/form/ValidationTextBox'
 ], function (
     config,
 

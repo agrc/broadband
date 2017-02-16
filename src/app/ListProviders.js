@@ -34,8 +34,7 @@ define([
     'esri/tasks/query',
     'esri/tasks/QueryTask',
 
-    'dojo/_base/sniff',
-    'xstyle/css!app/resources/ListProviders.css'
+    'dojo/_base/sniff'
 ],
 
 function (

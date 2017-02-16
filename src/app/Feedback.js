@@ -8,8 +8,7 @@ define([
 
     'ijit/widgets/notify/ChangeRequest',
 
-    'dijit/form/Button',
-    'xstyle/css!app/resources/Feedback.css'
+    'dijit/form/Button'
 ],
 
 function (

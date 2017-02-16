@@ -8,8 +8,7 @@ define([
     'dojo/text!app/templates/HelpPopup.html',
 
     'dijit/Dialog',
-    'dojo/_base/sniff',
-    'xstyle/css!app/resources/HelpPopup.css'
+    'dojo/_base/sniff'
 ],
 
 function (

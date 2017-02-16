@@ -23,13 +23,10 @@ var profile = {
             ],
             includeLocales: ['en-us'],
             customBase: true,
-            boot: true,
-            targetStylesheet: 'app/resources/App.css'
+            boot: true
         }
     },
-    userConfig: {
-        packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
-    },
+    packages: ['xstyle'],
     staticHasFeatures: {
         'dojo-trace-api': 0,
         'dojo-log-api': 0,
@@ -38,7 +35,7 @@ var profile = {
         'dojo-xhr-factory': 0,
         'dojo-test-sniff': 0
     },
-    plugins: {
-        'xstyle/css': 'xstyle/build/amd-css'
+    userConfig: {
+        packages: ['app', 'dijit', 'esri', 'layer-selector', 'ijit', 'agrc', 'dojox']
     }
 };

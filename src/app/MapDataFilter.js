@@ -29,8 +29,7 @@ define([
     'dijit/form/RadioButton',
     'dijit/form/Slider',
     'dojo/_base/sniff',
-    'dojox/form/TriStateCheckBox',
-    'xstyle/css!app/resources/MapDataFilter.css'
+    'dojox/form/TriStateCheckBox'
 ], function (
     config,
     HelpPopup,

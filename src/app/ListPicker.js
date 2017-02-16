@@ -15,8 +15,7 @@ define([
     'dojo/_base/lang',
 
     'dijit/form/Button',
-    'dijit/form/MultiSelect',
-    'xstyle/css!app/resources/ListPicker.css'
+    'dijit/form/MultiSelect'
 ],
 
 function (

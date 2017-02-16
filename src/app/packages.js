@@ -13,7 +13,6 @@
             'layer-selector',
             'polyfills',
             'put-selector',
-            'xstyle',
             {
                 name: 'bootstrap',
                 location: './bootstrap',

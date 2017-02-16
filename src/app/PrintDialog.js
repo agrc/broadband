@@ -21,8 +21,7 @@ define([
 
     'ijit/modules/_ErrorMessageMixin',
 
-    'dijit/form/Button',
-    'xstyle/css!app/resources/PrintDialog.css'
+    'dijit/form/Button'
 ], function (
     _DialogMixin,
     config,
