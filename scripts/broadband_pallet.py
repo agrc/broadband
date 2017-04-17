@@ -23,7 +23,11 @@ class BroadbandPallet(Pallet):
                                 ('Broadband/ProviderCoverage', 'MapServer'),
                                 ('Broadband/WirelineCached', 'MapServer')]
 
-        self.staging = r'C:\Scheduled\staging'
+        if configuration == 'Staging':
+            self.staging = r'C:\Scheduled\staging_stage'
+        else:
+            self.staging = r'C:\Scheduled\staging'
+
         self.broadband = join(self.staging, 'broadband.gdb')
         self.location = join(self.staging, 'location.gdb')
         self.demographic = join(self.staging, 'demographic.gdb')
