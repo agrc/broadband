@@ -24,13 +24,11 @@ class BroadbandPallet(Pallet):
                                 ('Broadband/WirelineCached', 'MapServer')]
 
         if configuration == 'Staging':
-            self.staging = r'C:\Scheduled\staging_stage'
-        else:
-            self.staging = r'C:\Scheduled\staging'
+            self.staging_rack = self.staging_rack + '_stage'
 
-        self.broadband = join(self.staging, 'broadband.gdb')
-        self.location = join(self.staging, 'location.gdb')
-        self.demographic = join(self.staging, 'demographic.gdb')
+        self.broadband = join(self.staging_rack, 'broadband.gdb')
+        self.location = join(self.staging_rack, 'location.gdb')
+        self.demographic = join(self.staging_rack, 'demographic.gdb')
         self.ubbmap = join(self.garage, databaseConnections[configuration])
         self.sgid = join(self.garage, 'SGID10.sde')
         self.bb_service = 'UBBMAP.UBBADMIN.BB_Service'
