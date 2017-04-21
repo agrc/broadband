@@ -23,9 +23,6 @@ class BroadbandPallet(Pallet):
                                 ('Broadband/ProviderCoverage', 'MapServer'),
                                 ('Broadband/WirelineCached', 'MapServer')]
 
-        if configuration == 'Staging':
-            self.staging_rack = self.staging_rack + '_stage'
-
         self.broadband = join(self.staging_rack, 'broadband.gdb')
         self.location = join(self.staging_rack, 'location.gdb')
         self.demographic = join(self.staging_rack, 'demographic.gdb')
