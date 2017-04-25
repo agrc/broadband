@@ -253,6 +253,11 @@ function (
         searchMapPoint: function (mapPoint, displayGraphic) {
             console.log('app/ListProviders:searchMapPoint', arguments);
 
+            ga('send', 'event', 'search', [
+                'x:' + mapPoint.x,
+                'y:' + mapPoint.y
+            ].join(';'));
+
             this.standby.show();
 
             // store mapPoint for later retrieval

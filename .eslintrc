@@ -6,7 +6,8 @@
         "node": true
     },
     "globals": {
-        "proj4": true
+        "proj4": true,
+        "ga": true
     },
     "rules": {
         "no-bitwise": 2,
