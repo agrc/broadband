@@ -1,6 +1,6 @@
 {
   "name": "starch",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "devDependencies": {
     "eslint-plugin-html": "^2.0.1",
     "grunt": "^1.0.1",
