@@ -30,7 +30,7 @@
     "util": "dojo-util#^1.10",
     "xstyle": "09b4d603f63df3e7aa5acc04784e36710a75671d",
     "jasmine-jsreporter": "~0.1.2",
-    "layer-selector": "agrc-layer-selector#~0.4.0",
+    "layer-selector": "agrc-layer-selector#~1.1.1",
     "arcgis-js-api": "~3.15.0",
     "proj4": "^2.3.17"
   },

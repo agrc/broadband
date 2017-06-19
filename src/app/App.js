@@ -294,7 +294,8 @@ define([
             new LayerSelector({
                 map: config.map,
                 quadWord: config.quadWord,
-                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo']
+                baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo'],
+                overlays: ['Address Points']
             }).startup();
 
             // create layers
