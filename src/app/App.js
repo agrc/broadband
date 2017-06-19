@@ -295,7 +295,12 @@ define([
                 map: config.map,
                 quadWord: config.quadWord,
                 baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo'],
-                overlays: ['Address Points']
+                overlays: ['Address Points', {
+                    Factory: ArcGISDynamicMapServiceLayer,
+                    url: config.landOwnershipLayerURL,
+                    id: 'Land Ownership',
+                    opacity: 0.5
+                }]
             }).startup();
 
             // create layers
