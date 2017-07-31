@@ -2,7 +2,9 @@ import arcpy
 from forklift.models import Pallet
 from forklift.exceptions import ValidationException
 from forklift.core import check_schema
-from os.path import join
+from os.path import join, dirname, realpath
+from os import environ
+import subprocess
 
 
 cachedServiceBase = {'Dev': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
@@ -151,12 +153,25 @@ class BroadbandPallet(Pallet):
             144447.638572,
             72223.819286
         ]
+        #: subprocess can only pass strings as arguments
+        scales_as_string = ';'.join([str(s) for s in scales])
 
         self.log.info('recaching')
         for cs in cachedServices:
             self.log.info(cs)
             cache_path = join(self.garage, cachedServiceBase[self.configuration].format(cs))
-            arcpy.ManageMapServerCacheTiles_server(cache_path, scales, 'RECREATE_ALL_TILES', 1)
+
+            current_folder = dirname(realpath(__file__))
+
+            #: make copy of existing environment and add python path to prevent subprocess from trying
+            #: to import packages from the python3 installation
+            new_env = environ.copy()
+            new_env.update({"PYTHONPATH": "C:\Python27\ArcGISx6410.5;C:\Python27\ArcGISx6410.5\lib"})
+            result = subprocess.run([r'C:\Python27\ArcGISx6410.5\python.exe', join(current_folder, 'cache.py'),
+                                    cache_path, scales_as_string, 'RECREATE_ALL_TILES', '1'], stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, env=new_env)
+            if result.returncode != 0:
+                raise Exception(result.stderr)
 
         index_names = ['MAXADDOWN', 'MAXADUP', 'TransTech', 'UTProvCode']
         bb_service = join(self.broadband, self.bb_service.split('.')[-1])
