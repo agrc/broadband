@@ -32,7 +32,7 @@ class BroadbandPallet(Pallet):
         self.sgid = join(self.garage, 'SGID10.sde')
         self.bb_service = 'UBBMAP.UBBADMIN.BB_Service'
 
-        self.copy_data = [self.broadband]
+        self.copy_data = [self.broadband, self.location, self.demographic]
 
         self.add_crate((self.bb_service, self.ubbmap, self.broadband, 'BB_Service'))
         self.add_crate(('UBBMAP.UBBADMIN.BB_Providers_Table', self.ubbmap, self.broadband, 'BB_Providers_Table'))
