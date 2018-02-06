@@ -14,9 +14,6 @@ var browsers = [{
     browserName: 'internet explorer',
     platform: windows,
     version: '11'
-}, {
-    browserName: 'microsoftedge',
-    platform: 'Windows 10'
 }];
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
