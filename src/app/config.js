@@ -49,7 +49,7 @@ function (
             wireline: appServerPath + 'Broadband/WirelineCached/MapServer'
         },
         landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
-                               '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
+                               '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer',
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
         defaultOpacities: {
