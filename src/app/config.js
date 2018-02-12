@@ -48,7 +48,8 @@ function (
             fixed: appServerPath + 'Broadband/FixedCached/MapServer',
             wireline: appServerPath + 'Broadband/WirelineCached/MapServer'
         },
-        landOwnershipLayerURL: 'https://tlamap.trustlands.utah.gov/arcgis/rest/services/SpecialProject/UT_SITLA_LandOwnership_WM/MapServer',
+        landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
+                               '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/FeatureServer/0',
         redlineUrl: '/chalkdust',
         exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
         defaultOpacities: {

@@ -233,12 +233,7 @@ function (
                     }
                 });
 
-                expect(config.map.centerAt).toHaveBeenCalledWith(
-                    jasmine.objectContaining({
-                        x: -12410568.089658665,
-                        y: 5130519.954974215
-                    })
-                );
+                expect(config.map.centerAt.calls.mostRecent().args[0].spatialReference.wkid).toBe(3857);
             });
         });
         describe('updateProviders', function () {

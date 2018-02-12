@@ -14,9 +14,6 @@ var browsers = [{
     browserName: 'internet explorer',
     platform: windows,
     version: '11'
-}, {
-    browserName: 'microsoftedge',
-    platform: 'Windows 10'
 }];
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
@@ -55,7 +52,7 @@ module.exports = function (grunt) {
     var deployDir = 'wwwroot/Broadband';
     var secrets;
     var sauceConfig = {
-        urls: ['http://127.0.0.1:8000/_SpecRunner.html'],
+        urls: ['http://localhost:8000/_SpecRunner.html'],
         tunnelTimeout: 500,
         build: process.env.TRAVIS_JOB_ID,
         browsers: browsers,
