@@ -166,8 +166,8 @@ class BroadbandPallet(Pallet):
             #: make copy of existing environment and add python path to prevent subprocess from trying
             #: to import packages from the python3 installation
             new_env = environ.copy()
-            new_env.update({"PYTHONPATH": "C:\Python27\ArcGISx6410.3;C:\Python27\ArcGISx6410.3\lib"})
-            result = subprocess.run([r'C:\Python27\ArcGISx6410.3\python.exe', join(current_folder, 'cache.py'),
+            new_env.update({"PYTHONPATH": "C:\Python27\ArcGISx6410.7;C:\Python27\ArcGISx6410.7\lib"})
+            result = subprocess.run([r'C:\Python27\ArcGISx6410.7\python.exe', join(current_folder, 'cache.py'),
                                     cache_path, scales_as_string, 'RECREATE_ALL_TILES', '1'], stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE, env=new_env)
             if result.returncode != 0:
