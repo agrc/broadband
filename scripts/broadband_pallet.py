@@ -4,12 +4,10 @@ from forklift.exceptions import ValidationException
 from forklift.core import check_schema
 from os.path import join, dirname, realpath
 from os import environ
-import subprocess
+from forklift import config as forklift config
 
 
-cachedServiceBase = {'Dev': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
-                     'Staging': r'arcgis on localhost_6080 (admin)\Broadband\{}Cached.MapServer',
-                     'Production': r'arcgis on mapserv (admin)\Broadband\{}Cached.MapServer'}
+cachedServiceBase = r'\Broadband\{}Cached.MapServer'
 databaseConnections = {'Dev': 'UBBMAP_LOCAL.sde',
                        'Staging': 'UBBMAP_STAGE.sde',
                        'Production': 'UBBMAP.sde'}
@@ -153,25 +151,16 @@ class BroadbandPallet(Pallet):
             144447.638572,
             72223.819286
         ]
-        #: subprocess can only pass strings as arguments
-        scales_as_string = ';'.join([str(s) for s in scales])
 
         self.log.info('recaching')
         for cs in cachedServices:
             self.log.info(cs)
-            cache_path = join(self.garage, cachedServiceBase[self.configuration].format(cs))
 
-            current_folder = dirname(realpath(__file__))
-
-            #: make copy of existing environment and add python path to prevent subprocess from trying
-            #: to import packages from the python3 installation
-            new_env = environ.copy()
-            new_env.update({"PYTHONPATH": "C:\Python27\ArcGISx6410.7;C:\Python27\ArcGISx6410.7\lib"})
-            result = subprocess.run([r'C:\Python27\ArcGISx6410.7\python.exe', join(current_folder, 'cache.py'),
-                                    cache_path, scales_as_string, 'RECREATE_ALL_TILES', '1'], stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE, env=new_env)
-            if result.returncode != 0:
-                raise Exception(result.stderr)
+            for server in forklift_config.get_config_prop('servers').items():
+                server = server[1]
+                cache_path = join(self.garage, server['machineName'], cachedServiceBase.format(cs))
+                #: path to server connection file in garage based on machine name
+                arcpy.server.ManageMapServerCacheTiles(cache_path, scales, 'RECREATE_ALL_TILES', 1)
 
         index_names = ['MAXADDOWN', 'MAXADUP', 'TransTech', 'UTProvCode']
         bb_service = join(self.broadband, self.bb_service.split('.')[-1])
