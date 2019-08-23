@@ -4,7 +4,7 @@ from forklift.exceptions import ValidationException
 from forklift.core import check_schema
 from os.path import join, dirname, realpath
 from os import environ
-from forklift import config as forklift config
+from forklift import config as forklift_config
 
 
 cachedServiceBase = r'\Broadband\{}Cached.MapServer'
