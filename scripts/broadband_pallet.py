@@ -169,3 +169,11 @@ class BroadbandPallet(Pallet):
             if field not in indexes:
                 self.log.info('building index for: ' + field)
                 arcpy.AddIndex_management(bb_service, field, field)
+
+if __name__ == '__main__':
+    import logging
+
+    pallet = BroadbandPallet()
+    pallet.configure_standalone_logging()
+    pallet.build()
+    pallet.post_copy_process()
