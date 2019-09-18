@@ -7,7 +7,7 @@ from os import environ
 from forklift import config as forklift_config
 
 
-cachedServiceBase = r'\Broadband\{}Cached.MapServer'
+cachedServiceBase = r'Broadband\{}Cached.MapServer'
 databaseConnections = {'Dev': 'UBBMAP_LOCAL.sde',
                        'Staging': 'UBBMAP_STAGE.sde',
                        'Production': 'UBBMAP.sde'}
@@ -158,8 +158,8 @@ class BroadbandPallet(Pallet):
 
             for server in forklift_config.get_config_prop('servers').items():
                 server = server[1]
-                cache_path = join(self.garage, server['machineName'], cachedServiceBase.format(cs))
                 #: path to server connection file in garage based on machine name
+                cache_path = join(self.garage, server['machineName'] + '.ags', cachedServiceBase.format(cs))
                 arcpy.server.ManageMapServerCacheTiles(cache_path, scales, 'RECREATE_ALL_TILES', 1)
 
         index_names = ['MAXADDOWN', 'MAXADUP', 'TransTech', 'UTProvCode']
