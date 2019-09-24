@@ -51,7 +51,7 @@ function (
         landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
                                '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer',
         redlineUrl: '/chalkdust',
-        exportWebMapUrl: appServerPath + 'Broadband/ExportWebMap/GPServer/Export Web Map',
+        exportWebMapUrl: 'https://us-central1-utahkoopserver.cloudfunctions.net/printproxy/15/arcgis/rest/services/GPServer/export',
         defaultOpacities: {
             wireline: 0.66,
             fixed: 0.33,
