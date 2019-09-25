@@ -1,9 +1,13 @@
 define([
+    'esri/config',
+
     'dojo/has',
     'dojo/request/xhr'
 ],
 
 function (
+    esriConfig,
+
     has,
     xhr
 ) {
@@ -22,6 +26,7 @@ function (
         // for some reason if this variable is set it breaks jasmine tests
         appServerPath = 'http://localhost/ArcGIS/rest/services/';
     }
+    esriConfig.defaults.io.corsEnabledServers.push('us-central1-utahkoopserver.cloudfunctions.net');
     var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
