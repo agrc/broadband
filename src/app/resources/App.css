@@ -77,12 +77,12 @@ h3 {
     height: 67px;
 }
 .logo {
-    background: url("images/consumer-map-logo.png") no-repeat scroll -22px -4px transparent;
-    width: 366px;
-    height: 75px;
+    background: url("images/consumer-map-logo.png") no-repeat transparent;
+    width: 275px;
+    height: 61px;
     display: block;
     float: left;
-    background-size: 366px 75px;
+    margin-top: 3px;
 }
 .title {
     font-family: "Lato", sans-serif;
