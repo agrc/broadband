@@ -10,15 +10,22 @@ var profile = {
     layers: {
         'dojo/dojo': {
             include: [
-                'dojo/i18n',
-                'dojo/domReady',
+                'app/App',
                 'app/packages',
                 'app/run',
-                'app/App',
-                'esri/dijit/Attribution',
+                'dojo/domReady',
+                'dojo/has',
+                'dojo/i18n',
+                'dojox/gfx/filters',
                 'dojox/gfx/path',
+                'dojox/gfx/shape',
                 'dojox/gfx/svg',
-                'dojox/gfx/shape'
+                'dojox/gfx/svgext',
+                'esri/dijit/Attribution',
+                'esri/layers/VectorTileLayerImpl'
+            ],
+            exclude: [
+                'esri/arcade/lib/esprima'
             ],
             includeLocales: ['en-us'],
             customBase: true,
