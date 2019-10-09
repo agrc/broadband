@@ -5,12 +5,14 @@
             'app',
             'dijit',
             'dgrid',
-            'dgrid0.3',
+            'dgrid1',
             'dojo',
             'dojox',
+            'dstore',
             'esri',
             'ijit',
             'layer-selector',
+            'moment',
             'polyfills',
             'put-selector',
             {
@@ -42,11 +44,6 @@
                 location: 'stubmodule/src',
                 main: 'stub-module'
             }
-        ],
-        map: {
-            esri: {
-                dgrid: 'dgrid0.3'
-            }
-        }
+        ]
     });
 }());
