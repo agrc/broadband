@@ -175,5 +175,5 @@ if __name__ == '__main__':
 
     pallet = BroadbandPallet()
     pallet.configure_standalone_logging()
-    pallet.build()
+    pallet.build('Production')
     pallet.post_copy_process()
