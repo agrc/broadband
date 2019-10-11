@@ -160,7 +160,7 @@ class BroadbandPallet(Pallet):
                 server = server[1]
                 #: path to server connection file in garage based on machine name
                 cache_path = join(self.garage, server['machineName'] + '.ags', cachedServiceBase.format(cs))
-                arcpy.server.ManageMapServerCacheTiles(cache_path, scales, 'RECREATE_ALL_TILES', 1)
+                arcpy.server.ManageMapServerCacheTiles(cache_path, scales, 'RECREATE_ALL_TILES', num_of_caching_service_instances=1)
 
         index_names = ['MAXADDOWN', 'MAXADUP', 'TransTech', 'UTProvCode']
         bb_service = join(self.broadband, self.bb_service.split('.')[-1])
