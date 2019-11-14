@@ -27,7 +27,7 @@ class BroadbandPallet(Pallet):
         self.location = join(self.staging_rack, 'location.gdb')
         self.demographic = join(self.staging_rack, 'demographic.gdb')
         self.ubbmap = join(self.garage, databaseConnections[configuration])
-        self.sgid = join(self.garage, 'SGID10.sde')
+        self.sgid = join(self.garage, 'SGID.sde')
         self.bb_service = 'UBBMAP.UBBADMIN.BB_Service'
 
         self.copy_data = [self.broadband, self.location, self.demographic]
