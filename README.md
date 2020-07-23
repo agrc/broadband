@@ -2,6 +2,8 @@
 
 Production: [https://mapserv.utah.gov/broadband/](https://mapserv.utah.gov/broadband/)
 
+Contact: Tim Haslam
+
 ## Deployment
 
 1. Publish `Broadband/ProviderCoverage` map service.
@@ -13,3 +15,4 @@ Production: [https://mapserv.utah.gov/broadband/](https://mapserv.utah.gov/broad
     * Templates folder: `maps\PrintTemplates`
     * Default template: `Main.mxd`
     * Synchronous
+1. `grunt build-prod && grunt deploy-prod`
