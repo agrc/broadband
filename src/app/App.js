@@ -184,12 +184,10 @@ define([
                 this.size = 'small';
                 domConstruct.place(this.leftNav, this.popoutMenu);
                 domConstruct.place(this.rightNav, this.popoutMenu);
-                domConstruct.place(this.navBar, this.popoutMenu);
             } else {
                 this.size = 'large';
                 domConstruct.place(this.leftNav, this.middleContainer);
                 domConstruct.place(this.rightNav, this.middleContainer);
-                domConstruct.place(this.navBar, this.headerContainer);
             }
         },
         onPopoutLinkClick: function () {
