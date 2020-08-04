@@ -26,7 +26,7 @@ function (
         // for some reason if this variable is set it breaks jasmine tests
         appServerPath = 'http://localhost/ArcGIS/rest/services/';
     }
-    esriConfig.defaults.io.corsEnabledServers.push('us-central1-utahkoopserver.cloudfunctions.net');
+    esriConfig.defaults.io.corsEnabledServers.push('print.agrc.utah.gov');
     var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
@@ -56,7 +56,7 @@ function (
         landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
                                '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer',
         redlineUrl: '/chalkdust',
-        exportWebMapUrl: 'https://us-central1-utahkoopserver.cloudfunctions.net/printproxy/15/arcgis/rest/services/GPServer/export',
+        exportWebMapUrl: 'https://print.agrc.utah.gov/15/arcgis/rest/services/GPServer/export',
         defaultOpacities: {
             wireline: 0.66,
             fixed: 0.33,
