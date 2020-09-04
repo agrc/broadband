@@ -18,15 +18,19 @@ function (
         baseDomain = 'https://mapserv.utah.gov';
         appBaseUrl = baseDomain + '/broadband/';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
+        esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
     } else if (has('agrc-build') === 'stage') {
         baseDomain = 'http://test.mapserv.utah.gov';
         appServerPath = baseDomain + '/ArcGIS/rest/services/';
+        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
     } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTest) {
         // dev
         // for some reason if this variable is set it breaks jasmine tests
         appServerPath = 'http://localhost/ArcGIS/rest/services/';
     }
     esriConfig.defaults.io.corsEnabledServers.push('print.agrc.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
     var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
