@@ -41,7 +41,7 @@ function (
 
         // version.: String
         //      The version number.
-        version: '2.11.1',
+        version: '2.11.2',
 
         appBaseUrl: appBaseUrl,
 
