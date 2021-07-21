@@ -15,18 +15,21 @@ function (
     var appServerPath = '/arcgis/rest/services';
     var quadWord = '';
     var apiKey = '';
+    var configuration = 'dev';
     if (has('agrc-build') === 'prod') {
         arcgisServerDomain = 'https://mapserv.utah.gov';
         appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
         esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
         quadWord = 'crystal-connect-remote-episode';
         apiKey = 'AGRC-DE590BC6690858';
+        configuration = 'prod';
     } else if (has('agrc-build') === 'stage') {
         arcgisServerDomain = 'http://test.mapserv.utah.gov';
         appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
         esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
         quadWord = 'wedding-tactic-enrico-yes';
         apiKey = 'AGRC-FE1B257E901672';
+        configuration = 'stage';
     } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTest) {
         // dev
         // for some reason if this variable is set it breaks jasmine tests
@@ -75,6 +78,10 @@ function (
         // currentLayer: esri/layer
         //      keeps track if the dynamic or cached layer is showing
         currentLayer: null,
+
+        // isDrawing: Boolean
+        //    keeps track if the drawing tool in the feedback widget is active
+        isDrawing: false,
 
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURLs: {
