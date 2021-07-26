@@ -1,6 +1,7 @@
-# broadband [![Build Status](https://travis-ci.org/agrc/starch.svg?branch=master)](https://travis-ci.org/agrc/broadband)
+# broadband [![firebase deploy](https://github.com/agrc/broadband/actions/workflows/nodejs.yml/badge.svg)](https://github.com/agrc/broadband/actions/workflows/nodejs.yml)
 
-Production: [https://mapserv.utah.gov/broadband/](https://mapserv.utah.gov/broadband/)
+- Production: [https://broadband.ugrc.utah.gov/](https://broadband.ugrc.utah.gov/)
+- Development: [https://broadband.dev.utah.gov](https://broadband.dev.utah.gov/)
 
 Contact: Tim Haslam
 
@@ -15,4 +16,3 @@ Contact: Tim Haslam
     * Templates folder: `maps\PrintTemplates`
     * Default template: `Main.mxd`
     * Synchronous
-1. `grunt build-prod && grunt deploy-prod`
