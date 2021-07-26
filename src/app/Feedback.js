@@ -1,5 +1,6 @@
 define([
     'app/_DialogMixin',
+    'app/config',
 
     'dijit/_WidgetsInTemplateMixin',
 
@@ -13,6 +14,7 @@ define([
 
 function (
     _DialogMixin,
+    config,
 
     _WidgetsInTemplateMixin,
 
@@ -36,6 +38,8 @@ function (
 
             this.hide();
 
+            config.isDrawing = true;
+
             this.inherited(arguments);
         },
         onDrawEnd: function () {
@@ -45,7 +49,12 @@ function (
 
             this.show();
 
+            config.isDrawing = false;
+
             this.inherited(arguments);
+        },
+        completed: function () {
+            this.hide();
         }
     });
 });

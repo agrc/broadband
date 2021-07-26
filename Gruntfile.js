@@ -1,20 +1,3 @@
-/* jshint camelcase: false */
-var osx = 'OS X 10.10';
-var windows = 'Windows 8.1';
-var browsers = [{
-    browserName: 'safari',
-    platform: osx
-}, {
-    browserName: 'firefox',
-    platform: windows
-}, {
-    browserName: 'chrome',
-    platform: windows
-}, {
-    browserName: 'internet explorer',
-    platform: windows,
-    version: '11'
-}];
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
@@ -34,58 +17,12 @@ module.exports = function (grunt) {
         'src/app/package.json',
         'src/app/config.js'
     ];
-    var deployFiles = [
-        '**',
-        '!**/*.uncompressed.js',
-        '!**/*consoleStripped.js',
-        '!**/bootstrap/less/**',
-        '!**/bootstrap/test-infra/**',
-        '!**/tests/**',
-        '!build-report.txt',
-        '!components-jasmine/**',
-        '!favico.js/**',
-        '!jasmine-favicon-reporter/**',
-        '!jasmine-jsreporter/**',
-        '!stubmodule/**',
-        '!util/**'
-    ];
-    var deployDir = 'wwwroot/Broadband';
-    var secrets;
-    var sauceConfig = {
-        urls: ['http://localhost:8000/_SpecRunner.html'],
-        tunnelTimeout: 500,
-        build: process.env.TRAVIS_JOB_ID,
-        browsers: browsers,
-        testname: 'broadband',
-        maxRetries: 10,
-        maxPollRetries: 10,
-        'public': 'public',
-        throttled: 5,
-        sauceConfig: {
-            'max-duration': 2400
-        },
-        statusCheckAttempts: 500
-    };
     var processhtmlOptions = {
         files: {
             'dist/index.html': ['src/index.html']
         }
     };
-    try {
-        secrets = grunt.file.readJSON('secrets.json');
-        sauceConfig.username = secrets.sauce_name;
-        sauceConfig.key = secrets.sauce_key;
-    } catch (e) {
-        // swallow for build server
-        secrets = {
-            stageHost: '',
-            prodHost: '',
-            username: '',
-            password: ''
-        };
-    }
 
-    // Project configuration.
     grunt.initConfig({
         bump: {
             options: {
@@ -95,21 +32,7 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['dist'],
-            deploy: ['deploy']
-        },
-        compress: {
-            main: {
-                options: {
-                    archive: 'deploy/deploy.zip'
-                },
-                files: [{
-                    src: deployFiles,
-                    dest: './',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
+            build: ['dist']
         },
         connect: {
             use_defaults: {}
@@ -186,55 +109,6 @@ module.exports = function (grunt) {
             stage: processhtmlOptions,
             prod: processhtmlOptions
         },
-        'saucelabs-jasmine': {
-            all: {
-                options: sauceConfig
-            }
-        },
-        secrets: secrets,
-        sftp: {
-            stage: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                files: {
-                    './': 'deploy/deploy.zip'
-                },
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            },
-            options: {
-                path: './' + deployDir + '/',
-                srcBasePath: 'deploy/',
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>',
-                showProgress: true
-            }
-        },
-        sshexec: {
-            options: {
-                username: '<%= secrets.username %>',
-                password: '<%= secrets.password %>'
-            },
-            stage: {
-                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.stageHost %>'
-                }
-            },
-            prod: {
-                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
-                options: {
-                    host: '<%= secrets.prodHost %>'
-                }
-            }
-        },
         uglify: {
             options: {
                 preserveComments: false,
@@ -285,15 +159,9 @@ module.exports = function (grunt) {
         'watch'
     ]);
 
-    grunt.registerTask('sauce', [
-        'jasmine:main:build',
-        'connect',
-        'saucelabs-jasmine'
-    ]);
-
-    grunt.registerTask('travis', [
+    grunt.registerTask('test', [
         'eslint:main',
-        'sauce',
+        'jasmine:main',
         'build-prod'
     ]);
 
@@ -307,12 +175,6 @@ module.exports = function (grunt) {
         'copy',
         'processhtml:prod'
     ]);
-    grunt.registerTask('deploy-prod', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:prod',
-        'sshexec:prod'
-    ]);
 
     // STAGE
     grunt.registerTask('build-stage', [
@@ -323,11 +185,5 @@ module.exports = function (grunt) {
         'uglify:stage',
         'copy',
         'processhtml:stage'
-    ]);
-    grunt.registerTask('deploy-stage', [
-        'clean:deploy',
-        'compress:main',
-        'sftp:stage',
-        'sshexec:stage'
     ]);
 };

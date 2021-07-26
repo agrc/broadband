@@ -393,8 +393,8 @@ define([
             // create new widget
             config.feedbackWidget = new Feedback({
                 map: config.map,
-                redliner: config.redlineUrl,
-                toIds: [4, 7],
+                toIds: [3, 4],
+                emailServiceConfiguration: window.AGRC.configuration,
                 title: 'Report a Problem'
             }, this.feedbackWidgetDiv);
             config.feedbackWidget.startup();

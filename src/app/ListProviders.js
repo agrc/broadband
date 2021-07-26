@@ -117,8 +117,7 @@ function (
             this._setUpQueryTasks();
 
             // create new symbol
-            this._markerSymbol = new PictureMarkerSymbol(
-                config.appBaseUrl + 'app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
+            this._markerSymbol = new PictureMarkerSymbol('app/resources/images/push_pin.png', 40, 40).setOffset(0, 17);
 
             // create new find address widget
             this.findAddress = new FindAddress({
@@ -239,6 +238,10 @@ function (
             var that = this;
             this.own(
                 config.map.on('click', function (event) {
+                    if (config.isDrawing) {
+                        return;
+                    }
+                    console.log('event', event);
                     that.searchMapPoint(event.mapPoint, true);
                 }),
                 this.qTask.on('error', lang.hitch(this, '_onQTaskError'))

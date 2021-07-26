@@ -134,7 +134,7 @@ define([
             // set up new symbol
             this.symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
-                new Color([255,255,0]), 1.5), null);
+                    new Color([255,255,0]), 1.5), null);
         },
 
         _wireEvents: function () {
@@ -293,7 +293,7 @@ define([
 
             // loop through all features
             array.forEach(features, function (feat, i) {
-                 // insert new empty row
+                // insert new empty row
                 var row = this.matchesTable.insertRow(i);
 
                 // insert match value cell
@@ -351,7 +351,6 @@ define([
             this.textBox.textbox.value = lang.trim(row.cells[0].innerHTML.replace(/(<([^>]+)>)/ig, ''));
 
             // clear table
-    //        this.deleteAllTableRows(this.matchesTable);
             this.toggleTable(false);
 
             // switch to return geometry and build where clause

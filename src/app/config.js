@@ -11,27 +11,45 @@ function (
     has,
     xhr
 ) {
-    var baseDomain = '';
-    var appBaseUrl = '';
-    var appServerPath = '';
+    var arcgisServerDomain = '';
+    var appServerPath = '/arcgis/rest/services';
+    var quadWord = '';
+    var apiKey = '';
+    var configuration = 'dev';
     if (has('agrc-build') === 'prod') {
-        baseDomain = 'https://mapserv.utah.gov';
-        appBaseUrl = baseDomain + '/broadband/';
-        appServerPath = baseDomain + '/ArcGIS/rest/services/';
+        arcgisServerDomain = 'https://mapserv.utah.gov';
+        appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
         esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+        quadWord = 'crystal-connect-remote-episode';
+        apiKey = 'AGRC-DE590BC6690858';
+        configuration = 'prod';
     } else if (has('agrc-build') === 'stage') {
-        baseDomain = 'http://test.mapserv.utah.gov';
-        appServerPath = baseDomain + '/ArcGIS/rest/services/';
+        arcgisServerDomain = 'http://test.mapserv.utah.gov';
+        appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
         esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
+        quadWord = 'wedding-tactic-enrico-yes';
+        apiKey = 'AGRC-FE1B257E901672';
+        configuration = 'stage';
     } else if (!window.dojoConfig || !window.dojoConfig.isJasmineTest) {
         // dev
         // for some reason if this variable is set it breaks jasmine tests
-        appServerPath = 'http://localhost/ArcGIS/rest/services/';
+        appServerPath = 'http://localhost/arcgis/rest/services/';
+
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            apiKey = secrets.apiKey;
+            quadWord = secrets.quadWord;
+        }, function () {
+            throw 'Error getting secrets!';
+        });
     }
+
     esriConfig.defaults.io.corsEnabledServers.push('print.agrc.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
-    var config = {
+    window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
 
@@ -43,13 +61,27 @@ function (
         //      The version number.
         version: '2.11.3',
 
-        appBaseUrl: appBaseUrl,
-
         map: null,
+
+        // quadWord: String
+        //      The access code for discover base maps.
+        quadWord: quadWord,
+
+        // apiKey: String
+        //      The access code for the UGRC api.
+        apiKey: apiKey,
+
+        // configuration: String
+        //      The app build configuration.
+        configuration: configuration,
 
         // currentLayer: esri/layer
         //      keeps track if the dynamic or cached layer is showing
         currentLayer: null,
+
+        // isDrawing: Boolean
+        //    keeps track if the drawing tool in the feedback widget is active
+        isDrawing: false,
 
         broadbandMapURL: appServerPath + 'Broadband/ProviderCoverage/MapServer',
         broadbandMapCachedURLs: {
@@ -59,7 +91,6 @@ function (
         },
         landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
                                '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer',
-        redlineUrl: '/chalkdust',
         exportWebMapUrl: 'https://print.agrc.utah.gov/15/arcgis/rest/services/GPServer/export',
         defaultOpacities: {
             wireline: 0.66,
@@ -149,16 +180,5 @@ function (
         telcomFeatureClassName: 'SGID10.UTILITIES.RuralTelcomBoundaries'
     };
 
-    xhr(require.baseUrl + 'secrets.json', {
-        handleAs: 'json',
-        sync: true
-    }).then(function (secrets) {
-        var build = has('agrc-build') || 'dev';
-        config.apiKey = secrets.apiKeys[build];
-        config.quadWord = secrets.quadWords[build];
-    }, function () {
-        throw 'Error getting secrets!';
-    });
-
-    return config;
+    return window.AGRC;
 });
