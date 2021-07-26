@@ -20,7 +20,7 @@ function (
         arcgisServerDomain = 'https://mapserv.utah.gov';
         appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
         esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
-        quadWord = 'crystal-connect-remote-episode';
+        quadWord = 'dinner-oregano-india-bahama';
         apiKey = 'AGRC-DE590BC6690858';
         configuration = 'prod';
     } else if (has('agrc-build') === 'stage') {
