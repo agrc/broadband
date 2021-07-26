@@ -393,7 +393,7 @@ define([
             // create new widget
             config.feedbackWidget = new Feedback({
                 map: config.map,
-                toIds: [3, 4],
+                toIds: [1, 7],
                 emailServiceConfiguration: window.AGRC.configuration,
                 title: 'Report a Problem'
             }, this.feedbackWidgetDiv);
@@ -430,57 +430,6 @@ define([
 
             return config.currentLayer;
         },
-        // filterByProviderIdNum: function () {
-        //     console.log('app/App:filterByProviderIdNum', arguments);
-        //
-        //     // check for provider id_num in URL
-        //     var id = this.getURLParameter('id_num');
-        //
-        //     // disable provider selector
-        //     var mapFilterWidget = registry.byId('map-data-filter');
-        //     mapFilterWidget.disableProviderSelector();
-        //
-        //     // set up query task
-        //     var query = new Query();
-        //     query.returnGeometry = false;
-        //     query.outFields = [config.fieldNames.ID, config.fieldNames.NAME];
-        //     query.where = config.fieldNames.ID_NUM + ' = \'' + id + '\'';
-        //
-        //     var qTask = new QueryTask(config.broadbandMapURL + '/3');
-        //     qTask.execute(query, function (featureSet) {
-        //         // check to make sure that a provider was found
-        //         if (featureSet.features.length === 1) {
-        //             // add provider to map data filter widget
-        //             var graphicAtts = featureSet.features[0].attributes;
-        //             var provName = graphicAtts[config.fieldNames.NAME];
-        //             var provID = graphicAtts[config.fieldNames.ID];
-        //
-        //             // set title
-        //             dom.byId('red-text').innerHTML = provID + ' |';
-        //
-        //             // update datafilter
-        //             mapFilterWidget._onListPickerOK([[provName,provID]]);
-        //
-        //             // remove cached layer
-        //             config.map.removeLayer(config.bbLayerCached);
-        //
-        //             // show dynamic layer and prevent it from being hidden
-        //             config.bbLayer.callLayerMethod('show');
-        //             config.bbLayer.hide = function () {
-        //                 this.show();
-        //             };
-        //
-        //         } else {
-        //             alert('There was no provider found with that id_num');
-        //             mapFilterWidget._onListPickerOK([['no provider found','no provider found']]);
-        //         }
-        //
-        //         // show provider map data filter
-        //     }, function (error) {
-        //         alert('There was an error with the provider id query');
-        //         console.error(error.message);
-        //     });
-        // },
         getURLParameter: function (name) {
             console.log('app/App:getURLParameter', arguments);
 
