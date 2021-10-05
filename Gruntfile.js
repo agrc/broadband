@@ -100,7 +100,9 @@ module.exports = function (grunt) {
                         'src/app/tests/jsReporterSanitizer.js',
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
-                    host: 'http://localhost:8000'
+                    host: 'http://localhost:8000',
+                    keepRunner: true,
+                    version: '3.8.0'
                 }
             }
         },
@@ -161,8 +163,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'eslint:main',
-        'jasmine:main',
-        'build-prod'
+        'connect',
+        'jasmine:main'
     ]);
 
     // PROD

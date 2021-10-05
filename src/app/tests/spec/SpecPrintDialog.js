@@ -39,7 +39,7 @@ require([
                     'providers=Baja|Beeline&extent=446372|4503183|288895';
                 expect(widget.getCustomTextElements(fullHash)).toEqual([
                     {techs: 'Cable\nFiber\nFixed Wireless\nMobile Wireless'},
-                    {speeds: '0.768 Mbps Download\n1.5 Mbps Upload'},
+                    {speeds: '1.5 Mbps Download\n3 Mbps Upload'},
                     {providers: 'Baja\nBeeline'}
                 ]);
             });
