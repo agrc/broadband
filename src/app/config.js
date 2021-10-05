@@ -24,9 +24,9 @@ function (
         apiKey = 'AGRC-DE590BC6690858';
         configuration = 'prod';
     } else if (has('agrc-build') === 'stage') {
-        arcgisServerDomain = 'http://test.mapserv.utah.gov';
+        arcgisServerDomain = 'https://mapserv.utah.gov';
         appServerPath = arcgisServerDomain + '/arcgis/rest/services/';
-        esriConfig.defaults.io.corsEnabledServers.push('test.mapserv.utah.gov');
+        esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
         quadWord = 'wedding-tactic-enrico-yes';
         apiKey = 'AGRC-FE1B257E901672';
         configuration = 'stage';
