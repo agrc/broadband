@@ -77,9 +77,9 @@ h3 {
     height: 67px;
 }
 .logo {
-    background: url("images/GOED-logo.jpeg") no-repeat transparent;
+    background: url("images/GOED-logo.svg") no-repeat transparent;
     background-size: contain;
-    width: 275px;
+    width: 303px;
     height: 61px;
     display: block;
     float: left;
