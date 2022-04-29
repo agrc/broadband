@@ -39,8 +39,5 @@
     "xstyle": "0.3.2",
     "moment": "2.24.0",
     "esri": "~3.35.0"
-  },
-  "ignoredDependencies": [
-    "dijit-themes"
-  ]
+  }
 }
