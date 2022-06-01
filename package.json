@@ -23,7 +23,7 @@
     "grunt-eslint": "^23.0.0",
     "grunt-if-missing": "^1.0.0",
     "grunt-newer": "^1.3.0",
-    "grunt-processhtml": "^0.4.1",
+    "grunt-processhtml": "^0.4.3",
     "load-grunt-tasks": "^5.1.0"
   },
   "scripts": {
