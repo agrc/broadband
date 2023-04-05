@@ -102,7 +102,7 @@ module.exports = function (grunt) {
                     ],
                     host: 'http://localhost:8000',
                     keepRunner: true,
-                    version: '3.8.0'
+                    version: '4.0.0'
                 }
             }
         },
