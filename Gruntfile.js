@@ -101,8 +101,7 @@ module.exports = function (grunt) {
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
                     host: 'http://localhost:8000',
-                    keepRunner: true,
-                    version: '4.0.0'
+                    keepRunner: true
                 }
             }
         },
