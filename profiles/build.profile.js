@@ -24,29 +24,28 @@ var profile = {
                 'esri/dijit/Attribution',
                 'esri/layers/VectorTileLayerImpl'
             ],
-            exclude: [
-                'esri/arcade/lib/esprima'
-            ],
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
         }
     },
-    packages: [{
-        name: 'moment',
-        main: 'moment',
-        resourceTags: {
-            amd: function (filename) {
-                return /\.js$/.test(filename);
-            },
-            test: function (filename, mid) {
-                return /\/tests/.test(mid);
-            },
-            miniExclude: function (filename, mid) {
-                return /\/src/.test(mid) || /\/templates/.test(mid);
+    packages: [
+        {
+            name: 'moment',
+            location: 'moment',
+            main: 'moment',
+            trees: [
+                // don't bother with .hidden, tests, min, src, and templates
+                ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates|dist)/]
+            ],
+            resourceTags: {
+                amd: function amd(filename) {
+                    return /\.js$/.test(filename);
+                }
             }
-        }
-    }, 'xstyle'],
+        },
+        'xstyle'
+    ],
     staticHasFeatures: {
         'dojo-trace-api': 0,
         'dojo-log-api': 0,
@@ -56,6 +55,14 @@ var profile = {
         'dojo-test-sniff': 0
     },
     userConfig: {
-        packages: ['app', 'dijit', 'esri', 'layer-selector', 'ijit', 'agrc', 'dojox']
+        packages: [
+            'app',
+            'dijit',
+            'esri',
+            'layer-selector',
+            'ijit',
+            'agrc',
+            'dojox'
+        ]
     }
 };
