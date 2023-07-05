@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0-2](https://github.com/agrc/broadband/compare/v2.13.0-1...v2.13.0-2) (2023-07-05)
+
+
+### 🐛 Bug Fixes
+
+* add more specific permissions to deploy ([e78e0d2](https://github.com/agrc/broadband/commit/e78e0d23948392aa9b2b8de70f2b4e061907ce8e))
+
 ## [2.13.0-1](https://github.com/agrc/broadband/compare/v2.13.0-0...v2.13.0-1) (2023-07-05)
 
 
