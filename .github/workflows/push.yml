@@ -25,6 +25,9 @@ jobs:
       released_version: ${{ steps.release-please.outputs.released_version }}
 
     steps:
+      - name: 👁 Monitor permissions
+        uses: GitHubSecurityLab/actions-permissions/monitor@v1
+
       - name: 🚀 Create Release
         id: release-please
         uses: agrc/release-composite-action@v1
@@ -46,6 +49,9 @@ jobs:
     if: github.ref_name == 'dev' && needs.release.outputs.release_created
 
     steps:
+      - name: 👁 Monitor permissions
+        uses: GitHubSecurityLab/actions-permissions/monitor@v1
+
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v1
         with:
