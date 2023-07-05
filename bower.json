@@ -19,7 +19,7 @@
     "tests"
   ],
   "dependencies": {
-    "agrc": "agrc-widgets#~6.1.4",
+    "agrc": "agrc-widgets#~6.1.8",
     "ijit": "agrc-ijit#~3.2.4",
     "jasmine-favicon-reporter": "*",
     "stubmodule": "~0.6.1",
