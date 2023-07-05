@@ -6,12 +6,6 @@ on:
       - dev
       - main
 
-permissions:
-  contents: write
-  id-token: write
-  deployments: write
-  pull-requests: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -25,9 +19,6 @@ jobs:
       released_version: ${{ steps.release-please.outputs.released_version }}
 
     steps:
-      - name: 👁 Monitor permissions
-        uses: GitHubSecurityLab/actions-permissions/monitor@v1
-
       - name: 🚀 Create Release
         id: release-please
         uses: agrc/release-composite-action@v1
@@ -47,11 +38,11 @@ jobs:
       name: dev
       url: https://broadband.dev.utah.gov
     if: github.ref_name == 'dev' && needs.release.outputs.release_created
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
-      - name: 👁 Monitor permissions
-        uses: GitHubSecurityLab/actions-permissions/monitor@v1
-
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v1
         with:
@@ -70,11 +61,12 @@ jobs:
       name: prod
       url: https://broadband.ugrc.utah.gov
     if: github.ref_name == 'main' && needs.release.outputs.release_created
+    permissions:
+      contents: read
+      id-token: write
+      deployments: read
 
     steps:
-      - name: 👁 Monitor permissions
-        uses: GitHubSecurityLab/actions-permissions/monitor@v1
-
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v1
         with:
