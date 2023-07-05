@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0-1](https://github.com/agrc/broadband/compare/v2.13.0-0...v2.13.0-1) (2023-07-05)
+
+
+### 🐛 Bug Fixes
+
+* don't commit bumps ([94e10fc](https://github.com/agrc/broadband/commit/94e10fc477b1dc2a0f8f259c9cc16b6ca86b41c3))
+
 ## [2.13.0-0](https://github.com/agrc/broadband/compare/v2.12.0...v2.13.0-0) (2023-07-05)
 
 
