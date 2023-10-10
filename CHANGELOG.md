@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.13.1](https://github.com/agrc/broadband/compare/v2.13.0...v2.13.1) (2023-10-10)
+
+
+### 🐛 Bug Fixes
+
+* use new GA4 analytics id and snippet ([478973a](https://github.com/agrc/broadband/commit/478973ab261b9d3133f4c5aa30d8d8a532ff5712))
+
+
+### 🌲 Dependencies
+
+* q4 ci dependency updates ([b41bae2](https://github.com/agrc/broadband/commit/b41bae2918686f37b114b1af1054cb61a249f6cb))
+* q4 npm dependency updates ([d2a0811](https://github.com/agrc/broadband/commit/d2a081130c192def7222c8c906257cd7d9321aa2))
+
 ## [2.13.0](https://github.com/agrc/broadband/compare/v2.12.0...v2.13.0) (2023-07-06)
 
 
