@@ -256,10 +256,10 @@ function (
         searchMapPoint: function (mapPoint, displayGraphic) {
             console.log('app/ListProviders:searchMapPoint', arguments);
 
-            ga('send', 'event', 'search', [
-                'x:' + mapPoint.x,
-                'y:' + mapPoint.y
-            ].join(';'));
+            gtag('event', 'search', {
+                x: mapPoint.x,
+                y: mapPoint.y
+            });
 
             this.standby.show();
 
