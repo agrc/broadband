@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.13.2](https://github.com/agrc/broadband/compare/v2.13.1...v2.13.2) (2023-10-12)
+
+
+### 🐛 Bug Fixes
+
+* switch to new api for sending custom google analytics events ([29ad2ca](https://github.com/agrc/broadband/commit/29ad2ca5cadb2cc294ecf4c078cecf3b74421811))
+
+
+### 📖 Documentation Improvements
+
+* correct badge url ([951ab6d](https://github.com/agrc/broadband/commit/951ab6d7500db7b31f121d6d336f13e05ec9a2ce))
+
 ## [2.13.1](https://github.com/agrc/broadband/compare/v2.13.0...v2.13.1) (2023-10-10)
 
 
