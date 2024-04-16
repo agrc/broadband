@@ -32,6 +32,7 @@ define([
     'esri/geometry/Extent',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
+    'esri/layers/VectorTileLayer',
     'esri/tasks/query',
     'esri/tasks/QueryTask',
 
@@ -294,7 +295,7 @@ define([
                 quadWord: config.quadWord,
                 baseLayers: ['Lite', 'Hybrid', 'Terrain', 'Topo'],
                 overlays: ['Address Points', {
-                    Factory: ArcGISDynamicMapServiceLayer,
+                    Factory: VectorTileLayer,
                     url: config.landOwnershipLayerURL,
                     id: 'Land Ownership',
                     opacity: 0.5

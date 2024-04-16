@@ -89,8 +89,8 @@ function (
             fixed: appServerPath + 'Broadband/FixedCached/MapServer',
             wireline: appServerPath + 'Broadband/WirelineCached/MapServer'
         },
-        landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/server' +
-                               '/rest/services/Ownership/UT_SITLA_Ownership_LandOwnership_WM/MapServer',
+        landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/hosting/rest/services' +
+                               '/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
         exportWebMapUrl: 'https://print.agrc.utah.gov/15/arcgis/rest/services/GPServer/export',
         defaultOpacities: {
             wireline: 0.66,
