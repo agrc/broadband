@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.3](https://github.com/agrc/broadband/compare/v2.13.2...v2.13.3) (2024-04-16)
+
+
+### 🐛 Bug Fixes
+
+* Migrate to new SITLA Vector Tile service ([32dc122](https://github.com/agrc/broadband/commit/32dc1225c3ceb18941247b641b7c995f5aa34147))
+
 ## [2.13.2](https://github.com/agrc/broadband/compare/v2.13.1...v2.13.2) (2023-10-12)
 
 
