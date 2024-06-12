@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.4](https://github.com/agrc/broadband/compare/v2.13.3...v2.13.4) (2024-06-12)
+
+
+### 🌲 Dependencies
+
+* **dev:** bump eslint-plugin-html in the safe-dependencies group ([bb3b646](https://github.com/agrc/broadband/commit/bb3b646b96036ed726aa328efdd13191cf8ac5ce))
+
 ## [2.13.3](https://github.com/agrc/broadband/compare/v2.13.2...v2.13.3) (2024-04-16)
 
 
