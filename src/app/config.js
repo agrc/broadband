@@ -91,7 +91,7 @@ function (
         },
         landOwnershipLayerURL: 'https://gis.trustlands.utah.gov/hosting/rest/services' +
                                '/Hosted/Land_Ownership_WM_VectorTile/VectorTileServer',
-        exportWebMapUrl: 'https://print.agrc.utah.gov/15/arcgis/rest/services/GPServer/export',
+        exportWebMapUrl: 'https://print.ugrc.utah.gov/v2/15/arcgis/rest/services/Broadband/ExportWebMap/GPServer/Export%20Web%20Map',
         defaultOpacities: {
             wireline: 0.66,
             fixed: 0.33,
