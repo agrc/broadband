@@ -11,12 +11,6 @@ module.exports = function (grunt) {
     var gruntFile = 'Gruntfile.js';
     var buildFiles = 'profiles/*.js';
     var jshintFiles = [jsFiles, gruntFile, buildFiles];
-    var bumpFiles = [
-        'package.json',
-        'bower.json',
-        'src/app/package.json',
-        'src/app/config.js'
-    ];
     var processhtmlOptions = {
         files: {
             'dist/index.html': ['src/index.html']
@@ -24,14 +18,6 @@ module.exports = function (grunt) {
     };
 
     grunt.initConfig({
-        bump: {
-            options: {
-                files: bumpFiles,
-                push: false,
-                commit: false,
-                createTag: false
-            }
-        },
         clean: {
             build: ['dist']
         },

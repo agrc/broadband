@@ -12,7 +12,6 @@
     "eslint-plugin-html": "^8.1.2",
     "globals": "^15.10.0",
     "grunt": "^1.6.1",
-    "grunt-bump": "^0.8.0",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-connect": "^5.0.0",
     "grunt-contrib-copy": "^1.0.0",
