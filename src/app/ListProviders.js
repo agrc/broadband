@@ -363,7 +363,7 @@ function (
 
                         this.addPerspectiveItemToList(perspectiveItem);
                     }
-                } catch (e) {
+                } catch {
                     console.error('problem adding provider result', g);
                 }
             }, this);
