@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.5-1](https://github.com/agrc/broadband/compare/v2.13.5-0...v2.13.5-1) (2024-10-04)
+
+
+### Bug Fixes
+
+* fix prod deploy if condition ([9832603](https://github.com/agrc/broadband/commit/983260350cfaba05f45233e93618e1ce597260ac))
+
 ## [2.13.5-0](https://github.com/agrc/broadband/compare/v2.13.4...v2.13.5-0) (2024-10-04)
 
 
