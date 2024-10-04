@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.5](https://github.com/agrc/broadband/compare/v2.13.5-1...v2.13.5) (2024-10-04)
+
+
+### Bug Fixes
+
+* fix build ([a4229de](https://github.com/agrc/broadband/commit/a4229dee2cf642a9aab49d58bda816195cb7dd1a))
+
 ## [2.13.5-1](https://github.com/agrc/broadband/compare/v2.13.5-0...v2.13.5-1) (2024-10-04)
 
 
