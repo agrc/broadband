@@ -30,7 +30,7 @@ jobs:
   deploy-prod:
     name: Deploy to production
     runs-on: ubuntu-latest
-    if: github.event.release.prerelease == true
+    if: github.event.release.prerelease == false
     environment:
       name: prod
       url: https://broadband.ugrc.utah.gov
