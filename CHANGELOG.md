@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.5-0](https://github.com/agrc/broadband/compare/v2.13.4...v2.13.5-0) (2024-10-04)
+
+
+### Dependencies
+
+* FY25Q2 dependency updates 🌲 ([36404b5](https://github.com/agrc/broadband/commit/36404b51b76c4b0e4493020a88d7aae70eada31f))
+
 ## [2.13.4](https://github.com/agrc/broadband/compare/v2.13.3...v2.13.4) (2024-07-16)
 
 
