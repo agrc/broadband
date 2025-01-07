@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.6](https://github.com/agrc/broadband/compare/v2.13.5...v2.13.6) (2025-01-07)
+
+
+### Dependencies
+
+* **dev:** bump the safe-dependencies group across 1 directory with 2 updates ([2e1a9b1](https://github.com/agrc/broadband/commit/2e1a9b1dec3150a835f86b22e0d812ba534cc21b))
+
 ## [2.13.5](https://github.com/agrc/broadband/compare/v2.13.5-1...v2.13.5) (2024-10-04)
 
 
