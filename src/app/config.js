@@ -59,7 +59,7 @@ function (
 
         // version.: String
         //      The version number.
-        version: '2.13.6', // x-release-please-version
+        version: '2.13.7', // x-release-please-version
 
         map: null,
 
