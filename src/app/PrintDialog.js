@@ -81,7 +81,7 @@ define([
             this.btnText = this.printBtn.get('label');
 
             var template = new PrintTemplate();
-            template.layout = 'Main';
+            template.layout = 'PrintTemplate';
             template.format = 'PDF';
 
             this.params = new PrintParameters();

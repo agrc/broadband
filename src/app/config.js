@@ -46,7 +46,7 @@ function (
         });
     }
 
-    esriConfig.defaults.io.corsEnabledServers.push('print.agrc.utah.gov');
+    esriConfig.defaults.io.corsEnabledServers.push('print.ugrc.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('api.mapserv.utah.gov');
     esriConfig.defaults.io.corsEnabledServers.push('discover.agrc.utah.gov');
     window.AGRC = {
