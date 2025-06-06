@@ -10,9 +10,9 @@ Contact: Tim Haslam
 1. Publish `Broadband/ProviderCoverage` map service.
 1. Publish `Broadband/*Cached` cached map services.
     * PNG32
-    * Cache highest 5 levels and set to cache on demand.
-1. Publish `Broadband/ExportWebMap` gp service ([docs](https://server.arcgis.com/en/server/latest/get-started/windows/tutorial-publishing-additional-services-for-printing.htm))
+    * Cache highest levels down to `72223.819286` and set to cache on demand.
+1. Publish `Broadband/ExportWebMap` gp service ([docs](https://enterprise.arcgis.com/en/server/10.9.1/publish-services/windows/tutorial-publish-additional-layouts-for-printing-with-arcgis-pro.htm))
     * Default format: PDF
     * Templates folder: `maps\PrintTemplates`
-    * Default template: `Main.mxd`
+    * Default template: `PrintTemplate.pagx`
     * Synchronous
