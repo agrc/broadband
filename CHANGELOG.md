@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.13.8](https://github.com/agrc/broadband/compare/v2.13.7...v2.13.8) (2025-07-30)
+
+
+### Dependencies
+
+* audit fix ([b73b058](https://github.com/agrc/broadband/commit/b73b058b0b26ed5741da8a7712ae0e850566b7aa))
+* bump the npm_and_yarn group with 2 updates ([a360cb9](https://github.com/agrc/broadband/commit/a360cb906b3d12bd5a86b5931dbd8331dc6c01f7))
+* **dev:** bump the safe-dependencies group with 2 updates ([6aed455](https://github.com/agrc/broadband/commit/6aed455c0368c4df5a49aa2f0ad48f1940383cf8))
+
 ## [2.13.7](https://github.com/agrc/broadband/compare/v2.13.6...v2.13.7) (2025-05-21)
 
 
