@@ -1,61 +1,17 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Residential Broadband Map</title>
-
-    <meta name='keywords' content='utah residential broadband map, utah broadband'>
-    <meta name='description' content='Utah Residential Broadband Map'>
-
-    <!-- CSS FILES -->
-    <link rel="stylesheet" type="text/css" href="app/resources/App.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
+    <title>Utah Residential Broadband</title>
+    <style>
+      html, body, iframe {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
 </head>
-<body class="claro">
-    <div data-dojo-type="app/App"></div>
-
-    <!-- JAVASCRIPT -->
-    <!-- build:template:prod
-    <script data-dojo-config="deps:['app/packages', 'app/run']" src='dojo/dojo.js'></script>
-    <script>
-        require({
-            baseUrl: './'
-        });
-    </script>
-    /build -->
-
-    <!-- build:template:stage
-    <script data-dojo-config="deps:['app/packages', 'app/run']" src='dojo/dojo.js'></script>
-    <script>
-        require({
-            baseUrl: './'
-        });
-    </script>
-    /build -->
-
-    <!-- build:remove -->
-    <script data-dojo-config="isDebug: 1" src='dojo/dojo.js'></script>
-    <script>
-        require({
-            baseUrl: './'
-        });
-    </script>
-    <script src='app/packages.js'></script>
-    <script src='app/run.js'></script>
-    <!-- /build -->
-
-    <!-- GOOGLE ANALYTICS -->
-    <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-8NNZD3FSK5"
-      ></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-    
-        gtag('config', 'G-8NNZD3FSK5', { debug_mode: window.location.hostname === 'localhost' });
-    </script>
+<body>
+  <iframe src="https://experience.arcgis.com/builder/?id=64558a178c6a4b5692e4e11eb8038957"></iframe>
 </body>
 </html>
