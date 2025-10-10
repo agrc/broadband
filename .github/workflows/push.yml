@@ -15,9 +15,9 @@ jobs:
     name: Create release
     if: github.ref_name == 'main'
     runs-on: ubuntu-latest
-    outputs:
-      release_created: ${{ steps.release-please.outputs.release_created }}
-      released_version: ${{ steps.release-please.outputs.released_version }}
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: 🚀 Create Release
@@ -38,6 +38,9 @@ jobs:
     environment:
       name: dev
       url: https://broadband.dev.utah.gov
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: 🚀 Deploy
