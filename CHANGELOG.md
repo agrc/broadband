@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0-rc.1](https://github.com/agrc/broadband/compare/v2.13.8...v3.0.0-rc.1) (2025-10-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* switch to experience builder
+
+### Bug Fixes
+
+* switch to experience builder embedded in iframe ([53c86c9](https://github.com/agrc/broadband/commit/53c86c95574823e9c15fa7ac2060acbb8909b509))
+
 ## [2.13.8](https://github.com/agrc/broadband/compare/v2.13.7...v2.13.8) (2025-07-30)
 
 
