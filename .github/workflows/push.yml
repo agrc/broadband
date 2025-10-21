@@ -13,10 +13,11 @@ concurrency:
 jobs:
   release:
     name: Create release
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
-    outputs:
-      release_created: ${{ steps.release-please.outputs.release_created }}
-      released_version: ${{ steps.release-please.outputs.released_version }}
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: 🚀 Create Release
@@ -29,4 +30,24 @@ jobs:
           github-app-key: ${{ secrets.UGRC_RELEASE_BOT_APP_KEY }}
           github-app-name: ${{ secrets.UGRC_RELEASE_BOT_NAME }}
           github-app-email: ${{ secrets.UGRC_RELEASE_BOT_EMAIL }}
-          extra-files: src/app/config.js
+
+  deploy-dev:
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'dev'
+    environment:
+      name: dev
+      url: https://broadband.dev.utah.gov
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: 🚀 Deploy
+        uses: agrc/firebase-website-deploy-composite-action@v1
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: echo "no build"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
