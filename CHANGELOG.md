@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.9](https://github.com/agrc/broadband/compare/v2.13.8...v2.13.9) (2025-11-11)
+
+
+### Dependencies
+
+* **dev:** bump globals in the safe-dependencies group ([faf9223](https://github.com/agrc/broadband/commit/faf9223d86cf954ece022b5d180e49aa5a5c635c))
+
 ## [2.13.8](https://github.com/agrc/broadband/compare/v2.13.7...v2.13.8) (2025-07-30)
 
 
