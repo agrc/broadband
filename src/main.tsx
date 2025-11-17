@@ -27,7 +27,7 @@ createRoot(document.getElementById('root')!).render(
       <Header links={links}>
         <div className="flex h-full grow items-center gap-3">
           <img src={Logo} alt="broadband logo size-4" />
-          <h2 className="font-heading text-2xl font-black text-zinc-600 sm:text-3xl dark:text-zinc-100">
+          <h2 className="font-heading text-2xl font-black text-zinc-600 sm:text-3xl lg:text-4xl xl:text-5xl dark:text-zinc-100">
             Utah Residential Broadband Map
           </h2>
         </div>
