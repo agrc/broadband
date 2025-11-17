@@ -1,7 +1,25 @@
 {
   "cSpell.words": [
+    "arcgis",
+    "Cantarell",
+    "Consolas",
+    "Fira",
     "firebaserc",
+    "GOEO",
     "hostingchannels",
+    "Menlo",
+    "Neue",
+    "Roboto",
+    "Segoe",
+    "ugrc",
     "webapi"
-  ]
+  ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+    "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }
