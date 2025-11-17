@@ -5,7 +5,7 @@ import './index.css';
 import Logo from './logo.jpg';
 
 const links = [
-  { key: 'Utah Broadband Center', action: { url: 'https://broadband.utah.gov' } },
+  { key: 'Utah Broadband Center', action: { url: 'https://connecting.utah.gov' } },
   {
     key: 'FCC National Broadband Map',
     action: { url: 'https://broadbandmap.fcc.gov' },
@@ -13,20 +13,89 @@ const links = [
 ];
 
 const Address = () => (
-  <address className="not-italic">
-    <p>Utah Broadband Center</p>
-    <p>UEN 8756</p>
-    <p>875 South 200 West</p>
-    <p>Salt Lake City, UT 84101</p>
-  </address>
+  <div className="order-last col-span-1 justify-center text-center sm:col-span-3 md:order-first md:col-span-2 md:justify-self-start md:text-start">
+    <div>
+      <div className="max-w-xs">
+        <img src={Logo} alt="broadband logo" />
+      </div>
+      <div className="mt-4 text-lg">
+        <p>Utah Broadband Center</p>
+        <p className="text-sm">A Division of Utah Department of Transportation</p>
+      </div>
+      <address className="mt-2 text-sm not-italic">
+        <p>Calvin Rampton Building</p>
+        <p>4501 S 2700 W</p>
+        <p>Taylorsville, Utah 84129</p>
+      </address>
+      <p className="mt-2 text-sm">Hours: Monday - Friday, 8:00 AM - 5:00 PM</p>
+    </div>
+  </div>
 );
+
+const columnOne = {
+  title: 'Navigation Menu',
+  links: [
+    {
+      title: 'Home',
+      url: 'https://connecting.utah.gov',
+    },
+    {
+      title: 'Internet Speed Test',
+      url: 'https://connecting.utah.gov/speed-test/',
+    },
+    {
+      title: 'News',
+      url: 'https://connecting.utah.gov/news/',
+    },
+    {
+      title: 'Contact',
+      url: 'https://connecting.utah.gov/contact/',
+    },
+    {
+      title: 'Events',
+      url: 'https://connecting.utah.gov/#:~:text=Contact-,Events,-Close%20search%20modal',
+    },
+  ],
+};
+
+const columnTwo = {
+  title: 'About',
+  links: [
+    {
+      title: 'Maps',
+      url: 'https://connecting.utah.gov/maps/',
+    },
+    {
+      title: 'Utah Broadband Advisory Commission',
+      url: 'https://connecting.utah.gov/advisory-commission/',
+    },
+    {
+      title: 'Utah Broadband Providers',
+      url: 'https://connecting.utah.gov/providers/',
+    },
+  ],
+};
+
+const columnThree = {
+  title: 'Grants',
+  links: [
+    {
+      title: 'Broadband Access Grant',
+      url: 'https://connecting.utah.gov/grants/bag/',
+    },
+    {
+      title: 'Broadband Infrastructure Grant (BIG)',
+      url: 'https://connecting.utah.gov/grants/big/',
+    },
+  ],
+};
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <main className="flex h-screen flex-col">
       <Header links={links}>
         <div className="flex h-full grow items-center gap-3">
-          <img src={Logo} alt="broadband logo size-4" />
+          <img src={Logo} alt="broadband logo" className="h-14" />
           <h2 className="font-heading text-2xl font-black text-zinc-600 sm:text-3xl lg:text-4xl xl:text-5xl dark:text-zinc-100">
             Utah Residential Broadband Map
           </h2>
@@ -39,6 +108,6 @@ createRoot(document.getElementById('root')!).render(
         src="https://arcg.is/04i8Hj1"
       ></iframe>
     </main>
-    <Footer renderAddress={() => <Address />} />
+    <Footer renderAddress={() => <Address />} columnOne={columnOne} columnTwo={columnTwo} columnThree={columnThree} />
   </React.StrictMode>,
 );
