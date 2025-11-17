@@ -49,5 +49,5 @@ jobs:
           identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
           service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
           project-id: ${{ secrets.PROJECT_ID }}
-          build-command: echo "no build"
+          build-command: pnpm run build --mode dev
           repo-token: ${{ secrets.GITHUB_TOKEN }}
