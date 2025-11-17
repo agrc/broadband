@@ -11,3 +11,26 @@ updates:
       default-days: 10
       exclude:
         - agrc/*
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: quarterly
+    groups:
+      safe-dependencies:
+        update-types:
+          - minor
+          - patch
+      major-dependencies:
+        update-types:
+          - major
+    commit-message:
+      prefix: deps
+      prefix-development: deps(dev)
+    cooldown:
+      default-days: 10
+      semver-major-days: 60
+      semver-minor-days: 14
+      semver-patch-days: 7
+      exclude:
+        - '@ugrc/*'

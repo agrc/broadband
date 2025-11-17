@@ -1,0 +1,38 @@
+name: Pull Request Events
+
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-check:
+    name: Lint and check types
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Set up code
+        uses: actions/checkout@v5
+        with:
+          show-progress: false
+
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: ⎔ Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: 📥 Download dependencies
+        run: pnpm install
+
+      - name: 🧶 Lint
+        run: pnpm run lint
+
+      - name: 🧪 Check types
+        run: pnpm run check
