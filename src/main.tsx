@@ -90,6 +90,11 @@ const columnThree = {
   ],
 };
 
+let url = 'https://arcg.is/04i8Hj1';
+if (import.meta.env.MODE !== 'production') {
+  url += '?draft=true';
+}
+
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <main className="flex h-screen flex-col">
@@ -105,7 +110,7 @@ createRoot(document.getElementById('root')!).render(
         className="m-0 flex-1 overflow-hidden border-none p-0"
         title="Broadband Map"
         allowFullScreen
-        src="https://arcg.is/04i8Hj1"
+        src={url}
       ></iframe>
     </main>
     <Footer renderAddress={() => <Address />} columnOne={columnOne} columnTwo={columnTwo} columnThree={columnThree} />
