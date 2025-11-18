@@ -1,4 +1,4 @@
-import { Footer, Header } from '@ugrc/utah-design-system';
+import { FirebaseAnalyticsProvider, FirebaseAppProvider, Footer, Header } from '@ugrc/utah-design-system';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -95,24 +95,47 @@ if (import.meta.env.MODE !== 'production') {
   url += '?draft=true';
 }
 
+let firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: '',
+};
+
+if (import.meta.env.VITE_FIREBASE_CONFIG) {
+  firebaseConfig = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
+}
+
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <main className="flex h-screen flex-col">
-      <Header links={links}>
-        <div className="flex h-full grow items-center gap-3">
-          <img src={Logo} alt="broadband logo" className="h-14" />
-          <h2 className="font-heading text-2xl font-black text-zinc-600 sm:text-3xl lg:text-4xl xl:text-5xl dark:text-zinc-100">
-            Utah Residential Broadband Map
-          </h2>
-        </div>
-      </Header>
-      <iframe
-        className="m-0 flex-1 overflow-hidden border-none p-0"
-        title="Broadband Map"
-        allowFullScreen
-        src={url}
-      ></iframe>
-    </main>
-    <Footer renderAddress={() => <Address />} columnOne={columnOne} columnTwo={columnTwo} columnThree={columnThree} />
+    <FirebaseAppProvider config={firebaseConfig}>
+      <FirebaseAnalyticsProvider>
+        <main className="flex h-screen flex-col">
+          <Header links={links}>
+            <div className="flex h-full grow items-center gap-3">
+              <img src={Logo} alt="broadband logo" className="h-14" />
+              <h2 className="font-heading text-2xl font-black text-zinc-600 sm:text-3xl lg:text-4xl xl:text-5xl dark:text-zinc-100">
+                Utah Residential Broadband Map
+              </h2>
+            </div>
+          </Header>
+          <iframe
+            className="m-0 flex-1 overflow-hidden border-none p-0"
+            title="Broadband Map"
+            allowFullScreen
+            src={url}
+          ></iframe>
+        </main>
+        <Footer
+          renderAddress={() => <Address />}
+          columnOne={columnOne}
+          columnTwo={columnTwo}
+          columnThree={columnThree}
+        />
+      </FirebaseAnalyticsProvider>
+    </FirebaseAppProvider>
   </React.StrictMode>,
 );
