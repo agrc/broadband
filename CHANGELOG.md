@@ -1,5 +1,28 @@
 # Changelog
 
+## [3.0.0](https://github.com/agrc/broadband/compare/v2.13.9...v3.0.0) (2025-11-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* switch to experience builder
+
+### Features
+
+* add draft flag to iframe src URL everything but production builds ([607d921](https://github.com/agrc/broadband/commit/607d921d6c25d427000a13dcb324712c60d699f7))
+* add UDS header & footer ([db582e8](https://github.com/agrc/broadband/commit/db582e82b88fd31ca8f87118012c6c46cfff5235))
+* re-wire up firebase app with analytics ([06a71fa](https://github.com/agrc/broadband/commit/06a71fad5839f45aa237c872602046082fae2dc0))
+* use footer links from connecting.utah.gov ([fd9d061](https://github.com/agrc/broadband/commit/fd9d061cac7439cee47c195557dce7ca21f11b86))
+
+
+### Bug Fixes
+
+* fix x-frame-options ([0a4d961](https://github.com/agrc/broadband/commit/0a4d961b8b77762fa13ddf9e4bef2e8038bcd0f2))
+* more responsive header title text size ([ee84ad6](https://github.com/agrc/broadband/commit/ee84ad67ed10750c1f1cefdd0c56124f55087172))
+* remove iframe border ([78ac445](https://github.com/agrc/broadband/commit/78ac445546d044d12058735e80b18552aad97898))
+* switch to experience builder embedded in iframe ([1974e39](https://github.com/agrc/broadband/commit/1974e39d7669cfaae5b205636cc9b8fed82e68aa))
+* use shortened url ([2c1dc19](https://github.com/agrc/broadband/commit/2c1dc19e60a64eb5fd9f7ccd9ad08207fb1cce89))
+
 ## [3.0.0-rc.2](https://github.com/agrc/broadband/compare/v2.13.8...v3.0.0-rc.2) (2025-10-10)
 
 
