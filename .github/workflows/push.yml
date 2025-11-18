@@ -51,3 +51,5 @@ jobs:
           project-id: ${{ secrets.PROJECT_ID }}
           build-command: pnpm run build --mode dev
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
