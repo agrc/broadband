@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/agrc/broadband/compare/v3.0.0...v3.0.1) (2025-12-01)
+
+
+### Bug Fixes
+
+* add missing local fonts ([5b838d3](https://github.com/agrc/broadband/commit/5b838d3ceb01c6eaad592981e3e997a8f951fb9f))
+
 ## [3.0.0](https://github.com/agrc/broadband/compare/v2.13.9...v3.0.0) (2025-11-18)
 
 
