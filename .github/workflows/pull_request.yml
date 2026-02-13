@@ -6,6 +6,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test-check:
     name: Lint and check types
@@ -36,3 +39,33 @@ jobs:
 
       - name: 🧪 Check types
         run: pnpm run check
+
+  deploy-preview:
+    name: Firebase preview
+    runs-on: ubuntu-latest
+    needs: [test-check]
+    environment:
+      name: preview
+    permissions:
+      id-token: write
+      deployments: write
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: ⬇️ Set up code
+        uses: actions/checkout@v5
+        with:
+          show-progress: false
+
+      - name: 🚀 Deploy Firebase
+        uses: agrc/firebase-website-deploy-composite-action@v2
+        with:
+          identity-provider: ${{ secrets.IDENTITY_PROVIDER }}
+          service-account-email: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          project-id: ${{ secrets.PROJECT_ID }}
+          build-command: pnpm run build
+          preview: yes
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          VITE_FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
