@@ -1,4 +1,7 @@
-import { FirebaseAnalyticsProvider, FirebaseAppProvider, Footer, Header } from '@ugrc/utah-design-system';
+import { Footer } from '@ugrc/utah-design-system/src/components/Footer';
+import { Header } from '@ugrc/utah-design-system/src/components/Header';
+import { FirebaseAnalyticsProvider } from '@ugrc/utah-design-system/src/contexts/FirebaseAnalyticsProvider';
+import { FirebaseAppProvider } from '@ugrc/utah-design-system/src/contexts/FirebaseAppProvider';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
