@@ -2,3 +2,7 @@
 
 - Production: [https://broadband.ugrc.utah.gov/](https://broadband.ugrc.utah.gov/)
 - Development: [https://broadband.dev.utah.gov](https://broadband.dev.utah.gov/)
+
+## Attribution
+
+This project was developed with the assistance of [GitHub Copilot](https://github.com/features/copilot).
