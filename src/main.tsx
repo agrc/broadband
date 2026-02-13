@@ -123,6 +123,7 @@ createRoot(document.getElementById('root')!).render(
             </div>
           </Header>
           <iframe
+            id='main-content'
             className="m-0 flex-1 overflow-hidden border-none p-0"
             title="Broadband Map"
             allowFullScreen
