@@ -44,9 +44,7 @@ jobs:
 
     steps:
       - name: ⬇️ Set up code
-        uses: actions/checkout@v5
-        with:
-          show-progress: false
+        uses: actions/checkout@v6
 
       - name: 🚀 Deploy
         uses: agrc/firebase-website-deploy-composite-action@v2
