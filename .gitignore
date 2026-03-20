@@ -26,3 +26,5 @@ yarn-error.log*
 /.firebase
 /public/assets
 /node_modules
+
+.playwright-mcp/
